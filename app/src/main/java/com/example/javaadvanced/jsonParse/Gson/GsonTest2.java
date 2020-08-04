@@ -11,120 +11,132 @@ import java.io.IOException;
 
 public class GsonTest2 {
 
-    static class Foo {
-        private String s;
-        private int i;
+    static class Food {
 
-        public Foo() {
-            this(null, 5);
+        private String name;
+        private double price;
+
+        public Food() {
+            this(null, 5.0);
         }
 
-        public Foo(String s, int i) {
-            this.s = s;
-            this.i = i;
+        public Food(String name, double price) {
+            this.name = name;
+            this.price = price;
         }
+
+        public static final String NAME = "name";
+        public static final String PRICE = "price";
     }
 
     public static void main(String... args) {
         test1();
     }
 
-    //使用方式1：基本使用， 使用默认的反射的TypeAdapter(ReflectiveTypeAdapterFactory.Adapter)，比较耗性能
+    //使用方式1：如果没有注册自定义TypeAdapter，则使用默认的反射的TypeAdapter(ReflectiveTypeAdapterFactory.Adapter)，比较耗性能
     public static void test1() {
-
 
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls().create();
-        Foo foo = new Foo();
-        String json = gson.toJson(foo);
+        Food food = new Food();
+        String json = gson.toJson(food);
         System.out.println(json);
     }
 
     //使用方式2： 使用自定义TypeAdapter
     public static void test2() {
-        Gson gson = new GsonBuilder().registerTypeAdapter(Foo.class
-                , new TypeAdapter<Foo>() {
+        Gson gson = new GsonBuilder().registerTypeAdapter(Food.class
+                , new TypeAdapter<Food>() {
 
                     @Override
-                    public void write(JsonWriter out, Foo value) throws IOException {
-                        if (value == null) {//进行非空判断
-                            out.nullValue();
-                            return;
-                        }
-                        //把Food对象制定成你自己定义的格式的字符串进行输出：不一定是json格式了，就看你怎么组织
-                        out.beginObject();
-                        out.name("s").value(value.s+"sdfas");
-                        out.name("i").value(value.i);
-                        out.endObject();
-                    }
-
-                    @Override
-                    public Foo read(JsonReader in) throws IOException {
+                    public Food read(JsonReader in) throws IOException {
                         if (in.peek() == JsonToken.NULL) {//进行非空判断
                             in.nextNull();
                             return null;
                         }
-                        //读取json串并封装成Foo对象返回之
-                        final Foo foo = new Foo();
+                        //读取json串并封装成Food对象返回之
+                        final Food food = new Food();
                         in.beginObject();
                         while (in.hasNext()) {
                             switch (in.nextName()) {
-                                case "s":
-                                    foo.s = in.nextString();
+                                case Food.NAME:
+                                    food.name = in.nextString();
                                     break;
-                                case "i":
-                                    foo.i = in.nextInt();
+                                case Food.PRICE:
+                                    food.price = in.nextInt();
                                     break;
                             }
                         }
                         in.endObject();
-                        return foo;
+                        return food;
                     }
+
+                    @Override
+                    public void write(JsonWriter out, Food value) throws IOException {
+                        if (value == null) {//进行非空判断
+                            out.nullValue();
+                            return;
+                        }
+                        //把Food对象制定成你自己定义的格式的字符串进行输出，不一定是json格式了，就看你怎么组织
+                        out.beginObject();
+                        out.name(Food.NAME).value(value.name);
+                        out.name(Food.PRICE).value(value.price);
+                        out.endObject();
+                    }
+
+
                 }).create();
 
-        Foo foo = new Foo();
-        String json = gson.toJson(foo);
+        Food food = new Food();
+        String json = gson.toJson(food);
         System.out.println(json);
 
     }
 
-    //nullSafe()使用
+    //nullSafe()使用，使用了nullSafe()方法后，上述TypeAdapter的写法
     public static void test3() {
 
-        Gson gson = new GsonBuilder().registerTypeAdapter(Foo.class
-                , new TypeAdapter<Foo>() {
+        Gson gson = new GsonBuilder().registerTypeAdapter(Food.class
+                , new TypeAdapter<Food>() {
 
                     @Override
-                    public void write(JsonWriter out, Foo value) throws IOException {
-                        out.beginObject();
-                        out.name("s").value(value.s);
-                        out.name("i").value(value.i);
-                        out.endObject();
-                    }
+                    public Food read(JsonReader in) throws IOException {
+                        //后面会调用TypeAdapter的nullSafe()方法，所以read和write方法都不用进行null的判断了
 
-                    @Override
-                    public Foo read(JsonReader in) throws IOException {
-                        //读取json串并封装成Foo对象返回之
-                        final Foo foo = new Foo();
+                        //读取json串并封装成Food对象返回之
+                        final Food food = new Food();
                         in.beginObject();
                         while (in.hasNext()) {
                             switch (in.nextName()) {
-                                case "s":
-                                    foo.s = in.nextString();
+                                case Food.NAME:
+                                    food.name = in.nextString();
                                     break;
-                                case "i":
-                                    foo.i = in.nextInt();
+                                case Food.PRICE:
+                                    food.price = in.nextInt();
                                     break;
                             }
                         }
                         in.endObject();
-                        return foo;
+                        return food;
                     }
+
+                    @Override
+                    public void write(JsonWriter out, Food value) throws IOException {
+                        //后面会调用TypeAdapter的nullSafe()方法，所以read和write方法都不用进行null的判断了
+
+                        //把Food对象制定成你自己定义的格式的字符串进行输出，不一定是json格式了，就看你怎么组织
+                        out.beginObject();
+                        out.name(Food.NAME).value(value.name);
+                        out.name(Food.PRICE).value(value.price);
+                        out.endObject();
+                    }
+
                 }.nullSafe()).create();
-        Foo foo = new Foo();
-        String json = gson.toJson(foo);
+        Food food = new Food();
+        String json = gson.toJson(food);
         System.out.println(json);
+
     }
 
 }

@@ -13,6 +13,9 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 
+/**
+ * Gson中注解的使用
+ */
 class MyClass {
     @SerializedName("name")
     String a;   //a => name

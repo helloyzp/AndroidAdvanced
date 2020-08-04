@@ -146,7 +146,6 @@ public class GsonError1 {
 
     //正常的数据情况，authors字段传入的是json数组
     public static void test1() {
-        //TODO:
 
         String json = "{\n" +
                 "    \"name\": \"java\",\n" +
@@ -169,7 +168,6 @@ public class GsonError1 {
 
     //异常的数据情况，authors字段传入的是空字符串
     public static void test2() {
-        //TODO:
         String json = "{\n" +
                 "    \"name\": \"java\",\n" +
                 "    \"authors\": \"\"\n" +
@@ -181,7 +179,6 @@ public class GsonError1 {
 
     //通过注册自定义注册TypeAdapter解决上面的authors字段可能传入异常数据的情况
     public static void test3() {
-        //TODO:
         String json = "{\n" +
                 "    \"name\": \"java\",\n" +
                 "    \"authors\": \"\"\n" +
@@ -203,6 +200,8 @@ public class GsonError1 {
         //test1();
         //test2();
         test3();
+
+
     }
 
 
