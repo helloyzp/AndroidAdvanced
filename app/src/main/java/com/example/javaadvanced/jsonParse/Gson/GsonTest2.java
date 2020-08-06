@@ -3,6 +3,7 @@ package com.example.javaadvanced.jsonParse.Gson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
@@ -11,8 +12,12 @@ import java.io.IOException;
 
 public class GsonTest2 {
 
+    public static final String NAME = "name";
+    public static final String PRICE = "price";
+
     static class Food {
 
+        @SerializedName(value = "myName1", alternate = "myName2")
         private String name;
         private double price;
 
@@ -24,9 +29,6 @@ public class GsonTest2 {
             this.name = name;
             this.price = price;
         }
-
-        public static final String NAME = "name";
-        public static final String PRICE = "price";
     }
 
     public static void main(String... args) {
@@ -60,10 +62,10 @@ public class GsonTest2 {
                         in.beginObject();
                         while (in.hasNext()) {
                             switch (in.nextName()) {
-                                case Food.NAME:
+                                case NAME:
                                     food.name = in.nextString();
                                     break;
-                                case Food.PRICE:
+                                case PRICE:
                                     food.price = in.nextInt();
                                     break;
                             }
@@ -80,8 +82,8 @@ public class GsonTest2 {
                         }
                         //把Food对象制定成你自己定义的格式的字符串进行输出，不一定是json格式了，就看你怎么组织
                         out.beginObject();
-                        out.name(Food.NAME).value(value.name);
-                        out.name(Food.PRICE).value(value.price);
+                        out.name(NAME).value(value.name);
+                        out.name(PRICE).value(value.price);
                         out.endObject();
                     }
 
@@ -109,10 +111,10 @@ public class GsonTest2 {
                         in.beginObject();
                         while (in.hasNext()) {
                             switch (in.nextName()) {
-                                case Food.NAME:
+                                case NAME:
                                     food.name = in.nextString();
                                     break;
-                                case Food.PRICE:
+                                case PRICE:
                                     food.price = in.nextInt();
                                     break;
                             }
@@ -127,8 +129,8 @@ public class GsonTest2 {
 
                         //把Food对象制定成你自己定义的格式的字符串进行输出，不一定是json格式了，就看你怎么组织
                         out.beginObject();
-                        out.name(Food.NAME).value(value.name);
-                        out.name(Food.PRICE).value(value.price);
+                        out.name(NAME).value(value.name);
+                        out.name(PRICE).value(value.price);
                         out.endObject();
                     }
 
