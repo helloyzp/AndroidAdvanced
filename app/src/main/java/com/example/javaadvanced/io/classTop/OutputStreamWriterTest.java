@@ -18,17 +18,17 @@ public class OutputStreamWriterTest {
 	
 	public static void testOutputStreamWriter() throws IOException {
 		File file = new File("src/testtxt/OutputStreamWriter.txt");
-		
-		// true, �������ݿ���׷��
+
+		// true, 设置内容可以追加
 		FileOutputStream fos = new FileOutputStream(file, true);
-		//todo �Ƿ���һ����װ�õ�writer��
+		//todo 是否有一个封装好的writer？
 		OutputStreamWriter oswDef = new OutputStreamWriter(fos);
 		BufferedWriter bwdef = new BufferedWriter(oswDef);
 		
 		bwdef.write(STRING);
 		bwdef.newLine();
 		bwdef.flush();
-//		bwdef.close();  //Ϊʲô��������д
+//		bwdef.close();  //为什么不能在这写
 		System.out.println("oswDef encoding: " + oswDef.getEncoding());
 		
 		OutputStreamWriter oswGBK = new OutputStreamWriter(fos, "GBK");

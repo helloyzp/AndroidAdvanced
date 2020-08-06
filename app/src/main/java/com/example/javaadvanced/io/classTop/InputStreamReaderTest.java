@@ -60,17 +60,10 @@ public class InputStreamReaderTest {
 		}
 	}
 	public static void main(String[] args) throws IOException {
-		//����������������������������
-		//���������Ƿ�����鷳����������
-		testISRDefaultEncoder(
-				new FileInputStream(
-						new File("src/testtxt/OutputStreamWriter.txt")));
-		testISRGBK(
-				new FileInputStream(
-						new File("src/testtxt/OutputStreamWriter.txt")));
-		testISRUTF8(
-				new FileInputStream(
-						new File("src/testtxt/OutputStreamWriter.txt")));
+		//创建过程是否过于麻烦
+		testISRDefaultEncoder(new FileInputStream(new File("src/testtxt/OutputStreamWriter.txt")));
+		testISRGBK(new FileInputStream(new File("src/testtxt/OutputStreamWriter.txt")));
+		testISRUTF8(new FileInputStream(new File("src/testtxt/OutputStreamWriter.txt")));
 	}
 
 }
