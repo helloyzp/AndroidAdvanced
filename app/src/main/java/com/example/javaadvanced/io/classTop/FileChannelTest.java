@@ -26,7 +26,12 @@ public class FileChannelTest {
 		copyFileByStream(sourceFile, targetFile);
 		copyFileByFileChannel(sourceFile, targetFile);
 	}
-	
+
+	/**
+	 * 通过管道的方式进行拷贝
+	 * @param sourceFile
+	 * @param targetFile
+	 */
 	private static void copyFileByFileChannel(File sourceFile,File targetFile){
 		Instant begin = Instant.now();
 		
@@ -69,7 +74,12 @@ public class FileChannelTest {
 		}
 		System.out.println("total spent: " + Duration.between(begin, Instant.now()).toMillis());
 	}
-	
+
+	/**
+	 * 通过流的方式进行拷贝
+	 * @param sourceFile
+	 * @param targetFile
+	 */
 	private static void copyFileByStream(File sourceFile,File targetFile) {
 		Instant begin = Instant.now();
 		
