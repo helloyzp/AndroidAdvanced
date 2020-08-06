@@ -1,5 +1,7 @@
 package com.example.javaadvanced.io.classTop;
 
+import android.os.TestLooperManager;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +20,6 @@ public class ObjectStream {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -28,7 +29,7 @@ public class ObjectStream {
 	private static void writeObject(){
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(
-					new FileOutputStream("src/testtxt/object.txt"));
+					new FileOutputStream(Constants.DATA_PATH+ "object.txt"));
 			for(int i = 0; i < 10; i++){
 				oos.writeObject(new Person("欧阳锋[" + i +"]", i));
 			}
@@ -43,24 +44,45 @@ public class ObjectStream {
 		try {
 			ObjectInputStream ois = new ObjectInputStream(
 					new BufferedInputStream(
-							new FileInputStream(newFile("src/testtxt/object.txt"))));
+							new FileInputStream(newFile(Constants.DATA_PATH+ "object.txt"))));
 			while (ois.available() != -1) {
 				try {
 					Object object = ois.readObject();
 					Person person = (Person) object;
 					System.out.println(person.toString());
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
 			}
 			ois.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private static void readObject2() {
+		try {
+			ObjectInputStream ois = new ObjectInputStream(
+					new BufferedInputStream(
+							new FileInputStream(newFile(Constants.DATA_PATH+ "object.txt"))));
+			while (ois.available() != -1) {
+				try {
+					Object object = ois.readObject();
+					//读取数据时，如果是完全相同的类，但在不同的包下，也是不行的。
+					com.example.javaadvanced.io.test.Person person = (com.example.javaadvanced.io.test.Person) object;
+					System.out.println(person.toString());
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+
+			}
+			ois.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -81,6 +103,7 @@ public class ObjectStream {
 			// TODO: handle exception
 		}
 	}
+
 	/**
 	 * 通过集合写入对象
 	 */
@@ -101,14 +124,13 @@ public class ObjectStream {
 		}
 	}
 
-	
-
-
 	public static void main(String[] args) {
 //		writeObject();
 //		writeObjectByArray();
 //		writeObjectByList();
-		
+
+
+		writeObject();
 		readObject();
 	}
 

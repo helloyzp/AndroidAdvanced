@@ -7,11 +7,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+/**
+ * OutputStreamWriter将OutputStream转为Writer，即将字节流转为字符流
+ */
 public class OutputStreamWriterTest {
 
 	private final static String STRING = "I like AV";
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
 		testOutputStreamWriter();
 		
 	}

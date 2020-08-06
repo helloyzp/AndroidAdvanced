@@ -23,9 +23,6 @@ public class BufferedStreamTest {
     private static void bufferedOutPutStream() {
         try {
             File file = new File(Constants.DATA_PATH + "BufferedStreamTest.txt");
-            if (!file.exists()) {
-                file.createNewFile();
-            }
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
             bos.write(byteArray[0]);
             bos.write(byteArray, 1, byteArray.length - 1);
@@ -40,9 +37,6 @@ public class BufferedStreamTest {
     private static void bufferedInputStream() {
         try {
             File file = new File(Constants.DATA_PATH + "BufferedStreamTest.txt");
-            if (!file.exists()) {
-                file.createNewFile();
-            }
             BufferedInputStream bin = new BufferedInputStream(new FileInputStream(file));
             for (int i = 0; i < 10; i++) {
                 if (bin.available() >= 0) {

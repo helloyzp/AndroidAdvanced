@@ -25,16 +25,21 @@ public class WriterAndStream {
 			bufferedWriter.close();
 			System.out.println("end");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
+	public static void testFileWriter() throws IOException {
+		BufferedWriter bufferedWriter = new BufferedWriter(
+				new FileWriter("src/testtxt/writerAndStream.txt"));
+
+	}
+
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		testWriterAndStream();
 	}
+
 
 }
