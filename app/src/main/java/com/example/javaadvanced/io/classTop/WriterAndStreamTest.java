@@ -10,7 +10,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.channels.FileChannel;
 
-public class WriterAndStream {
+/**
+ * 字节流转为字符流
+ */
+public class WriterAndStreamTest {
 
 	private static void testWriterAndStream(){
 		try {

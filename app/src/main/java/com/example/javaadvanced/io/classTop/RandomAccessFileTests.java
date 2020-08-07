@@ -6,7 +6,7 @@ import java.io.RandomAccessFile;
 
 public class RandomAccessFileTests {
 
-	private static final File file = new File("src\\testtxt\\raf.txt");
+	private static final File file = new File(Constants.DATA_PATH + "raf.txt");
 
 	/**
 	 * 向文件中写入内容

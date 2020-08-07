@@ -13,7 +13,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObjectStream {
+public class ObjectStreamTest {
 	private static File newFile(String path){
 		File file = new File(path);
 		if (!file.exists()) {
