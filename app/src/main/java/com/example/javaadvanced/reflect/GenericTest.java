@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 
 public class GenericTest {
 
-    public static class ParentClass<T> {
+    public static abstract class ParentClass<T> {
         T name;
 
         public T getName() {
@@ -21,9 +21,10 @@ public class GenericTest {
 
     }
 
-
-
-    public static void main(String[] args) {
+    /**
+     * 通过父类去获取泛型类型
+     */
+    public static void getActualType() {
         Child child = new Child();
         Type type = child.getClass().getGenericSuperclass();
         if(type instanceof ParameterizedType) {
@@ -32,6 +33,11 @@ public class GenericTest {
             System.out.println(actualtype);//class java.lang.String
 
         }
-
     }
+
+
+    public static void main(String[] args) {
+        getActualType();
+    }
+
 }

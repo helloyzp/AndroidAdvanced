@@ -1,7 +1,7 @@
-package com.example.javaadvanced.jsonParse.myjosn;
+package com.example.javaadvanced.serializable.jsonParse.myjosn;
 
-import com.example.javaadvanced.jsonParse.myjosn.model.JsonArray;
-import com.example.javaadvanced.jsonParse.myjosn.model.JsonObject;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.model.JsonArray;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.model.JsonObject;
 
 import java.util.List;
 import java.util.Map;

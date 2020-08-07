@@ -1,7 +1,7 @@
-package com.example.javaadvanced.jsonParse.myjosn.model;
+package com.example.javaadvanced.serializable.jsonParse.myjosn.model;
 
-import com.example.javaadvanced.jsonParse.myjosn.JsonUtils;
-import com.example.javaadvanced.jsonParse.myjosn.exception.JsonTypeException;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.JsonUtils;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.exception.JsonTypeException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

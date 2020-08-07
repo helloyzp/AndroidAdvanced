@@ -19,23 +19,25 @@ public class OutputStreamWriterTest {
 	}
 	
 	public static void testOutputStreamWriter() throws IOException {
-		File file = new File("src/testtxt/OutputStreamWriter.txt");
+		File file = new File(Constants.DATA_PATH + "OutputStreamWriter.txt");
 
 		// true, 设置内容可以追加
 		FileOutputStream fos = new FileOutputStream(file, true);
+
 		//todo 是否有一个封装好的writer？
 		OutputStreamWriter oswDef = new OutputStreamWriter(fos);
 		BufferedWriter bwdef = new BufferedWriter(oswDef);
-		
 		bwdef.write(STRING);
 		bwdef.newLine();
 		bwdef.flush();
-//		bwdef.close();  //为什么不能在这写
+        //为什么不能在这写bwdef.close()? 因为bwdef引用着oswDef，oswDef引用着fos，关闭bwdef会关闭oswDef，关闭oswDef会关闭fos，而fos后面还要用。
+        //这里如果关闭了，会报异常：Exception in thread "main" java.io.IOException: Stream Closed
+//		bwdef.close();
 		System.out.println("oswDef encoding: " + oswDef.getEncoding());
 		
 		OutputStreamWriter oswGBK = new OutputStreamWriter(fos, "GBK");
 		BufferedWriter bwGBK = new BufferedWriter(oswGBK);
-		bwGBK.write(STRING + "GBK");
+		bwGBK.write(STRING + " GBK");
 		bwGBK.newLine();
 		bwGBK.flush();
 //		bwGBK.close();
@@ -43,7 +45,7 @@ public class OutputStreamWriterTest {
 		
 		OutputStreamWriter oswUTF8 = new OutputStreamWriter(fos, "UTF-8");
 		BufferedWriter bwUTF8 = new BufferedWriter(oswUTF8);
-		bwUTF8.write(STRING + "UTF-8");
+		bwUTF8.write(STRING + " UTF-8");
 		bwUTF8.newLine();
 		bwUTF8.flush();
 //		bwUTF8.close();

@@ -1,4 +1,4 @@
-package com.example.javaadvanced.jsonParse.myjosn.tokenizer;
+package com.example.javaadvanced.serializable.jsonParse.myjosn.tokenizer;
 
 import java.io.IOException;
 import java.io.Reader;

@@ -1,4 +1,4 @@
-package com.example.javaadvanced.jsonParse.Gson;
+package com.example.javaadvanced.serializable.jsonParse.Gson;
 
 import com.example.javaadvanced.reflect.GenericDeclarationTest;
 import com.google.gson.Gson;

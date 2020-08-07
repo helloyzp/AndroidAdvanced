@@ -1,12 +1,12 @@
-package com.example.javaadvanced.jsonParse.myjosn.parser;
+package com.example.javaadvanced.serializable.jsonParse.myjosn.parser;
 
 
-import com.example.javaadvanced.jsonParse.myjosn.exception.JsonParseException;
-import com.example.javaadvanced.jsonParse.myjosn.model.JsonArray;
-import com.example.javaadvanced.jsonParse.myjosn.model.JsonObject;
-import com.example.javaadvanced.jsonParse.myjosn.tokenizer.Token;
-import com.example.javaadvanced.jsonParse.myjosn.tokenizer.TokenList;
-import com.example.javaadvanced.jsonParse.myjosn.tokenizer.TokenType;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.exception.JsonParseException;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.model.JsonArray;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.model.JsonObject;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.tokenizer.Token;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.tokenizer.TokenList;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.tokenizer.TokenType;
 
 /**
  * 语法分析器

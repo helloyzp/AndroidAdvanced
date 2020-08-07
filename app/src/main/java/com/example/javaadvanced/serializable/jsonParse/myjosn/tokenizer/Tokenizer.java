@@ -1,6 +1,6 @@
-package com.example.javaadvanced.jsonParse.myjosn.tokenizer;
+package com.example.javaadvanced.serializable.jsonParse.myjosn.tokenizer;
 
-import com.example.javaadvanced.jsonParse.myjosn.exception.JsonParseException;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.exception.JsonParseException;
 
 import java.io.IOException;
 

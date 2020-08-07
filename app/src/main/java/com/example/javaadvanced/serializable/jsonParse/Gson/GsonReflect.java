@@ -1,4 +1,4 @@
-package com.example.javaadvanced.jsonParse.Gson;
+package com.example.javaadvanced.serializable.jsonParse.Gson;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

@@ -1,4 +1,4 @@
-package com.example.javaadvanced.jsonParse.myjosn.exception;
+package com.example.javaadvanced.serializable.jsonParse.myjosn.exception;
 
 
 public class JsonParseException extends RuntimeException {

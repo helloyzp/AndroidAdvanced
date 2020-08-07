@@ -1,9 +1,9 @@
-package com.example.javaadvanced.jsonParse.myjosn;
+package com.example.javaadvanced.serializable.jsonParse.myjosn;
 
-import com.example.javaadvanced.jsonParse.myjosn.parser.Parser;
-import com.example.javaadvanced.jsonParse.myjosn.tokenizer.CharReader;
-import com.example.javaadvanced.jsonParse.myjosn.tokenizer.TokenList;
-import com.example.javaadvanced.jsonParse.myjosn.tokenizer.Tokenizer;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.parser.Parser;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.tokenizer.CharReader;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.tokenizer.TokenList;
+import com.example.javaadvanced.serializable.jsonParse.myjosn.tokenizer.Tokenizer;
 
 import java.io.IOException;
 import java.io.StringReader;

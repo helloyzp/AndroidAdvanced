@@ -1,4 +1,4 @@
-package com.example.javaadvanced.jsonParse.Gson;
+package com.example.javaadvanced.serializable.jsonParse.Gson;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
