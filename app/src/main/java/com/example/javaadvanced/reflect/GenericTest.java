@@ -3,6 +3,9 @@ package com.example.javaadvanced.reflect;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+/**
+ * 通过子类继承泛型父类去获取泛型类型， 即通过调用子类的Class对象的getGenericSuperclass()方法获取直接父类的Type类型
+ */
 public class GenericTest {
 
     public static abstract class ParentClass<T> {
@@ -22,7 +25,7 @@ public class GenericTest {
     }
 
     /**
-     * 通过父类去获取泛型类型
+     * 通过子类继承泛型父类去获取泛型类型
      */
     public static void getActualType() {
         Child child = new Child();
