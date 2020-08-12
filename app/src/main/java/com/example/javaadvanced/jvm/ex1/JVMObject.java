@@ -2,17 +2,16 @@ package com.example.javaadvanced.jvm.ex1;
 
 /**
  * @author King老师
- *从底层深入理解运行时数据区
+ * 从底层深入理解运行时数据区
  * -Xms30m -Xmx30m -XX:+UseConcMarkSweepGC -XX:-UseCompressedOops
  * -Xss1m
  */
-
 public class JVMObject {
     public final static String MAN_TYPE = "man"; // 常量
     public static String WOMAN_TYPE = "woman";  // 静态变量
 
     public static void  main(String[] args)throws Exception {//栈帧
-        Teacher T1 = new Teacher();//堆中   T1 是局部变量
+        Teacher T1 = new Teacher();//Teacher对象存在堆中，  T1引用变量，存在虚拟机栈的栈帧的局部变量表中
         T1.setName("Mark");
         T1.setSexType(MAN_TYPE);
         T1.setAge(36);
@@ -30,7 +29,7 @@ public class JVMObject {
 class Teacher{
     String name;
     String sexType;
-    int age;//堆
+    int age;
 
     public String getName() {
         return name;
