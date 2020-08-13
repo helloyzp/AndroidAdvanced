@@ -1,7 +1,9 @@
-package com.example.javaadvanced.jvm.ex1;
+package com.example.javaadvanced.jvm.ex1.jvmOptimization;
 /**
  * @author King老师
- * 方法内联
+ *
+ * 虚拟机优化技术
+ * 编译优化技术——方法内联
  */
 public class MethodDeal {
 

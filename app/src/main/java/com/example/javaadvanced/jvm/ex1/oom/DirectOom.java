@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
  */
 public class DirectOom {
     public static void main(String[] args) {
-        //直接分配128M的直接内存(100M)
+        //直接分配128M的直接内存(超过了设置的最大直接内存100M)
         ByteBuffer bb = ByteBuffer.allocateDirect(128*1024*1204);
     }
 }

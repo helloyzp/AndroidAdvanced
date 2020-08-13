@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 /**
  * cglib动态生成
- * Enhancer中 setSuperClass和setCallback, 设置好了SuperClass后, 可以使用create制作代理对象了
+ * Enhancer中 setSuperClass和setCallback, 设置好了SuperClass后, 可以使用create制作代理对象了。
  * 限制方法区的大小导致的内存溢出
  * VM Args: -XX:MetaspaceSize=10M -XX:MaxMetaspaceSize=10M
  * */

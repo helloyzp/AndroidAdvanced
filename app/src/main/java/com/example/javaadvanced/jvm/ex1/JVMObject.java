@@ -5,6 +5,9 @@ package com.example.javaadvanced.jvm.ex1;
  * 从底层深入理解运行时数据区
  * -Xms30m -Xmx30m -XX:+UseConcMarkSweepGC -XX:-UseCompressedOops
  * -Xss1m
+ *
+ *  查看对象在新生代和老年代的地址
+ *  查看栈帧
  */
 public class JVMObject {
     public final static String MAN_TYPE = "man"; // 常量

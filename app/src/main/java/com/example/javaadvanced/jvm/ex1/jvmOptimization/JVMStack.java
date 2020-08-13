@@ -1,7 +1,9 @@
-package com.example.javaadvanced.jvm.ex1;
+package com.example.javaadvanced.jvm.ex1.jvmOptimization;
 /**
  * @author King老师
- * 栈帧之间数据的共享
+ *
+ * 虚拟机优化技术
+ * 栈的优化技术——栈帧之间数据的共享
  */
 public class JVMStack {
 
