@@ -38,7 +38,7 @@ public class TestSoftRef {
         SoftReference<User> userSoft = new SoftReference<User>(user);//软引用
         user = null;//干掉强引用，确保这个实例只有userSoft软引用指向它
         System.out.println(userSoft.get()); //看一下这个对象是否还在
-        System.gc();//进行一次GC垃圾回收  千万不要写在业务代码中。
+        System.gc();//进行一次GC垃圾回收  千万不要写在业务代码中（写在业务代码中会导致应用卡顿）。
         System.out.println("After gc");
         System.out.println("userSoft.get()=" + userSoft.get());
         //往堆中填充数据，导致OOM
