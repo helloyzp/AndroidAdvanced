@@ -17,7 +17,7 @@
             android:text="搜索历史"
             android:textColor="@android:color/black"
             android:textSize="18sp"/>
-        <com.example.javaadvanced.flowlayout.FlowLayout
+        <com.example.javaadvanced.ui.flowlayout.FlowLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_button_circular"
                 android:text="图书勋章日" />
-        </com.example.javaadvanced.flowlayout.FlowLayout>
+        </com.example.javaadvanced.ui.flowlayout.FlowLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -99,7 +99,7 @@
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
-        <com.example.javaadvanced.flowlayout.FlowLayout
+        <com.example.javaadvanced.ui.flowlayout.FlowLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp">
@@ -194,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_button_circular"
                 android:text="笔记本电脑" />
-        </com.example.javaadvanced.flowlayout.FlowLayout>
+        </com.example.javaadvanced.ui.flowlayout.FlowLayout>
     </LinearLayout>
 
 </ScrollView>

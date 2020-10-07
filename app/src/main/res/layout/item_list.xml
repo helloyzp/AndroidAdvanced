@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.example.javaadvanced.dispatchevent.ViewpagerListview.MyListView
+    <com.example.javaadvanced.ui.dispatchevent.ViewpagerListview.MyListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

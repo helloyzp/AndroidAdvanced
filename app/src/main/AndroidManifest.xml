@@ -18,14 +18,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".viewpagerheightwrap.ViewPagerActivity"/>
-        <activity android:name=".flowlayout.FlowLayoutActivity"/>
-        <activity android:name=".dispatchevent.clickevent.ClickEventActivity"/>
-        <activity android:name=".dispatchevent.ViewpagerListview.ViewpagerListviewActivity"/>
-        <activity android:name=".dispatchevent.ViewpagerListview.ViewpagerListviewActivity2"/>
-        <activity android:name=".dispatchevent.SwipeRefreshLayoutViewpaegr.SRL_VP_mainActivity"/>
-        <activity android:name=".RecyclerView.RecyclerViewDecoration.RecyclerViewActivity"/>
-        <activity android:name=".RecyclerView.RecyclerViewCache.RecyclerViewCacheActivity"/>
+        <activity android:name=".ui.viewpagerheightwrap.ViewPagerActivity"/>
+        <activity android:name=".ui.flowlayout.FlowLayoutActivity"/>
+        <activity android:name=".ui.dispatchevent.OnTouchOnClick.ClickEventActivity"/>
+        <activity android:name=".ui.dispatchevent.ViewpagerListview.ViewpagerListviewActivity"/>
+        <activity android:name=".ui.dispatchevent.ViewpagerListview.ViewpagerListviewActivity2"/>
+        <activity android:name=".ui.dispatchevent.SwipeRefreshLayoutViewpaegr.SRL_VP_mainActivity"/>
+        <activity android:name=".ui.RecyclerView.RecyclerViewDecoration.RecyclerViewActivity"/>
+        <activity android:name=".ui.RecyclerView.RecyclerViewCache.RecyclerViewCacheActivity"/>
     </application>
 
 </manifest>

@@ -7,16 +7,16 @@
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent">
 
-    <com.example.javaadvanced.dispatchevent.SwipeRefreshLayoutViewpaegr.CustomSRL2
+    <com.example.javaadvanced.ui.dispatchevent.SwipeRefreshLayoutViewpaegr.CustomSRL2
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.example.javaadvanced.dispatchevent.SwipeRefreshLayoutViewpaegr.CustomVPInner
+        <com.example.javaadvanced.ui.dispatchevent.SwipeRefreshLayoutViewpaegr.CustomVPInner
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.example.javaadvanced.dispatchevent.SwipeRefreshLayoutViewpaegr.CustomSRL2>
+    </com.example.javaadvanced.ui.dispatchevent.SwipeRefreshLayoutViewpaegr.CustomSRL2>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

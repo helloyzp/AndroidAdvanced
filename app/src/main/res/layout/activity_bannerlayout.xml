@@ -6,7 +6,7 @@
     android:background="#aadcff"
     android:clipChildren="false">
 
-    <com.example.javaadvanced.viewpagerheightwrap.MyViewPager
+    <com.example.javaadvanced.ui.viewpagerheightwrap.MyViewPager
         android:id="@+id/view_Pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
         android:clipChildren="false">
-    </com.example.javaadvanced.viewpagerheightwrap.MyViewPager>
+    </com.example.javaadvanced.ui.viewpagerheightwrap.MyViewPager>
 
     <RadioGroup
         android:id="@+id/radio_group"

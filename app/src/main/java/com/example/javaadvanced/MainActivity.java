@@ -7,8 +7,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.javaadvanced.RecyclerView.RecyclerViewCache.RecyclerViewCacheActivity;
-import com.example.javaadvanced.RecyclerView.RecyclerViewDecoration.RecyclerViewActivity;
+import com.example.javaadvanced.ui.RecyclerView.RecyclerViewCache.RecyclerViewCacheActivity;
 
 import java.lang.reflect.Method;
 
