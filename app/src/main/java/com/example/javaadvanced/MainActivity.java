@@ -7,7 +7,8 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.javaadvanced.viewpagerheightwrap.ViewPagerActivity;
+import com.example.javaadvanced.RecyclerView.RecyclerViewCache.RecyclerViewCacheActivity;
+import com.example.javaadvanced.RecyclerView.RecyclerViewDecoration.RecyclerViewActivity;
 
 import java.lang.reflect.Method;
 
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void gotoActivity() {
-        Intent intent = new Intent(this, ViewPagerActivity.class);
+        Intent intent = new Intent(this, RecyclerViewCacheActivity.class);
         startActivity(intent);
     }
 

@@ -20,7 +20,12 @@
 
         <activity android:name=".viewpagerheightwrap.ViewPagerActivity"/>
         <activity android:name=".flowlayout.FlowLayoutActivity"/>
-
+        <activity android:name=".dispatchevent.clickevent.ClickEventActivity"/>
+        <activity android:name=".dispatchevent.ViewpagerListview.ViewpagerListviewActivity"/>
+        <activity android:name=".dispatchevent.ViewpagerListview.ViewpagerListviewActivity2"/>
+        <activity android:name=".dispatchevent.SwipeRefreshLayoutViewpaegr.SRL_VP_mainActivity"/>
+        <activity android:name=".RecyclerView.RecyclerViewDecoration.RecyclerViewActivity"/>
+        <activity android:name=".RecyclerView.RecyclerViewCache.RecyclerViewCacheActivity"/>
     </application>
 
 </manifest>
