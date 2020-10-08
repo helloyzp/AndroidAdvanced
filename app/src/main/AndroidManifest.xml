@@ -23,7 +23,7 @@
         <activity android:name=".ui.dispatchevent.OnTouchOnClick.ClickEventActivity"/>
         <activity android:name=".ui.dispatchevent.ViewpagerListview.ViewpagerListviewActivity"/>
         <activity android:name=".ui.dispatchevent.ViewpagerListview.ViewpagerListviewActivity2"/>
-        <activity android:name=".ui.dispatchevent.SwipeRefreshLayoutViewpaegr.SRL_VP_mainActivity"/>
+        <activity android:name=".ui.dispatchevent.SwipeRefreshLayoutViewpager.SRL_VP_mainActivity"/>
         <activity android:name=".ui.RecyclerView.RecyclerViewDecoration.RecyclerViewActivity"/>
         <activity android:name=".ui.RecyclerView.RecyclerViewCache.RecyclerViewCacheActivity"/>
     </application>

@@ -1,4 +1,4 @@
-package com.example.javaadvanced.ui.dispatchevent.SwipeRefreshLayoutViewpaegr;
+package com.example.javaadvanced.ui.dispatchevent.SwipeRefreshLayoutViewpager;
 
 import android.content.Context;
 
