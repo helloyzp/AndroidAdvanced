@@ -17,7 +17,7 @@ import com.example.javaadvanced.ui.RecyclerView.slidecard.adapter.ViewHolder;
 import java.util.List;
 
 /**
- * RecyclerView实现的滑动卡片效果
+ * RecyclerView实现层叠卡片滑动删除特效，
  * 学习自定义RecyclerView.LayoutManager
  */
 public class SlidecardActivity extends AppCompatActivity {
