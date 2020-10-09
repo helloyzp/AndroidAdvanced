@@ -2,6 +2,7 @@ package com.example.javaadvanced.ui.RecyclerView.slidecard;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -31,6 +32,7 @@ public class SlidecardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_slidecard);
 
         rv = findViewById(R.id.rv);
+        //rv.setLayoutManager(new LinearLayoutManager(this));//使用LinearLayoutManager效果是线性排列的，达不到想要的效果
         rv.setLayoutManager(new SlideCardLayoutManager());
 
         mDatas = SlideCardBean.initDatas();
