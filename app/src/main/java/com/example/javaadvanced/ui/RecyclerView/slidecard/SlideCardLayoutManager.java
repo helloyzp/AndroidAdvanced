@@ -44,6 +44,7 @@ public class SlideCardLayoutManager extends RecyclerView.LayoutManager {
                     widthSpace / 2 + getDecoratedMeasuredWidth(view),
                     heightSpace / 2 + getDecoratedMeasuredHeight(view));
 
+            //进行平移和缩放，不同位置的卡片缩放级别不同
             int level = itemCount - i - 1;
             if (level > 0) {
                 if (level < CardConfig.MAX_SHOW_COUNT - 1) {

@@ -16,6 +16,7 @@ import com.example.javaadvanced.ui.RecyclerView.slidecard.adapter.ViewHolder;
 import java.util.List;
 
 /**
+ * RecyclerView实现的滑动卡片效果
  * 学习自定义RecyclerView.LayoutManager
  */
 public class SlidecardActivity extends AppCompatActivity {
@@ -48,6 +49,7 @@ public class SlidecardActivity extends AppCompatActivity {
         // 初始化数据
         CardConfig.initConfig(this);
 
+        //拖动卡片的滑动效果
         SlideCallback slideCallback = new SlideCallback(rv, adapter, mDatas);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(slideCallback);
         itemTouchHelper.attachToRecyclerView(rv);

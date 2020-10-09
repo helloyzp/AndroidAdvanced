@@ -1,6 +1,7 @@
 package com.example.javaadvanced.ui.RecyclerView.slidecard;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import com.example.javaadvanced.ui.RecyclerView.slidecard.adapter.UniversalAdapt
 import java.util.List;
 
 public class SlideCallback extends ItemTouchHelper.SimpleCallback {
+    private String TAG = "SlideCallback";
 
     private RecyclerView mRv;
     private UniversalAdapter<SlideCardBean> adapter;
@@ -47,6 +49,7 @@ public class SlideCallback extends ItemTouchHelper.SimpleCallback {
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
+        Log.i(TAG, "onChildDraw(), dX=" + dX + " ,dY=" + dY);
 
         double maxDistance = recyclerView.getWidth() * 0.5f;
         double distance = Math.sqrt(dX * dX + dY * dY);
