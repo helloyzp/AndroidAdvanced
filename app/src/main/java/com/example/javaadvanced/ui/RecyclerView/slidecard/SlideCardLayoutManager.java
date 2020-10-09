@@ -5,6 +5,9 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * 自定义RecyclerView的LayoutManager
+ */
 public class SlideCardLayoutManager extends RecyclerView.LayoutManager {
 
     @Override
