@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.javaadvanced.ui.RecyclerView.RecyclerViewCache.RecyclerViewCacheActivity;
+import com.example.javaadvanced.ui.RecyclerView.slidecard.SlidecardActivity;
 
 import java.lang.reflect.Method;
 
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void gotoActivity() {
-        Intent intent = new Intent(this, RecyclerViewCacheActivity.class);
+        Intent intent = new Intent(this, SlidecardActivity.class);
         startActivity(intent);
     }
 

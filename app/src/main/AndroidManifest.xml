@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.javaadvanced">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -26,6 +28,7 @@
         <activity android:name=".ui.dispatchevent.SwipeRefreshLayoutViewpager.SRL_VP_mainActivity"/>
         <activity android:name=".ui.RecyclerView.RecyclerViewDecoration.RecyclerViewActivity"/>
         <activity android:name=".ui.RecyclerView.RecyclerViewCache.RecyclerViewCacheActivity"/>
+        <activity android:name=".ui.RecyclerView.slidecard.SlidecardActivity"/>
     </application>
 
 </manifest>
