@@ -13,6 +13,10 @@ import com.example.javaadvanced.R;
 
 import java.util.List;
 
+/**
+ * 什么时候调用onCreateViewHolder()?
+ * 什么时候调用onBindViewHolder()?
+ */
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
 
     private Context context;
@@ -28,20 +32,22 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_rv, parent, false);
-        Log.e(TAG, "onCreateViewHolder: " + getItemCount());
+        Log.e(TAG, "onCreateViewHolder(): getItemCount()=" + getItemCount());
         return new CustomViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
         holder.tv.setText(list.get(position));
-        Log.e(TAG, "onBindViewHolder: " + position);
+        Log.e(TAG, "onBindViewHolder(): position=" + position);
     }
 
     @Override
     public int getItemCount() {
         return list == null ? 0 : list.size();
     }
+
+
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         private TextView tv;
