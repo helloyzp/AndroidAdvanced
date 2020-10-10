@@ -3,6 +3,7 @@ package com.example.javaadvanced.ui.RecyclerView.MyRecyclerView;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +15,22 @@ import com.bumptech.glide.load.engine.Resource;
 import com.example.javaadvanced.R;
 
 public class MyRecyclerViewActivity extends AppCompatActivity {
+    private String TAG = "MyRecyclerViewActivity";
 
     private int mCount = 500000;
 
+    private static int ItemViewType_COUNT = 2;
+    private static int ItemViewType_FIRST = 0;
+    private static int ItemViewType_SECOND = 1;
+
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myrecyclerview);
+        recyclerView = findViewById(R.id.recyclerview);
+        recyclerView.setAdapter(new MyAdapter(this));
 
     }
 
@@ -39,7 +48,12 @@ public class MyRecyclerViewActivity extends AppCompatActivity {
 
         @Override
         public View onCreateViewHolder(int position, View convertView, ViewGroup parent) {
-            convertView = layoutInflater.inflate(R.layout.item_text, parent, false);
+            if (getItemViewType(position) == ItemViewType_FIRST) {
+                convertView = layoutInflater.inflate(R.layout.item_image, parent, false);
+            } else {
+                convertView = layoutInflater.inflate(R.layout.item_text, parent, false);
+            }
+            Log.i(TAG, "onCreateViewHolder(), position=" + position + " ,convertView=" + convertView);
             return convertView;
         }
 
@@ -52,12 +66,19 @@ public class MyRecyclerViewActivity extends AppCompatActivity {
 
         @Override
         public int getItemViewType(int position) {
-            return 0;
+            if (position == 0) {//第一条数据是单独的类型，比如朋友圈的第一条数据是背景墙
+                return ItemViewType_FIRST;
+            }
+            return ItemViewType_SECOND;
         }
 
+        /**
+         * 几种类型的ItemView
+         * @return
+         */
         @Override
         public int getViewTypeCount() {
-            return 1;//一种类型的item
+            return ItemViewType_COUNT;
         }
 
         @Override
