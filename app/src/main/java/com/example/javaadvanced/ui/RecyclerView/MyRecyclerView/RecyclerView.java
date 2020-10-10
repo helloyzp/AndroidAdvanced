@@ -128,7 +128,7 @@ public class RecyclerView extends ViewGroup {
 
         scrollY += y;
 
-        //滑动临界值的情况，比如第一条数据已经在屏幕第一条item的位置还要继续下滑
+        //滑动临界值的情况，比如第一条数据已经在屏幕第一条item的位置还要继续下滑,或者最后一条数据已经在屏幕的最后一条item的位置还要继续上滑
         scrollY = scrollBounds(scrollY);
 
         if (scrollY > 0) {//往上滑
