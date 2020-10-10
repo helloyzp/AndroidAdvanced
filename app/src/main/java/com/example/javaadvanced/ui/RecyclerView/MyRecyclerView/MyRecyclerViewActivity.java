@@ -54,12 +54,15 @@ public class MyRecyclerViewActivity extends AppCompatActivity {
                 convertView = layoutInflater.inflate(R.layout.item_text, parent, false);
             }
             Log.i(TAG, "onCreateViewHolder(), position=" + position + " ,convertView=" + convertView);
+            TextView textView = convertView.findViewById(R.id.tv);
+            textView.setText("第" + position + "行");
             return convertView;
         }
 
         @Override
         public View onBindViewHolder(int position, View convertView, ViewGroup parent) {
-            TextView textView = convertView.findViewById(R.id.text);
+            Log.i(TAG, "onBindViewHolder(), position=" + position + " ,convertView=" + convertView);
+            TextView textView = convertView.findViewById(R.id.tv);
             textView.setText("第" + position + "行");
             return convertView;
         }
