@@ -36,11 +36,11 @@ public class RecyclerView extends ViewGroup {
 
     private int rowCount;
 
-    //每一行的高度
+    //每一行itemView的高度
     private int[] heights;
 
-    private int width;
-    private int height;
+    private int width;//RecyclerView的宽度
+    private int height;//RecyclerView的高度
 
     private int touchSlop;//最小滑动距离
 
