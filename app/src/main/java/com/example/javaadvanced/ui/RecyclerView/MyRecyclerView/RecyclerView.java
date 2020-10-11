@@ -131,8 +131,8 @@ public class RecyclerView extends ViewGroup {
         //滑动临界值的情况，比如第一条数据已经在屏幕第一条item的位置还要继续下滑,或者最后一条数据已经在屏幕的最后一条item的位置还要继续上滑
         scrollY = scrollBounds(scrollY);
 
-        if (scrollY > 0) {//往上滑
-            // <1> 上滑移除最上面的一条
+        if (scrollY > 0) {//手指往上滑
+            // (1)上滑移除最上面的一条
             while (heights[firstRow] < scrollY) {//当往上滑动的距离大于屏幕中第一个item的高度，则将屏幕中第一个item移除
                 if (!viewList.isEmpty()) {
                     //移除最上面的itemView
@@ -144,18 +144,16 @@ public class RecyclerView extends ViewGroup {
                 firstRow++;
             }
 
-            // <2>上滑加载最下面的一条
-            // 当剩下的数据的总高度小于屏幕的高度的时候，最下面添加一条数据
-            while (getFillHeight() < height) {
+            // (2)上滑加载最下面的一条
+            while (getFillHeight() < height) { // 当屏幕中剩下的item的总高度小于屏幕的高度的时候，最下面添加一条item
                 int addLast = firstRow + viewList.size();
                 View view = obtain(addLast, width, heights[addLast]);
-                //上滑时往viewList中添加数据
-                viewList.add(viewList.size(), view);
+                viewList.add(viewList.size(), view);//往viewList中添加item
             }
 
-        } else { //往下滑
+        } else { //手指往下滑
 
-            //<3>下滑加载最上面的一条
+            //(1)下滑加载最上面的一条
             while (scrollY < 0) {  //这里判断scrollY<0即可，滑到顶置零
                 //第一行应该变成firstRow - 1
                 int firstAddRow = firstRow - 1;
@@ -165,7 +163,7 @@ public class RecyclerView extends ViewGroup {
                 scrollY += heights[firstRow + 1];
             }
 
-            //<4>下滑移除最下面的一条
+            //(2)下滑移除最下面的一条
             while (sumArray(heights, firstRow, viewList.size()) - scrollY - heights[firstRow + viewList.size() - 1] >= height) {
                 removeView(viewList.remove(viewList.size() - 1));
             }
