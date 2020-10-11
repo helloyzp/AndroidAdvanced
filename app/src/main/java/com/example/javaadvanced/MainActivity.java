@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void gotoActivity() {
-        Intent intent = new Intent(this, MyRecyclerViewActivity.class);
+        Intent intent = new Intent(this, SlidecardActivity.class);
         startActivity(intent);
     }
 

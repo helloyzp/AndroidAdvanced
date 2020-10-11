@@ -62,6 +62,7 @@ public class SlideCallback extends ItemTouchHelper.SimpleCallback {
         // 显示的个数  4个
         int itemCount = recyclerView.getChildCount();
 
+        //滑动回弹的效果，滑动距离小于一定百分比时进行回弹
         for (int i = 0; i < itemCount; i++) {
             View view = recyclerView.getChildAt(i);
 
