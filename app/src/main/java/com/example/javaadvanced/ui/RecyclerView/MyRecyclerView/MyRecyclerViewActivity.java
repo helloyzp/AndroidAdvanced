@@ -11,17 +11,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.load.engine.Resource;
 import com.example.javaadvanced.R;
 
 public class MyRecyclerViewActivity extends AppCompatActivity {
     private String TAG = "MyRecyclerViewActivity";
-
-    private int mCount = 500000;
-
-    private static int ItemViewType_COUNT = 2;
-    private static int ItemViewType_FIRST = 0;
-    private static int ItemViewType_SECOND = 1;
 
     private RecyclerView recyclerView;
 
@@ -35,6 +28,11 @@ public class MyRecyclerViewActivity extends AppCompatActivity {
     }
 
     public class MyAdapter extends RecyclerView.Adapter {
+        private int mCount = 500000;
+
+        private int ItemViewType_COUNT = 2;//共有的itemview类型
+        private int ItemViewType_FIRST = 0;
+        private int ItemViewType_SECOND = 1;
 
         private LayoutInflater layoutInflater;
         private int height;
@@ -42,6 +40,7 @@ public class MyRecyclerViewActivity extends AppCompatActivity {
         public MyAdapter(Context context) {
             Resources resource = context.getResources();
             layoutInflater = LayoutInflater.from(context);
+            //只是简易版的RecyclerView，为了方便，每个itemveiw的高度固定
             height = resource.getDimensionPixelSize(R.dimen.table_height);
 
         }
@@ -77,6 +76,7 @@ public class MyRecyclerViewActivity extends AppCompatActivity {
 
         /**
          * 几种类型的ItemView
+         *
          * @return
          */
         @Override

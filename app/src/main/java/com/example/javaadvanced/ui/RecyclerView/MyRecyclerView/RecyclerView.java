@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * 自定义RecyclerView，理解RecyclerView的核心原理
+ * 自定义简易版RecyclerView，理解RecyclerView的核心原理
  */
 public class RecyclerView extends ViewGroup {
 
