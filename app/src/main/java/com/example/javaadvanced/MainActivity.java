@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.javaadvanced.performanceOptimization.DataStructure.HashMapSparseArrayActivity;
 import com.example.javaadvanced.ui.RecyclerView.MyRecyclerView.MyRecyclerViewActivity;
 import com.example.javaadvanced.ui.RecyclerView.RecyclerViewCache.RecyclerViewCacheActivity;
 import com.example.javaadvanced.ui.RecyclerView.slidecard.SlidecardActivity;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void gotoActivity() {
-        Intent intent = new Intent(this, RecyclerViewCacheActivity.class);
+        Intent intent = new Intent(this, HashMapSparseArrayActivity.class);
         startActivity(intent);
     }
 
