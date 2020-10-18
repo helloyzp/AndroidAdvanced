@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.javaadvanced">
 
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
@@ -20,6 +24,18 @@
             </intent-filter>
         </activity>
 
+<!--
+        &lt;!&ndash; 启动速度 &ndash;&gt;
+        <activity android:name=".performanceOptimization.Startingspeed.AppStartActivity"
+            android:theme="@style/AppStarTheme1">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>-->
+
+
         <activity android:name=".ui.viewpagerheightwrap.ViewPagerActivity"/>
         <activity android:name=".ui.flowlayout.FlowLayoutActivity"/>
         <activity android:name=".ui.dispatchevent.OnTouchOnClick.ClickEventActivity"/>
@@ -31,6 +47,12 @@
         <activity android:name=".ui.RecyclerView.slidecard.SlidecardActivity"/>
         <activity android:name=".ui.RecyclerView.MyRecyclerView.MyRecyclerViewActivity"/>
         <activity android:name=".performanceOptimization.DataStructure.HashMapSparseArrayActivity"/>
+        
+        <activity android:name=".performanceOptimization.Startingspeed.HomeActivity"/>
+        <activity android:name=".performanceOptimization.Startingspeed.FlowLayoutActivity"/>
+        <activity android:name=".performanceOptimization.Startingspeed.RecyclerActivity"/>
+        <activity android:name=".performanceOptimization.Startingspeed.LayoutTestActivity"/>
+
     </application>
 
 </manifest>

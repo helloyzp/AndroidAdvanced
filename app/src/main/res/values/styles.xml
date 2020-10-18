@@ -8,4 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="AppStarTheme" parent="AppTheme">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+
+    <style name="AppStarTheme1" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/app_star</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
 </resources>
