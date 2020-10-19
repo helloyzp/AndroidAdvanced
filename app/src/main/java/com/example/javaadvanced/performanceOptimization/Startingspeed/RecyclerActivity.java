@@ -56,7 +56,7 @@ public class RecyclerActivity extends AppCompatActivity {
         mData = createDataList();
 
         //设置Adapter必须指定，否则数据怎么显示
-        mRecycler.setAdapter(new RecyclerViewDemo1Adapter(mData));
+        mRecycler.setAdapter(new RecyclerViewDemoAdapter(mData));
 
         //设置分割线
         mRecycler.addItemDecoration(

@@ -9,12 +9,14 @@
     </style>
 
 
+    <!-- app启动的白屏黑屏 解决方案1：去除PreviewWindow -->
     <style name="AppStarTheme" parent="AppTheme">
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@null</item>
         <item name="android:windowDisablePreview">true</item>
     </style>
 
+    <!-- app启动的白屏黑屏 解决方案2：给PreviewWindow设置背景图 -->
     <style name="AppStarTheme1" parent="AppTheme">
         <item name="android:windowBackground">@drawable/app_star</item>
         <item name="android:windowFullscreen">true</item>

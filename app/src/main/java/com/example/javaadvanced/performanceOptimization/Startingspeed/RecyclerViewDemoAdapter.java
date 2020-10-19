@@ -3,18 +3,17 @@ package com.example.javaadvanced.performanceOptimization.Startingspeed;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import com.example.javaadvanced.R;
 
-
-public class RecyclerViewDemo1Adapter extends RecyclerView.Adapter<RecyclerViewDemo1Adapter.ViewHolder> {
+public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDemoAdapter.ViewHolder> {
 
     private List<String> mData;
 
-    public RecyclerViewDemo1Adapter(List<String> data) {
+    public RecyclerViewDemoAdapter(List<String> data) {
         this.mData = data;
     }
 

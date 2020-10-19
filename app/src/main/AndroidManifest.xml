@@ -24,8 +24,7 @@
             </intent-filter>
         </activity>
 
-<!--
-        &lt;!&ndash; 启动速度 &ndash;&gt;
+<!--      &lt;!&ndash;  app启动的白屏黑屏 解决方案&ndash;&gt;
         <activity android:name=".performanceOptimization.Startingspeed.AppStartActivity"
             android:theme="@style/AppStarTheme1">
             <intent-filter>
@@ -52,6 +51,11 @@
         <activity android:name=".performanceOptimization.Startingspeed.FlowLayoutActivity"/>
         <activity android:name=".performanceOptimization.Startingspeed.RecyclerActivity"/>
         <activity android:name=".performanceOptimization.Startingspeed.LayoutTestActivity"/>
+
+        <activity android:name=".performanceOptimization.memory.MemoryMainActivity"/>
+        <activity android:name=".performanceOptimization.memory.ListActivity"/>
+        <activity android:name=".performanceOptimization.memory.SecondActivity"/>
+
 
     </application>
 
