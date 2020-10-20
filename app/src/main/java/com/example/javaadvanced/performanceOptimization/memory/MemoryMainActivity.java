@@ -20,7 +20,7 @@ public class MemoryMainActivity extends AppCompatActivity {
     }
 
     public void jump1(View view) {
-        startActivity(new Intent(this, SecondActivity.class));
+        startActivity(new Intent(this, FirstActivity.class));
     }
 
     public void jump2(View view) {

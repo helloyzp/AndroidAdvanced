@@ -54,7 +54,7 @@
 
         <activity android:name=".performanceOptimization.memory.MemoryMainActivity"/>
         <activity android:name=".performanceOptimization.memory.ListActivity"/>
-        <activity android:name=".performanceOptimization.memory.SecondActivity"/>
+        <activity android:name=".performanceOptimization.memory.FirstActivity"/>
 
 
     </application>
