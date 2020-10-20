@@ -216,6 +216,7 @@ public class IOSStyleLoadingView extends View {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        //移除监听器，否则会造成内存泄漏
         if (valueAnimator != null) {
             valueAnimator.removeAllUpdateListeners();
             valueAnimator.cancel();
