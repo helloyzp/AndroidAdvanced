@@ -5,7 +5,9 @@ import android.os.Bundle;
 
 import com.example.javaadvanced.R;
 
-
+/**
+ * 内存抖动修复后的Activity
+ */
 public class SecondActivity extends Activity {
 
     @Override

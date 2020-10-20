@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.javaadvanced.R;
 
-
+/**
+ * 演示内存抖动的Activity
+ */
 public class ListActivity extends Activity {
 
 

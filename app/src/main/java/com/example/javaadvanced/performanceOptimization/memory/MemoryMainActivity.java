@@ -16,6 +16,9 @@ public class MemoryMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memory_main);
 
+        //传递ApplicationContext，而不是传递Activity
+        SingletonManager.getInstance().init(getApplicationContext());
+
 
     }
 
@@ -33,7 +36,7 @@ public class MemoryMainActivity extends AppCompatActivity {
 
 
     /**
-     * 正确的字符串拼接
+     * 正确的字符串拼接，避免内存抖动
      * @param values
      * @return
      */

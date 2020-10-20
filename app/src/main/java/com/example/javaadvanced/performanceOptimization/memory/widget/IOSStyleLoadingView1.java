@@ -10,6 +10,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
+/**
+ * onDraw方法里创建了大量的Paint和Path对象，频繁调用Color.parseColor产生大量的String对象
+ * 从而造成内存抖动
+ */
 public class IOSStyleLoadingView1 extends View {
 
     private final Context context;
