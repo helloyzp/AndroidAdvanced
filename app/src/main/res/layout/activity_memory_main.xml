@@ -9,13 +9,19 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="没有发生内存抖动"
+        android:text="SecondActivity(没有发生内存抖动)"
         android:onClick="jump1" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="演示发生内存抖动"
+        android:text="ListActivity(演示发生内存抖动)"
         android:onClick="jump2" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MemoryLeakActivity(演示内存泄露)"
+        android:onClick="jump3" />
 
 </LinearLayout>

@@ -20,14 +20,23 @@ public class MemoryMainActivity extends AppCompatActivity {
     }
 
     public void jump1(View view) {
-        startActivity(new Intent(this, FirstActivity.class));
+        startActivity(new Intent(this, SecondActivity.class));
     }
 
     public void jump2(View view) {
         startActivity(new Intent(this, ListActivity.class));
     }
 
+    public void jump3(View view) {
+        startActivity(new Intent(this, MemoryLeakActivity.class));
+    }
 
+
+    /**
+     * 正确的字符串拼接
+     * @param values
+     * @return
+     */
     public String addStr(String[] values) {
         StringBuilder result = new StringBuilder();
         // 10000
