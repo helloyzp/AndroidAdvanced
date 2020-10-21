@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.example.javaadvanced.jvm.AndroidVM.Hotfix;
+import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.proxymodel.proxy.HttpProxy;
+import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.proxymodel.proxy.OkHttpModel;
 
 import java.io.File;
 
@@ -20,4 +22,10 @@ public class MyApplication extends Application {
         Hotfix.installPatch(this,new File("/sdcard/patch.dex"));
     }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        //HttpProxy.init(VolleyModel.getInstance(getApplicationContext()));
+        HttpProxy.init(new OkHttpModel(getApplicationContext()));
+    }
 }

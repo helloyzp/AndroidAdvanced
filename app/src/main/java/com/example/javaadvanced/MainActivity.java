@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.firstusestruct.HTTPRequestActivity;
 import com.example.javaadvanced.performanceOptimization.DataStructure.HashMapSparseArrayActivity;
 import com.example.javaadvanced.performanceOptimization.memory.MemoryMainActivity;
 import com.example.javaadvanced.ui.RecyclerView.MyRecyclerView.MyRecyclerViewActivity;
@@ -58,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void gotoActivity() {
-        Intent intent = new Intent(this, MemoryMainActivity.class);
+        //Intent intent = new Intent(this, MemoryMainActivity.class);
+        Intent intent = new Intent(this, HTTPRequestActivity.class);
         startActivity(intent);
     }
 
