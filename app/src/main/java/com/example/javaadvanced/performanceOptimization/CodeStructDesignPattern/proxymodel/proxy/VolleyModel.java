@@ -20,7 +20,7 @@ import java.util.Map;
  **/
 
 //必须实现统一的被代理的行为规范
-//被代理对象(真实对象)，封装了Volley的网络请求
+//被代理对象(真实对象)，封装了Volley的网络请求，如果Volley的sdk改变了，只需要修改这个类的代码
 public class VolleyModel implements IHttp {
 
     private static final String TAG = "VolleyModel";
