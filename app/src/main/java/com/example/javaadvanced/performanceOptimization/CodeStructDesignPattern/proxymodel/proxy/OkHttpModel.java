@@ -22,6 +22,7 @@ import okhttp3.Response;
  **/
 
 //必须实现统一的被代理的行为规范
+//被代理对象(真实对象)，封装了OkHttp的网络请求
 public class OkHttpModel implements IHttp {
     private static final String TAG = "OkHttpModel";
 

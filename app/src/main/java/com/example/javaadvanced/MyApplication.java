@@ -25,7 +25,10 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         //HttpProxy.init(VolleyModel.getInstance(getApplicationContext()));
+        //当需要将网络请求库由Volley更换为OkHttp时只需要调用HttpProxy.init()设置新的realObject即可
         HttpProxy.init(new OkHttpModel(getApplicationContext()));
+
     }
 }

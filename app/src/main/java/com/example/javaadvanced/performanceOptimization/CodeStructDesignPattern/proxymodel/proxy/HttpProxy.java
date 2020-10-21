@@ -13,11 +13,16 @@ import java.util.Map;
 //代理类，它包含真实对象,访问者对代理对象的访问，可以被代理对象转变为对真实对象的访问
 public class HttpProxy implements IHttp {
 
+    /**
+     * 代理对象对应的realObject
+     */
     private static IHttp mHttp = null;
+
     /**
      * 请求Url
      */
     private String mUrl;
+
     /**
      * 请求参数
      */
