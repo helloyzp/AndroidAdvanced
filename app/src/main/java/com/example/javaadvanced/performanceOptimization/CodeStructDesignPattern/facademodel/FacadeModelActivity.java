@@ -65,6 +65,7 @@ public class FacadeModelActivity extends AppCompatActivity implements View.OnCli
 
                     @Override
                     public void onFailed(String failed) {
+                        Log.d(TAG, "Network onFailed：" + failed );
 
                     }
                 });

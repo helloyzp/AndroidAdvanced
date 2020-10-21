@@ -1,5 +1,7 @@
 package com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.proxymodel.proxy;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +14,7 @@ import java.util.Map;
  **/
 //代理类，它包含真实对象,访问者对代理对象的访问，可以被代理对象转变为对真实对象的访问
 public class HttpProxy implements IHttp {
+    private String TAG = "HttpProxy";
 
     /**
      * 代理对象对应的realObject
@@ -60,6 +63,7 @@ public class HttpProxy implements IHttp {
     @Override
     public void get(String url, Map<String, Object> params, ICallBack callback) {
         //访问前的预处理
+        Log.i(TAG, "mHttp=" + mHttp);
         mHttp.get(url, params, callback);
         //访问后的操作
     }

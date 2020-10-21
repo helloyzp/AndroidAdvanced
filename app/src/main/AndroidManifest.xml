@@ -57,7 +57,11 @@
         <activity android:name=".performanceOptimization.memory.SecondActivity"/>
         <activity android:name=".performanceOptimization.memory.MemoryLeakActivity"/>
         <activity android:name=".performanceOptimization.CodeStructDesignPattern.firstusestruct.HTTPRequestActivity"/>
+        <activity android:name=".performanceOptimization.CodeStructDesignPattern.facademodel.FacadeModelActivity"/>
+        <activity android:name=".performanceOptimization.CodeStructDesignPattern.proxymodel.ProxyModelActivity"/>
+
         <activity android:name=".performanceOptimization.Bitmap.bitmapcache.BitmapCacheActivity"/>
+        <activity android:name=".performanceOptimization.Bitmap.bigimage.BitmapBigImageActivity"/>
 
 
     </application>

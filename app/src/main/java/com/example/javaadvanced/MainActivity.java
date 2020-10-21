@@ -7,7 +7,9 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.facademodel.FacadeModelActivity;
 import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.firstusestruct.HTTPRequestActivity;
+import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.proxymodel.ProxyModelActivity;
 import com.example.javaadvanced.performanceOptimization.DataStructure.HashMapSparseArrayActivity;
 import com.example.javaadvanced.performanceOptimization.memory.MemoryMainActivity;
 import com.example.javaadvanced.ui.RecyclerView.MyRecyclerView.MyRecyclerViewActivity;
@@ -60,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void gotoActivity() {
         //Intent intent = new Intent(this, MemoryMainActivity.class);
-        Intent intent = new Intent(this, HTTPRequestActivity.class);
+        //Intent intent = new Intent(this, HTTPRequestActivity.class);
+        //Intent intent = new Intent(this, FacadeModelActivity.class);
+        Intent intent = new Intent(this, ProxyModelActivity.class);
         startActivity(intent);
     }
 

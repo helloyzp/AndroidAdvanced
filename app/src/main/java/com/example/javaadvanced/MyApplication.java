@@ -2,6 +2,7 @@ package com.example.javaadvanced;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.example.javaadvanced.jvm.AndroidVM.Hotfix;
 import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.proxymodel.proxy.HttpProxy;
@@ -10,6 +11,7 @@ import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.
 import java.io.File;
 
 public class MyApplication extends Application {
+    private String TAG = "MyApplication";
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -25,6 +27,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.i(TAG, "onCreate()");
 
         //HttpProxy.init(VolleyModel.getInstance(getApplicationContext()));
         //当需要将网络请求库由Volley更换为OkHttp时只需要调用HttpProxy.init()设置新的realObject即可

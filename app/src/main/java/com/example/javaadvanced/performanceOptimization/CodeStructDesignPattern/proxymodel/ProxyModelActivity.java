@@ -20,13 +20,13 @@ import com.yuyh.library.BubblePopupWindow;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProxyModelActivity extends AppCompatActivity implements View.OnClickListener{
+public class ProxyModelActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
     Button button;
     TextView mounth;
     private String url = "http://c.3g.163.com/photo/api/set/0001%2F2250173.json";
-    private Map<String,Object> params = new HashMap<>();
+    private Map<String, Object> params = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +48,18 @@ public class ProxyModelActivity extends AppCompatActivity implements View.OnClic
                     public void onFailure(String e) {
                         Log.d(TAG, "onFailure: " + e);
                     }
+
                     @Override
                     public void onSuccess(PhotoSetInfo result) {
                         initBubble(mounth, result.getDesc());
-                        Log.d(TAG, "Network result：" + result.toString() );
+                        Log.d(TAG, "Network result：" + result.toString());
                     }
                 });
                 break;
         }
     }
 
-    private void initBubble(View view, String info){
+    private void initBubble(View view, String info) {
         BubblePopupWindow leftTopWindow = new BubblePopupWindow(ProxyModelActivity.this);
         View bubbleView = getLayoutInflater().inflate(R.layout.layout_popup_view, null);
         TextView tvContent = (TextView) bubbleView.findViewById(R.id.tvContent);
