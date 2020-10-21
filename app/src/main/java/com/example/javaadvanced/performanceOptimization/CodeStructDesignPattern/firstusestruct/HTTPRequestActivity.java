@@ -23,12 +23,14 @@ import com.yuyh.library.BubblePopupWindow;
 /**
  * 以网络请求库的封装为例讲解设计模式
  *
+ * 这个例子是未使用设计模式的代码
+ *
  * 存在的问题：
  * 1.Activity里存在大量网络请求相关的代码
  * 2.直接引用了第三方网络请求库，如果这个第三方网络请求库后期需要改成其他的第三方网络请求库，则需要修改大量代码
  *
  * 解决方案：
- * 利用门面模式重构代码
+ * 利用门面模式重构代码，参看：FacadeModelActivity
  */
 public class HTTPRequestActivity extends AppCompatActivity implements View.OnClickListener {
 

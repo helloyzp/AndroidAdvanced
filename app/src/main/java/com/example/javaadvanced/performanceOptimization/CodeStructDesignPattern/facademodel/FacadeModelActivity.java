@@ -24,7 +24,7 @@ import java.util.Map;
  * 存在的问题：
  * 违背了开闭原则，一旦更换第三方网络请求库，FacadeNetwork这个类的代码需要全面的修改，而不能复用已有的代码。
  * 解决方案：
- * 利用代理模式重构代码
+ * 利用代理模式重构代码，惨啊可能：ProxyModelActivity
  */
 public class FacadeModelActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "MainActivity";
