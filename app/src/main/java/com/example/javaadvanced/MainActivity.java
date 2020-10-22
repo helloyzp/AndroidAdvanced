@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.javaadvanced.performanceOptimization.Bitmap.bitmapcache.BitmapCacheActivity;
 import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.facademodel.FacadeModelActivity;
 import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.firstusestruct.HTTPRequestActivity;
 import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.proxymodel.ProxyModelActivity;
@@ -64,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, MemoryMainActivity.class);
         //Intent intent = new Intent(this, HTTPRequestActivity.class);
         //Intent intent = new Intent(this, FacadeModelActivity.class);
-        Intent intent = new Intent(this, ProxyModelActivity.class);
+        //Intent intent = new Intent(this, ProxyModelActivity.class);
+        Intent intent = new Intent(this, BitmapCacheActivity.class);
         startActivity(intent);
     }
 

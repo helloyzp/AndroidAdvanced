@@ -2,8 +2,8 @@ package com.example.javaadvanced.performanceOptimization.Bitmap.bitmapcache;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,10 +35,10 @@ public class BitmapAdapter extends RecyclerView.Adapter<BitmapAdapter.BitmapView
     public void onBindViewHolder(@NonNull BitmapViewHolder bitmapViewHolder, int i) {
 
         // 原始方法获取bitmap
-//        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_mv_w);
+//        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_mv_webp);
 
         // 第一种优化
-//        Bitmap bitmap = ImageResize.resizeBitmap(context, R.drawable.icon_mv, 80, 80, false);
+//        Bitmap bitmap = ImageResize.resizeBitmap(context, R.drawable.icon_mv_jpg, 80, 80, false);
 
         // 第二种优化
         Bitmap bitmap = ImageCache.getInstance().getBitmapFromMemory(String.valueOf(i));
@@ -52,7 +52,7 @@ public class BitmapAdapter extends RecyclerView.Adapter<BitmapAdapter.BitmapView
 
             if (bitmap == null) {
                 // 网络获取
-                bitmap = ImageResize.resizeBitmap(context, R.drawable.icon_mv, 80, 80, false, reusable);
+                bitmap = ImageResize.resizeBitmap(context, R.drawable.icon_mv_jpg, 80, 80, false, reusable);
                 //放入内存
                 ImageCache.getInstance().putBitmap2Memory(String.valueOf(i), bitmap);
                 //放入磁盘
