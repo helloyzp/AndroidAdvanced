@@ -43,7 +43,7 @@ public class ImageResize {
 
         options.inJustDecodeBounds = false;
 
-        // 复用, inMutable 为true 表示易变
+        // 复用, inMutable 为true 表示可变的
         options.inMutable = true;
         options.inBitmap = reusable;
 

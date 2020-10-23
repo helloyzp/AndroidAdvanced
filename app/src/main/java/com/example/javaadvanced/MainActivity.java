@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, FacadeModelActivity.class);
         //Intent intent = new Intent(this, ProxyModelActivity.class);
         //Intent intent = new Intent(this, BitmapCacheActivity.class);
-        Intent intent = new Intent(this, BitmapMemoryActivity.class);
+        Intent intent = new Intent(this, BitmapCacheActivity.class);
         startActivity(intent);
     }
 

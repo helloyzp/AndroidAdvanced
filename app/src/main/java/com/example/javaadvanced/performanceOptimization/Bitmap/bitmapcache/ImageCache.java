@@ -71,10 +71,10 @@ public class ImageCache {
 
             @Override
             protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
-                if (oldValue.isMutable()) {
-                    // 3.0 bitmap 缓存 native
-                    // <8.0  bitmap 缓存 java
-                    // 8.0 native
+                if (oldValue.isMutable()) {//当Bitmap移出lruCache时放入缓存池中，缓存池缓存的是Bitmap这块内存(避免Bitmap频繁的创建与销毁)，但Bitmap中的数据是无用的。
+                    // 3.0 bitmap 像素数据存储在 native
+                    // <8.0  bitmap 像素数据存储在 java
+                    // 8.0以后 像素数据存储在 native
                     reusablePool.add(new WeakReference<Bitmap>(oldValue, getReferenceQueue()));
                 }
 
@@ -164,6 +164,14 @@ public class ImageCache {
     private ReferenceQueue<Bitmap> referenceQueue;
     boolean shutDown;
 
+    /**
+     * 为什么使用引用队列？
+     *
+     * 因为gc回收Bitmap时只是回收了Bitmap在堆中的这部分内存，Bitmap的像素数据是存储在native内存中，
+     * 所以引用队列监控到Bitmap被gc回收时需要手动调用bitmap.recycle()回收native中的像素数据占用的内存。
+     *
+     * @return
+     */
     private ReferenceQueue<Bitmap> getReferenceQueue() {
         if (referenceQueue == null) {
             referenceQueue = new ReferenceQueue<>();
@@ -214,6 +222,7 @@ public class ImageCache {
 
 
     /**
+     * Bitmap复用规则：
      * 3.0 之前不能复用
      * 3.0-4.4 宽高一样，inSampleSize = 1
      * 4.4 只要小于等于就行了
@@ -266,7 +275,7 @@ public class ImageCache {
             h /= inSampleSize;
         }
         int byteCount = w * h * getBytesPerPixel(bitmap.getConfig());
-        // 图片内存 系统分配内存
+        // 图片内存 <= 系统分配内存 则满足条件，即只要图片的内存<=Bitmap分配的内存就可以复用
         return byteCount <= bitmap.getAllocationByteCount();
 
 

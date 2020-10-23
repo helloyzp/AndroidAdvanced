@@ -34,16 +34,19 @@ public class BitmapAdapter extends RecyclerView.Adapter<BitmapAdapter.BitmapView
     @Override
     public void onBindViewHolder(@NonNull BitmapViewHolder bitmapViewHolder, int i) {
 
-        // 原始方法获取bitmap
+        // 原始方法获取bitmap，获取原图，不进行压缩
 //        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_mv_webp);
 
-        // 第一种优化
+        // 第一种优化：进行图片压缩
 //        Bitmap bitmap = ImageResize.resizeBitmap(context, R.drawable.icon_mv_jpg, 80, 80, false);
 
-        // 第二种优化
+        // 第二种优化：使用缓存，并使用Bitmap复用机制
         Bitmap bitmap = ImageCache.getInstance().getBitmapFromMemory(String.valueOf(i));
         Log.e("leo", "使用内存缓存" + bitmap);
         if (bitmap == null) {
+            //当内存缓存中没有读取到Bitmap时需要去磁盘缓存中读取，这时不是直接创建一个新的Bitmap，而是去复用池中
+            //检索有没有可以复用的Bitmap，传递给options.inBitmap使用，这样BitmapFactory.decodeXXX()系列方法进行创建Bitmap
+            //时就会复用这个从复用池中检索出来的Bitmap，避免Bitmap频繁的创建与销毁。
             Bitmap reusable = ImageCache.getInstance().getReusable(60, 60, 1);
             Log.e("leo", "使用复用缓存" + reusable);
 
