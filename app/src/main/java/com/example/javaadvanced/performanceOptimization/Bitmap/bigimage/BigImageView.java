@@ -19,6 +19,9 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * 自定义View实现长图加载
+ */
 public class BigImageView extends View implements GestureDetector.OnGestureListener, View.OnTouchListener {
     private String TAG = "BigImageView";
 

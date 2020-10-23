@@ -10,6 +10,9 @@ import com.example.javaadvanced.R;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * 长图加载
+ */
 public class BitmapBigImageActivity extends AppCompatActivity {
 
     @Override
