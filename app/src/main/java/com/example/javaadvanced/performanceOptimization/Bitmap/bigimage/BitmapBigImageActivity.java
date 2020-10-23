@@ -20,8 +20,8 @@ public class BitmapBigImageActivity extends AppCompatActivity {
         BigImageView bigImageView = findViewById(R.id.iv_big);
         InputStream is = null;
         try {
-//            is = getAssets().open("big.png");
-            is = getAssets().open("world.jpg");
+            //is = getAssets().open("bigimage_text.png");
+            is = getAssets().open("bigimage_worldmap.jpg");
 
             bigImageView.setImage(is);
 

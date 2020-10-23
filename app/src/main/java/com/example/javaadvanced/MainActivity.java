@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.javaadvanced.performanceOptimization.Bitmap.bigimage.BitmapBigImageActivity;
 import com.example.javaadvanced.performanceOptimization.Bitmap.bitmapcache.BitmapCacheActivity;
 import com.example.javaadvanced.performanceOptimization.Bitmap.bitmapmemory.BitmapMemoryActivity;
 import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.facademodel.FacadeModelActivity;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, FacadeModelActivity.class);
         //Intent intent = new Intent(this, ProxyModelActivity.class);
         //Intent intent = new Intent(this, BitmapCacheActivity.class);
-        Intent intent = new Intent(this, BitmapCacheActivity.class);
+        Intent intent = new Intent(this, BitmapBigImageActivity.class);
         startActivity(intent);
     }
 
