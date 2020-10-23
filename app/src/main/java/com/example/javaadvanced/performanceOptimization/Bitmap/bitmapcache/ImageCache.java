@@ -45,7 +45,7 @@ public class ImageCache {
     }
 
     private LruCache<String, Bitmap> lruCache; //内存缓存
-    private Set<WeakReference<Bitmap>> reusablePool; // 复用池，避免频繁的创建与销毁Bitmap对象。
+    private Set<WeakReference<Bitmap>> reusablePool; // 复用池，避免频繁的创建与销毁Bitmap对象，结合options.inBitmap使用。
     private DiskLruCache diskLruCache; //磁盘缓存
 
 
