@@ -62,6 +62,7 @@
 
         <activity android:name=".performanceOptimization.Bitmap.bitmapcache.BitmapCacheActivity"/>
         <activity android:name=".performanceOptimization.Bitmap.bigimage.BitmapBigImageActivity"/>
+        <activity android:name=".performanceOptimization.Bitmap.bitmapmemory.BitmapMemoryActivity"/>
 
 
     </application>

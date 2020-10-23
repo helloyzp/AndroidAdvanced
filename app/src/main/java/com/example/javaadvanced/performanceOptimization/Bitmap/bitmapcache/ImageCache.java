@@ -45,7 +45,7 @@ public class ImageCache {
     }
 
     private LruCache<String, Bitmap> lruCache;
-    private Set<WeakReference<Bitmap>> reusablePool;
+    private Set<WeakReference<Bitmap>> reusablePool; // 复用池
     private DiskLruCache diskLruCache;
 
 
@@ -85,6 +85,12 @@ public class ImageCache {
             diskLruCache = DiskLruCache.open(new File(dir), BuildConfig.VERSION_CODE, 1, 10 * 1024 * 1024);
         } catch (IOException e) {
             e.printStackTrace();
+            //指定的目录创建DiskLruCache失败时用系统的缓存目录
+            try {
+                diskLruCache = DiskLruCache.open(context.getCacheDir(), BuildConfig.VERSION_CODE, 1, 10 * 1024 * 1024);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
