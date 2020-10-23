@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class BigImageView extends View implements GestureDetector.OnGestureListener, View.OnTouchListener {
-
+    private String TAG = "BigImageView";
 
     Rect mRect;
     BitmapFactory.Options mOptions;
@@ -113,11 +113,11 @@ public class BigImageView extends View implements GestureDetector.OnGestureListe
 //        }
 
 
-        Log.e("Leo", "============缩放后=========");
-        Log.e("Leo", "inSampleSize = " + mOptions.inSampleSize);
-        Log.e("Leo", "mScale = " + mScale);
-        Log.e("Leo", "图片宽 = " + mImageWidth + ",高 = " + mImageHeight);
-        Log.e("Leo", "view 宽 = " + mViewWidth + ",高 = " + mViewHeight);
+        Log.e(TAG, "============缩放后=========");
+        Log.e(TAG, "inSampleSize = " + mOptions.inSampleSize);
+        Log.e(TAG, "mScale = " + mScale);
+        Log.e(TAG, "图片宽 = " + mImageWidth + ",高 = " + mImageHeight);
+        Log.e(TAG, "view 宽 = " + mViewWidth + ",高 = " + mViewHeight);
 
     }
 
@@ -156,7 +156,7 @@ public class BigImageView extends View implements GestureDetector.OnGestureListe
 
         mOptions.inBitmap = bitmap;
         bitmap = mBitmapRegionDecoder.decodeRegion(mRect, mOptions);
-        Log.e("leo", "图片大小 " + bitmap.getByteCount());// 没有优化：44338752，1.优化：2770200，2优化：692064
+        Log.e(TAG, "图片大小 " + bitmap.getByteCount());// 没有优化：44338752，1.优化：2770200，2优化：692064
 
         Matrix matrix = new Matrix();
         matrix.setScale(mScale, mScale);

@@ -44,9 +44,9 @@ public class ImageCache {
         return instance;
     }
 
-    private LruCache<String, Bitmap> lruCache;
-    private Set<WeakReference<Bitmap>> reusablePool; // 复用池
-    private DiskLruCache diskLruCache;
+    private LruCache<String, Bitmap> lruCache; //内存缓存
+    private Set<WeakReference<Bitmap>> reusablePool; // 复用池，避免频繁的创建与销毁Bitmap对象。
+    private DiskLruCache diskLruCache; //磁盘缓存
 
 
     public void init(Context context, String dir) {
@@ -69,16 +69,19 @@ public class ImageCache {
                 return value.getByteCount();
             }
 
+            //LruCache移除图片的时候回调 entryRemoved 方法
             @Override
             protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
-                if (oldValue.isMutable()) {//当Bitmap移出lruCache时放入缓存池中，缓存池缓存的是Bitmap这块内存(避免Bitmap频繁的创建与销毁)，但Bitmap中的数据是无用的。
+                //当Bitmap移出lruCache时，判断oldValue.isMutable()是否为true，如果是可变的，则表示可以复用，
+                if (oldValue.isMutable()) {//如果可以复用，将Bitmap放入复用池中，目的是为了复用Bitmap这块内存(避免Bitmap频繁的创建与销毁)。
                     // 3.0 bitmap 像素数据存储在 native
                     // <8.0  bitmap 像素数据存储在 java
                     // 8.0以后 像素数据存储在 native
+                    //放入复用池中的Bitmap不能调用 recycle()，否则内存就被回收了
                     reusablePool.add(new WeakReference<Bitmap>(oldValue, getReferenceQueue()));
+                } else { //如果不能复用，我们就直接调用 recycle() 回收内存
+                    oldValue.recycle();//调用 recycle() 回收内存
                 }
-
-                oldValue.recycle();
             }
         };
         try {
