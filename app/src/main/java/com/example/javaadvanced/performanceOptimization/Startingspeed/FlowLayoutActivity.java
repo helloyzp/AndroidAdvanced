@@ -41,7 +41,7 @@ public class FlowLayoutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         verifyStoragePermissions(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_startspeed_flowlayout);
         mButton = findViewById(R.id.btn_list);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override

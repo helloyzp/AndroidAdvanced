@@ -6,6 +6,9 @@ import android.os.Bundle;
 
 import com.example.javaadvanced.R;
 
+/**
+ * app存储优化
+ */
 public class StorageMainActivity extends AppCompatActivity {
 
     @Override
