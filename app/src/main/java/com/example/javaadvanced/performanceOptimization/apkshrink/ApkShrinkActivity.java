@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.javaadvanced.R;
 
+/**
+ * 使用矢量图
+ */
 public class ApkShrinkActivity extends AppCompatActivity {
 
     @Override

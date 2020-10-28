@@ -15,6 +15,7 @@ import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.
 import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.proxymodel.ProxyModelActivity;
 import com.example.javaadvanced.performanceOptimization.DataStructure.HashMapSparseArrayActivity;
 import com.example.javaadvanced.performanceOptimization.apkshrink.ApkShrinkActivity;
+import com.example.javaadvanced.performanceOptimization.apkshrink.resguard.ResguardActivity;
 import com.example.javaadvanced.performanceOptimization.memory.MemoryMainActivity;
 import com.example.javaadvanced.ui.RecyclerView.MyRecyclerView.MyRecyclerViewActivity;
 import com.example.javaadvanced.ui.RecyclerView.RecyclerViewCache.RecyclerViewCacheActivity;
@@ -71,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, ProxyModelActivity.class);
         //Intent intent = new Intent(this, BitmapCacheActivity.class);
         //Intent intent = new Intent(this, BitmapCacheActivity.class);
-        Intent intent = new Intent(this, ApkShrinkActivity.class);
+        //Intent intent = new Intent(this, ApkShrinkActivity.class);
+        Intent intent = new Intent(this, ResguardActivity.class);
         startActivity(intent);
     }
 

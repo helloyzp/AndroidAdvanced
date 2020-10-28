@@ -65,6 +65,7 @@
         <activity android:name=".performanceOptimization.Bitmap.bitmapmemory.BitmapMemoryActivity"/>
 
         <activity android:name=".performanceOptimization.apkshrink.ApkShrinkActivity"/>
+        <activity android:name=".performanceOptimization.apkshrink.resguard.ResguardActivity"/>
 
 
     </application>
