@@ -9,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.javaadvanced.R;
 
 
+/**
+ * 内存优化
+ * 内存泄露、都存抖动
+ */
 public class MemoryMainActivity extends AppCompatActivity {
 
     @Override

@@ -17,6 +17,7 @@ import com.example.javaadvanced.performanceOptimization.DataStructure.HashMapSpa
 import com.example.javaadvanced.performanceOptimization.apkshrink.ApkShrinkActivity;
 import com.example.javaadvanced.performanceOptimization.apkshrink.resguard.ResguardActivity;
 import com.example.javaadvanced.performanceOptimization.memory.MemoryMainActivity;
+import com.example.javaadvanced.performanceOptimization.screenadapter.ScreenadapterActivity;
 import com.example.javaadvanced.ui.RecyclerView.MyRecyclerView.MyRecyclerViewActivity;
 import com.example.javaadvanced.ui.RecyclerView.RecyclerViewCache.RecyclerViewCacheActivity;
 import com.example.javaadvanced.ui.RecyclerView.slidecard.SlidecardActivity;
@@ -73,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, BitmapCacheActivity.class);
         //Intent intent = new Intent(this, BitmapCacheActivity.class);
         //Intent intent = new Intent(this, ApkShrinkActivity.class);
-        Intent intent = new Intent(this, ResguardActivity.class);
+        //Intent intent = new Intent(this, ResguardActivity.class);
+        Intent intent = new Intent(this, ScreenadapterActivity.class);
         startActivity(intent);
     }
 

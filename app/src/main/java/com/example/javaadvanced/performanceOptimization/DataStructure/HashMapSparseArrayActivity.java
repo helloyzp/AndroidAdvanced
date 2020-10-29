@@ -14,6 +14,10 @@ import com.example.javaadvanced.R;
 
 import java.util.HashMap;
 
+/**
+ * 数据结构优化
+ * 如何正确的选择数据结构？
+ */
 public class HashMapSparseArrayActivity extends AppCompatActivity {
     private String TAG = "HashMapSparseArrayActivity";
 
