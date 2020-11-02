@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-/// 应用com.google.protobuf
+// 应用com.google.protobuf
 apply plugin: 'com.google.protobuf'
 
 android {

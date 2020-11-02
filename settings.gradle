@@ -1,4 +1,4 @@
-//include ':androidadapter'
+include ':activitylaunchmode'//include ':androidadapter'
 include ':resguard-tools'
 rootProject.name='JavaAdvanced'
 include ':app'
