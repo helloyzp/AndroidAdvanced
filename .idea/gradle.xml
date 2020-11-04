@@ -12,7 +12,10 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/activitylaunchmode" />
+            <option value="$PROJECT_DIR$/androidadapter" />
+            <option value="$PROJECT_DIR$/androidfragment" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/fragmentdemo" />
             <option value="$PROJECT_DIR$/resguard-tools" />
           </set>
         </option>
