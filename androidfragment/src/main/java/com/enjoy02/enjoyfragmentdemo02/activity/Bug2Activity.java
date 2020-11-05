@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PersistableBundle;
+import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -13,9 +14,11 @@ import com.enjoy02.enjoyfragmentdemo02.R;
 import com.enjoy02.enjoyfragmentdemo02.fragment.Bug2Fragment;
 
 /**
- * TODO: Can not perform this action after onSaveInstanceState
+ *  Can not perform this action after onSaveInstanceState
  */
 public class Bug2Activity extends FragmentActivity {
+
+    private String TAG = "Bug2Activity";
 
     private Handler mHandler = new Handler(){
         @Override
@@ -42,6 +45,7 @@ public class Bug2Activity extends FragmentActivity {
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
+        Log.i(TAG, "onSaveInstanceState()");
     }
 
     //    解决方法：

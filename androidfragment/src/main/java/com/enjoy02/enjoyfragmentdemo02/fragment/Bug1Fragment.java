@@ -18,7 +18,11 @@ import com.enjoy02.enjoyfragmentdemo02.BaseFragment;
 import com.enjoy02.enjoyfragmentdemo02.R;
 
 /**
- * TODO: getActivity==null
+ * 出现的异常：getActivity == null
+ * 出现的场景：请求网络接口后退出Activity
+ * 解决方案： 不建议fragment要使用getActivity()方法获取宿主activity，
+ *  而是在onAttach(Activity activity)里赋值，使用mActivity代替getActivity()，
+ * 保证Fragment即使在onDetach后，仍持有Activity的引用（有引起内存泄露的风险，但是异步任务没停止的情况下，本身就可能已内存泄漏，相比Crash，这种做法“安全”些）
  */
 public class Bug1Fragment extends BaseFragment {
 
@@ -38,6 +42,9 @@ public class Bug1Fragment extends BaseFragment {
         }
     };
 
+    /**
+     * 模拟耗时网络请求
+     */
     class NetWorkTask implements Runnable {
         @Override
         public void run() {
@@ -52,7 +59,9 @@ public class Bug1Fragment extends BaseFragment {
     }
 
 
-    //TODO: [解决方案]在onAttach(Activity activity)里赋值，使用mActivity代替getActivity()，保证Fragment即使在onDetach后，仍持有Activity的引用（有引起内存泄露的风险，但是异步任务没停止的情况下，本身就可能已内存泄漏，相比Crash，这种做法“安全”些）
+    //TODO: [解决方案]在onAttach(Activity activity)里赋值，使用mActivity代替getActivity()，
+    // 保证Fragment即使在onDetach后，仍持有Activity的引用
+    // （有引起内存泄露的风险，但是异步任务没停止的情况下，本身就可能已内存泄漏，相比Crash，这种做法“安全”些）
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

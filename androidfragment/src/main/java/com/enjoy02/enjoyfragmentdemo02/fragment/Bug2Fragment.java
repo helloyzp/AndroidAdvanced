@@ -13,7 +13,11 @@ import android.view.ViewGroup;
 import com.enjoy02.enjoyfragmentdemo02.BaseFragment;
 import com.enjoy02.enjoyfragmentdemo02.R;
 /**
- * TODO: Can not perform this action after onSaveInstanceState
+ * 出现的异常：Can not perform this action after onSaveInstanceState
+ * 出现的场景：在子线程commit fragment
+ * 解决方案：
+ * 1)不能在onSaveInstanceState()之后的生命周期里面commit fragment
+ * 2)不要在子线程commit fragment，因为这时Activity很有可能已经走完onSaveInstanceState()
  */
 public class Bug2Fragment extends BaseFragment {
 
