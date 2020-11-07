@@ -951,7 +951,7 @@ public class FragmentActivity extends ComponentActivity implements
     }
 
     //FragmentActivity.HostCallbacks继承FragmentHostCallback，通过重写FragmentHostCallback中的函数，
-    //将将Fragment操作与Fragment宿主（例如FragmentActivity）捆绑起来。有些方法需要通过宿主来实现，单单依靠Fragment，无法实现
+    //将Fragment操作与Fragment宿主（例如FragmentActivity）捆绑起来。有些方法需要通过宿主来实现，单单依靠Fragment，无法实现
 
     class HostCallbacks extends FragmentHostCallback<FragmentActivity> {
         public HostCallbacks() {
