@@ -739,7 +739,7 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
 
     // Must be accessed while locked.
     ArrayList<androidx.fragment.app.BackStackRecord> mBackStackIndices; //mBackStackIndices 返回栈索引列表，用来给 BackStackRecord 分配 mIndex 需要
-    ArrayList<Integer> mAvailBackStackIndices;//返回栈可用索引列表，存储着 mBackStackIndices 列表中值为 null 的下
+    ArrayList<Integer> mAvailBackStackIndices;//返回栈可用索引列表，存储着 mBackStackIndices 列表中值为 null 的下标
 
     ArrayList<OnBackStackChangedListener> mBackStackChangeListeners;
     private final CopyOnWriteArrayList<FragmentLifecycleCallbacksHolder>
@@ -2247,11 +2247,10 @@ final class FragmentManagerImpl extends FragmentManager implements LayoutInflate
         }
     }
 
-    //该方法是出栈的时候调用的，当 BackStackRecord 出栈后来更新返回栈可用索引列表的
+    //该方法是出栈的时候调用的，当 BackStackRecord 出栈后更新返回栈可用索引列表mAvailBackStackIndices的
     public void freeBackStackIndex(int index) {
-    //把相应位置设置成 null，然后把该下标加入可用返回栈列表的列尾
         synchronized (this) {
-            mBackStackIndices.set(index, null);
+            mBackStackIndices.set(index, null);//把相应位置设置成 null，然后把该下标加入可用返回栈列表的列尾
             if (mAvailBackStackIndices == null) {
                 mAvailBackStackIndices = new ArrayList<Integer>();
             }
