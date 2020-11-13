@@ -67,6 +67,8 @@
         <activity android:name=".performanceOptimization.apkshrink.ApkShrinkActivity"/>
         <activity android:name=".performanceOptimization.apkshrink.resguard.ResguardActivity"/>
         <activity android:name=".performanceOptimization.screenadapter.ScreenadapterActivity"/>
+        <activity android:name=".network.okhttp.OkhttpMainActivity"/>
+        <activity android:name=".thread.ThreadTestActivity"/>
 
     </application>
 

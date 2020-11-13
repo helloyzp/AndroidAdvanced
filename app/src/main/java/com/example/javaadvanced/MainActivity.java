@@ -7,20 +7,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.javaadvanced.performanceOptimization.Bitmap.bigimage.BitmapBigImageActivity;
-import com.example.javaadvanced.performanceOptimization.Bitmap.bitmapcache.BitmapCacheActivity;
-import com.example.javaadvanced.performanceOptimization.Bitmap.bitmapmemory.BitmapMemoryActivity;
-import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.facademodel.FacadeModelActivity;
-import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.firstusestruct.HTTPRequestActivity;
-import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.proxymodel.ProxyModelActivity;
-import com.example.javaadvanced.performanceOptimization.DataStructure.HashMapSparseArrayActivity;
-import com.example.javaadvanced.performanceOptimization.apkshrink.ApkShrinkActivity;
-import com.example.javaadvanced.performanceOptimization.apkshrink.resguard.ResguardActivity;
-import com.example.javaadvanced.performanceOptimization.memory.MemoryMainActivity;
-import com.example.javaadvanced.performanceOptimization.screenadapter.ScreenadapterActivity;
-import com.example.javaadvanced.ui.RecyclerView.MyRecyclerView.MyRecyclerViewActivity;
-import com.example.javaadvanced.ui.RecyclerView.RecyclerViewCache.RecyclerViewCacheActivity;
-import com.example.javaadvanced.ui.RecyclerView.slidecard.SlidecardActivity;
+import com.example.javaadvanced.thread.ThreadTestActivity;
 
 import java.lang.reflect.Method;
 
@@ -75,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, BitmapCacheActivity.class);
         //Intent intent = new Intent(this, ApkShrinkActivity.class);
         //Intent intent = new Intent(this, ResguardActivity.class);
-        Intent intent = new Intent(this, ScreenadapterActivity.class);
+        //Intent intent = new Intent(this, ScreenadapterActivity.class);
+        //Intent intent = new Intent(this, OkhttpMainActivity.class);
+        Intent intent = new Intent(this, ThreadTestActivity.class);
         startActivity(intent);
     }
 
