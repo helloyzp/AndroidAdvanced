@@ -178,7 +178,7 @@ public final class RetryAndFollowUpInterceptor implements Interceptor {
                     streamAllocation.release();
                 }
             }
-            //todo 如果进过重试/重定向才成功的，则在本次响应中记录上次响应的情况
+            //todo 如果经过重试/重定向才成功的，则在本次响应中记录上次响应的情况
             //Attach the prior response if it exists. Such responses never have a body.
             if (priorResponse != null) {
                 response = response.newBuilder()
@@ -190,12 +190,14 @@ public final class RetryAndFollowUpInterceptor implements Interceptor {
                         .build();
             }
             //todo 处理3和4xx的一些状态码，如301 302重定向
+            // 重定向的关键代码，如果followUpRequest()返回的结果为null，则表示不需要重定向，直接返回响应；
+            // 如果followUpRequest()返回的结果不为null，则表示需要重定向，继续执行，会进入下一个while循环，发起一个新的完整的请求。
             Request followUp = followUpRequest(response, streamAllocation.route());
             if (followUp == null) {
                 if (!forWebSocket) {
                     streamAllocation.release();
                 }
-                return response;
+                return response;   //不需要重定向等，直接返回结果
             }
 
             closeQuietly(response.body());
@@ -256,16 +258,16 @@ public final class RetryAndFollowUpInterceptor implements Interceptor {
         //The application layer has forbidden retries.
         if (!client.retryOnConnectionFailure()) return false;
 
-        //todo 2、由于requestSendStarted只在http2的io异常中为true，先不管http2
+        //todo 2、由于requestSendStarted只在http2的io异常中为true，http1中一定是false，先不管http2
         //We can't send the request body again.
         if (requestSendStarted && userRequest.body() instanceof UnrepeatableRequestBody)
             return false;
 
-        //todo 3、判断是不是属于重试的异常
+        //todo 3、判断是不是属于可重试的异常
         //This exception is fatal.
         if (!isRecoverable(e, requestSendStarted)) return false;
 
-        //todo 4、不存在更多的路由
+        //todo 4、判断是否存在更多的路由，如果域名可以解析出多个ip或者配置了多个http代理，那么hasMoreRoutes就为true
         //No more routes to attempt.
         if (!streamAllocation.hasMoreRoutes()) return false;
 
@@ -273,12 +275,20 @@ public final class RetryAndFollowUpInterceptor implements Interceptor {
         return true;
     }
 
+    /**
+     * 判断是不是属于可重试的异常
+     * @param e
+     * @param requestSendStarted requestSendStarted只在http2的io异常中为true，http1中一定是false
+     * @return
+     */
     private boolean isRecoverable(IOException e, boolean requestSendStarted) {
+        // 出现协议异常，不能重试
         // If there was a protocol problem, don't recover.
         if (e instanceof ProtocolException) {
             return false;
         }
 
+        // requestSendStarted认为它一直为false(不管http2),异常属于socket超时异常,直接判定可以重试
         // If there was an interruption don't recover, but if there was a timeout connecting to a
         // route
         // we should try the next route (if there is one).
@@ -286,6 +296,7 @@ public final class RetryAndFollowUpInterceptor implements Interceptor {
             return e instanceof SocketTimeoutException && !requestSendStarted;
         }
 
+        // SSL握手异常中，证书出现问题，不能重试
         // Look for known client-side or negotiation errors that are unlikely to be fixed by trying
         // again with a different route.
         if (e instanceof SSLHandshakeException) {
@@ -295,6 +306,7 @@ public final class RetryAndFollowUpInterceptor implements Interceptor {
                 return false;
             }
         }
+        // SSL握手未授权异常 不能重试
         if (e instanceof SSLPeerUnverifiedException) {
             // e.g. a certificate pinning error.
             return false;
@@ -319,7 +331,7 @@ public final class RetryAndFollowUpInterceptor implements Interceptor {
 
         final String method = userResponse.request().method();
         switch (responseCode) {
-            case HTTP_PROXY_AUTH:
+            case HTTP_PROXY_AUTH: // 407 客户端使用了HTTP代理服务器，在请求头中添加 “Proxy-Authorization”，给代理服务器授权
                 Proxy selectedProxy = route != null
                         ? route.proxy()
                         : client.proxy();
@@ -329,15 +341,15 @@ public final class RetryAndFollowUpInterceptor implements Interceptor {
                 }
                 return client.proxyAuthenticator().authenticate(route, userResponse);
 
-            case HTTP_UNAUTHORIZED:
+            case HTTP_UNAUTHORIZED:// 401 需要身份验证 有些服务器接口需要验证使用者身份 在请求头中添加 “Authorization”
                 return client.authenticator().authenticate(route, userResponse);
 
-            case HTTP_PERM_REDIRECT:
-            case HTTP_TEMP_REDIRECT:
+            case HTTP_PERM_REDIRECT: // 308 永久重定向
+            case HTTP_TEMP_REDIRECT: // 307 临时重定向
                 // "If the 307 or 308 status code is received in response to a request other than
                 // GET
                 // or HEAD, the user agent MUST NOT automatically redirect the request"
-                if (!method.equals("GET") && !method.equals("HEAD")) {
+                if (!method.equals("GET") && !method.equals("HEAD")) {   // 如果请求方式不是GET或者HEAD，框架不会自动重定向请求
                     return null;
                 }
                 // fall-through

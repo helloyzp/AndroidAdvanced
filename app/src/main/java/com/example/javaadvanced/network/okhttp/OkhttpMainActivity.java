@@ -11,6 +11,8 @@ import java.net.Proxy;
 import java.net.ProxySelector;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 import okhttp3.Call;
@@ -28,6 +30,11 @@ public class OkhttpMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        testOkHttpInThread();
+        testURLConnection();
+    }
+
+    public void testOkHttpInThread() {
         new Thread() {
             @Override
             public void run() {
@@ -38,7 +45,17 @@ public class OkhttpMainActivity extends AppCompatActivity {
                 }
             }
         }.start();
+    }
 
+    public void testURLConnection() {
+        try {
+            String url = "http://www.baidu.com";
+            URLConnection urlConnection = new URL(url).openConnection();
+            //urlConnection=com.android.okhttp.internal.huc.HttpURLConnectionImpl
+            System.out.println("urlConnection=" + urlConnection.getClass().getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

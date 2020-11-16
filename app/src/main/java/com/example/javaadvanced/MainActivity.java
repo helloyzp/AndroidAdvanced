@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.javaadvanced.network.okhttp.OkhttpMainActivity;
 import com.example.javaadvanced.thread.ThreadTestActivity;
 
 import java.lang.reflect.Method;
@@ -63,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, ApkShrinkActivity.class);
         //Intent intent = new Intent(this, ResguardActivity.class);
         //Intent intent = new Intent(this, ScreenadapterActivity.class);
-        //Intent intent = new Intent(this, OkhttpMainActivity.class);
-        Intent intent = new Intent(this, ThreadTestActivity.class);
+        Intent intent = new Intent(this, OkhttpMainActivity.class);
+        //Intent intent = new Intent(this, ThreadTestActivity.class);
         startActivity(intent);
     }
 
