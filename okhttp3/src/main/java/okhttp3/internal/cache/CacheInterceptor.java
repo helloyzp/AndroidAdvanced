@@ -55,18 +55,21 @@ public final class CacheInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        //todo 通过url的md5数据 从文件缓存查找 （GET请求才有缓存）
+        //todo 通过url的md5数据从文件缓存中(DiskLruCache)查找, GET请求才有缓存
         Response cacheCandidate = cache != null
                 ? cache.get(chain.request())
                 : null;
 
         long now = System.currentTimeMillis();
 
-        //todo 缓存策略:根据各种条件(请求头)组成 请求与缓存
+        //todo 构建缓存策略对象CacheStrategy:根据本次请求和已缓存的响应进行构建，
+        // 主要是生成CacheStrategy的两个成员属性：networkRequest和cacheResponse。其实就是对
+        // 本次请求和已缓存的响应根据http协议的缓存机制进行进一步加工（根据请求头和响应头的各个缓存相关控制字段），
+        // 最终生成CacheStrategy的networkRequest和cacheResponse两个成员属性。
         CacheStrategy strategy =
                 new CacheStrategy.Factory(now, chain.request(), cacheCandidate).get();
-        Request networkRequest = strategy.networkRequest;
-        Response cacheResponse = strategy.cacheResponse;
+        Request networkRequest = strategy.networkRequest;//网络请求
+        Response cacheResponse = strategy.cacheResponse;//可用的已缓存的响应
 
         if (cache != null) {
             cache.trackResponse(strategy);
@@ -76,7 +79,7 @@ public final class CacheInterceptor implements Interceptor {
             closeQuietly(cacheCandidate.body()); // The cache candidate wasn't applicable. Close it.
         }
 
-        //todo 没有网络请求也没有缓存
+        //todo 1.没有网络请求也没有缓存(networkRequest == null && cacheResponse == null)，直接返回504
         //If we're forbidden from using the network and the cache is insufficient, fail.
         if (networkRequest == null && cacheResponse == null) {
             return new Response.Builder()
@@ -90,7 +93,7 @@ public final class CacheInterceptor implements Interceptor {
                     .build();
         }
 
-        //todo 没有请求，肯定就要使用缓存
+        //todo 2.没有网络请求但有缓存(networkRequest == null && cacheResponse != null)，肯定就要使用缓存
         //If we don't need the network, we're done.
         if (networkRequest == null) {
             return cacheResponse.newBuilder()
@@ -98,7 +101,7 @@ public final class CacheInterceptor implements Interceptor {
                     .build();
         }
 
-        //todo 去发起请求
+        //todo 走到这里说明有网络请求(networkRequest != null)，交给下一个拦截器，去发起网络请求
         Response networkResponse = null;
         try {
             networkResponse = chain.proceed(networkRequest);
@@ -109,9 +112,11 @@ public final class CacheInterceptor implements Interceptor {
             }
         }
 
+        //todo 3.有网络请求，且有缓存(networkRequest != null && cacheResponse != null)
+
         // If we have a cache response too, then we're doing a conditional get.
         if (cacheResponse != null) {
-            //todo 服务器返回304无修改，那就使用缓存的响应修改了时间等数据后作为本次请求的响应
+            //todo 服务器返回304无修改，那就根据缓存的响应修改了时间等数据后作为本次请求的响应返回
             if (networkResponse.code() == HTTP_NOT_MODIFIED) {
                 Response response = cacheResponse.newBuilder()
                         .headers(combine(cacheResponse.headers(), networkResponse.headers()))
@@ -132,12 +137,14 @@ public final class CacheInterceptor implements Interceptor {
             }
         }
 
-        //todo 走到这里说明缓存不可用 那就使用网络的响应
+        //todo 4.有网络请求，没有缓存(networkRequest != null && cacheResponse == null)
+        //todo 走到这里说明缓存不可用 那就使用网络请求的响应
         Response response = networkResponse.newBuilder()
                 .cacheResponse(stripBody(cacheResponse))
                 .networkResponse(stripBody(networkResponse))
                 .build();
-        //todo 进行缓存
+
+        //todo 进行写入缓存
         if (cache != null) {
             if (HttpHeaders.hasBody(response) && CacheStrategy.isCacheable(response,
                     networkRequest)) {

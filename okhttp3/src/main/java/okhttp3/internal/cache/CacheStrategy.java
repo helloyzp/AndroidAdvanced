@@ -75,10 +75,9 @@ public final class CacheStrategy {
         // This implementation doesn't support caching partial content.
         switch (response.code()) {
             //todo 对于 200, 203, 204, 300, 301, 404, 405, 410, 414, 501, 308 只判断是不是存在
-            // cache-control:nostore 不缓存
-            // 302, 307 需要存在: Expires:时间、CacheControl:max-age/public/private 才判断是不是存在
-            // cache-control:nostore
-            // 才能够缓存
+            // cache-control:nostore，不存在cache-control:nostore才能进行缓存
+            // 对于 302, 307 需要存在: Expires:时间、CacheControl:max-age/public/private 时才判断是不是存在
+            // cache-control:nostore，不存在cache-control:nostore才能进行缓存
             // 其他响应码不缓存
             case HTTP_OK:
             case HTTP_NOT_AUTHORITATIVE:
@@ -198,7 +197,8 @@ public final class CacheStrategy {
          */
         public CacheStrategy get() {
             CacheStrategy candidate = getCandidate();
-            //todo 如果可以使用缓存，那networkRequest必定为null；指定了只使用缓存但是networkRequest又不为null，冲突。那就gg(拦截器返回504)
+            //todo 指定了只使用缓存但是networkRequest又不为null(即客户端表示只使用缓存，但是发现又没有可用的缓存)，冲突。
+            // 那就gg(拦截器返回504)
             if (candidate.networkRequest != null && request.cacheControl().onlyIfCached()) {
                 // We're forbidden from using the network and the cache is insufficient.
                 return new CacheStrategy(null, null);
@@ -212,17 +212,18 @@ public final class CacheStrategy {
          */
         private CacheStrategy getCandidate() {
             // No cached response.
-            //todo 1、没有缓存,进行网络请求
+            //todo 1、如果没有缓存，进行网络请求
             if (cacheResponse == null) {
                 return new CacheStrategy(request, null);
             }
-            //todo 2、https请求，但是没有握手信息,进行网络请求
+            //todo 2、判断https请求。如果是https请求，但是没有握手信息,进行网络请求
+            //todo okhttp会保存ssl握手信息 Handshake，如果这次发起的是https请求，但是已缓存的响应中没有握手信息，那么这个缓存不能用，发起网络请求
             //Drop the cached response if it's missing a required handshake.
             if (request.isHttps() && cacheResponse.handshake() == null) {
                 return new CacheStrategy(request, null);
             }
 
-            //todo 3、主要是通过响应码以及头部缓存控制字段判断响应能不能缓存，不能缓存那就进行网络请求
+            //todo 3、判断响应码以及响应头。主要是通过响应码以及响应头的缓存控制字段判断响应能不能缓存，不能缓存那就进行网络请求
             //If this response shouldn't have been stored, it should never be used
             //as a response source. This check should be redundant as long as the
             //persistence store is well-behaved and the rules are constant.
@@ -231,7 +232,7 @@ public final class CacheStrategy {
             }
 
             CacheControl requestCaching = request.cacheControl();
-            //todo 4、如果 请求包含：CacheControl:no-cache 需要与服务器验证缓存有效性
+            //todo 4、判断请求头。如果 请求包含：CacheControl:no-cache 需要与服务器验证缓存有效性
             // 或者请求头包含 If-Modified-Since：时间 值为lastModified或者data 如果服务器没有在该头部指定的时间之后修改了请求的数据，服务器返回304(无修改)
             // 或者请求头包含 If-None-Match：值就是Etag（资源标记）服务器将其与存在服务端的Etag值进行比较；如果匹配，返回304
             // 请求头中只要存在三者中任意一个，进行网络请求
@@ -239,13 +240,13 @@ public final class CacheStrategy {
                 return new CacheStrategy(request, null);
             }
 
-            //todo 5、如果缓存响应中存在 Cache-Control:immutable 响应内容将一直不会改变,可以使用缓存
+            //todo 5、判断响应是不是一直不变。如果缓存响应中存在 Cache-Control:immutable 表示响应内容将一直不会改变,可以使用缓存
             CacheControl responseCaching = cacheResponse.cacheControl();
             if (responseCaching.immutable()) {
                 return new CacheStrategy(null, cacheResponse);
             }
 
-            //todo 6、根据 缓存响应的 控制缓存的响应头 判断是否允许使用缓存
+            //todo 6、判断缓存的有效期。根据 缓存响应的 控制缓存的响应头 判断是否允许使用缓存
             // 6.1、获得缓存的响应从创建到现在的时间
             long ageMillis = cacheResponseAge();
             //todo
@@ -290,8 +291,7 @@ public final class CacheStrategy {
                 return new CacheStrategy(null, builder.build());
             }
 
-            // Find a condition to add to the request. If the condition is satisfied, the
-            // response body
+            // Find a condition to add to the request. If the condition is satisfied, the response body
             // will not be transmitted.
             //todo 7、缓存过期了
             String conditionName;
@@ -308,7 +308,7 @@ public final class CacheStrategy {
             } else {
                 return new CacheStrategy(request, null); // No condition! Make a regular request.
             }
-            //todo 如果设置了 If-None-Match/If-Modified-Since 服务器是可能返回304(无修改)的,使用缓存的响应体
+            //todo 如果设置了 If-None-Match/If-Modified-Since 服务器是可能返回304(无修改)的,这时使用缓存的响应
             Headers.Builder conditionalRequestHeaders = request.headers().newBuilder();
             Internal.instance.addLenient(conditionalRequestHeaders, conditionName, conditionValue);
 
@@ -368,9 +368,9 @@ public final class CacheStrategy {
             // 响应Data字段：服务器发出这个消息的时间
             // 响应Age字段: 当代理服务器用自己缓存的实体去响应请求时，会用该头部表明该实体从产生到现在经过多长时间了
             // 计算收到响应的时间与服务器创建发出这个消息的时间差值:apparentReceivedAge
-            // 取出apparentReceivedAge 与ageSeconds最大值并赋予receivedAge （代理服务器缓存的时间，意义如上的结果，但是要拿最大值）
+            // 取出apparentReceivedAge与ageSeconds的最大值并赋予receivedAge （代理服务器缓存的时间，意义如上，但是要取两者的最大值）
             // 计算从发起请求到收到响应的时间差responseDuration
-            // 计算现在与收到响应的时间差residentDuration
+            // 计算现在与收到响应时的时间差residentDuration
             // 三者加起来就是响应已存在的总时长
             long apparentReceivedAge = servedDate != null
                     ? Math.max(0, receivedResponseMillis - servedDate.getTime())
