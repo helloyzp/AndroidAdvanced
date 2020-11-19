@@ -73,10 +73,12 @@ public final class Route {
   }
 
   /**
+   * 所谓的隧道就是指：在HTTP代理中发送HTTPS请求
    * Returns true if this route tunnels HTTPS through an HTTP proxy. See <a
    * href="http://www.ietf.org/rfc/rfc2817.txt">RFC 2817, Section 5.2</a>.
    */
   public boolean requiresTunnel() {
+    //如果使用了HTTP代理，同时本次请求是HTTPS请求
     return address.sslSocketFactory != null && proxy.type() == Proxy.Type.HTTP;
   }
 

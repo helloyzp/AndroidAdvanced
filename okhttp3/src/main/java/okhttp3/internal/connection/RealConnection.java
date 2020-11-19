@@ -166,7 +166,7 @@ public final class RealConnection extends Http2Connection.Listener implements Co
                     connectTunnel(connectTimeout, readTimeout, writeTimeout, call, eventListener);
                     if (rawSocket == null) {
                         // We were unable to connect the tunnel but properly closed down our
-                      // resources.
+                        // resources.
                         break;
                     }
                 } else {
@@ -229,7 +229,7 @@ public final class RealConnection extends Http2Connection.Listener implements Co
             if (tunnelRequest == null) break; // Tunnel successfully created.
 
             // The proxy decided to close the connection after an auth challenge. We need to
-          // create a new
+            // create a new
             // connection, but this time with the auth credentials.
             closeQuietly(rawSocket);
             rawSocket = null;
@@ -368,7 +368,7 @@ public final class RealConnection extends Http2Connection.Listener implements Co
 
     private boolean isValid(SSLSession sslSocketSession) {
         // don't use SslSocket.getSession since for failed results it returns
-      // SSL_NULL_WITH_NULL_NULL
+        // SSL_NULL_WITH_NULL_NULL
         return !"NONE".equals(sslSocketSession.getProtocol()) && !"SSL_NULL_WITH_NULL_NULL".equals(
                 sslSocketSession.getCipherSuite());
     }
@@ -391,7 +391,7 @@ public final class RealConnection extends Http2Connection.Listener implements Co
                     .request(tunnelRequest)
                     .build();
             // The response body from a CONNECT should be empty, but if it is not then we should
-          // consume
+            // consume
             // it before proceeding.
             long contentLength = HttpHeaders.contentLength(response);
             if (contentLength == -1L) {
@@ -404,13 +404,13 @@ public final class RealConnection extends Http2Connection.Listener implements Co
             switch (response.code()) {
                 case HTTP_OK:
                     // Assume the server won't send a TLS ServerHello until we send a TLS
-                  // ClientHello. If
+                    // ClientHello. If
                     // that happens, then we will have buffered bytes that are needed by the
-                  // SSLSocket!
+                    // SSLSocket!
                     // This check is imperfect: it doesn't tell us whether a handshake will
-                  // succeed, just
+                    // succeed, just
                     // that it will almost certainly fail because the proxy has sent unexpected
-                  // data.
+                    // data.
                     if (!source.buffer().exhausted() || !sink.buffer().exhausted()) {
                         throw new IOException("TLS tunnel buffered too many bytes!");
                     }
@@ -456,18 +456,21 @@ public final class RealConnection extends Http2Connection.Listener implements Co
      */
     public boolean isEligible(Address address, @Nullable Route route) {
         // If this connection is not accepting new streams, we're done.
+        //todo 实际上就是在使用中(对于http1.1)，就不能复用
         if (allocations.size() >= allocationLimit || noNewStreams) return false;
 
         // If the non-host fields of the address don't overlap, we're done.
+        //todo 如果地址不同，不能复用。包括了配置的dns、代理、证书以及端口等等 (域名还没判断，所有下面马上判断域名)
         if (!Internal.instance.equalsNonHost(this.route.address(), address)) return false;
 
         // If the host exactly matches, we're done: this connection can carry the address.
+        //todo 域名也相同，那就可以复用了
         if (address.url().host().equals(this.route().address().url().host())) {
             return true; // This connection is a perfect match.
         }
 
         // At this point we don't have a hostname match. But we still be able to carry the
-      // request if
+        // request if
         // our connection coalescing requirements are met. See also:
         // https://hpbn.co/optimizing-application-delivery/#eliminate-domain-sharding
         // https://daniel.haxx.se/blog/2016/08/18/http2-connection-coalescing/

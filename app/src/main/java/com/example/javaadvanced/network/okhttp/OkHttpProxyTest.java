@@ -28,7 +28,8 @@ public class OkHttpProxyTest {
                     .build();
 
     OkHttpClient httpClient =
-            new OkHttpClient.Builder().proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
+            new OkHttpClient.Builder()
+                    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
                     "114.239.145.90", 808)))
                     .proxyAuthenticator(new Authenticator() {//如果配置了代理服务器，会返回407要求验证用户名和密码
                         @Nullable

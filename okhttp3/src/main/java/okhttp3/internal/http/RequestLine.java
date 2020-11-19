@@ -35,9 +35,9 @@ public final class RequestLine {
     result.append(' ');
 
     if (includeAuthorityInRequestLine(request, proxyType)) {
-      result.append(request.url());
+      result.append(request.url());//http代理请求的请求行需要保留域名，即完整的url即可
     } else {
-      result.append(requestPath(request.url()));
+      result.append(requestPath(request.url()));//从url中解析path，普通http请求的请求行只需要路径，不需要域名
     }
 
     result.append(" HTTP/1.1");

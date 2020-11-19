@@ -27,7 +27,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 import javax.annotation.Nullable;
+
 import okhttp3.internal.Util;
 import okhttp3.internal.connection.RealConnection;
 import okhttp3.internal.connection.RouteDatabase;
@@ -42,244 +44,283 @@ import static okhttp3.internal.Util.closeQuietly;
  * of which connections to keep open for future use.
  */
 public final class ConnectionPool {
-  /**
-   * Background threads are used to cleanup expired connections. There will be at most a single
-   * thread running per connection pool. The thread pool executor permits the pool itself to be
-   * garbage collected.
-   */
-  private static final Executor executor = new ThreadPoolExecutor(0 /* corePoolSize */,
-      Integer.MAX_VALUE /* maximumPoolSize */, 60L /* keepAliveTime */, TimeUnit.SECONDS,
-      new SynchronousQueue<Runnable>(), Util.threadFactory("OkHttp ConnectionPool", true));
+    /**
+     * Background threads are used to cleanup expired connections. There will be at most a single
+     * thread running per connection pool. The thread pool executor permits the pool itself to be
+     * garbage collected.
+     */
+    private static final Executor executor = new ThreadPoolExecutor(0 /* corePoolSize */,
+            Integer.MAX_VALUE /* maximumPoolSize */, 60L /* keepAliveTime */, TimeUnit.SECONDS,
+            new SynchronousQueue<Runnable>(), Util.threadFactory("OkHttp ConnectionPool", true));
 
-  /** The maximum number of idle connections for each address. */
-  private final int maxIdleConnections;
-  private final long keepAliveDurationNs;
-  private final Runnable cleanupRunnable = new Runnable() {
-    @Override public void run() {
-      while (true) {
-        long waitNanos = cleanup(System.nanoTime());
-        if (waitNanos == -1) return;
-        if (waitNanos > 0) {
-          long waitMillis = waitNanos / 1000000L;
-          waitNanos -= (waitMillis * 1000000L);
-          synchronized (ConnectionPool.this) {
-            try {
-              ConnectionPool.this.wait(waitMillis, (int) waitNanos);
-            } catch (InterruptedException ignored) {
+    /**
+     * The maximum number of idle connections for each address.
+     */
+    private final int maxIdleConnections;
+    private final long keepAliveDurationNs;
+    //清理空闲连接的清理任务，cleanupRunnable什么时候开始执行？执行put方法新放入连接的时候
+    private final Runnable cleanupRunnable = new Runnable() {
+        @Override
+        public void run() {
+            while (true) {
+                //todo waitNanos表示等待多久后需要再次清理
+                long waitNanos = cleanup(System.nanoTime());
+                if (waitNanos == -1) return;
+                if (waitNanos > 0) {
+                    //todo 因为等待是纳秒级，wait方法可以接收纳秒级控制，但是要把毫秒与纳秒分开
+                    long waitMillis = waitNanos / 1000000L;
+                    waitNanos -= (waitMillis * 1000000L);
+                    synchronized (ConnectionPool.this) {
+                        try {
+                            //todo 参数多传递一个纳秒参数waitNanos，控制更加精准
+                            ConnectionPool.this.wait(waitMillis, (int) waitNanos);
+                        } catch (InterruptedException ignored) {
+                        }
+                    }
+                }
             }
-          }
         }
-      }
+    };
+
+    private final Deque<RealConnection> connections = new ArrayDeque<>();
+    final RouteDatabase routeDatabase = new RouteDatabase();
+    boolean cleanupRunning;
+
+    /**
+     * todo 最多保存 5个处于空闲状态的连接(idle connections)，空闲连接的默认保活时间为 5分钟，5分钟内如果一直没有活动则被移出连接池
+     * Create a new connection pool with tuning parameters appropriate for a single-user application.
+     * The tuning parameters in this pool are subject to change in future OkHttp releases. Currently
+     * this pool holds up to 5 idle connections which will be evicted after 5 minutes of inactivity.
+     */
+    public ConnectionPool() {
+        this(5, 5, TimeUnit.MINUTES);
     }
-  };
 
-  private final Deque<RealConnection> connections = new ArrayDeque<>();
-  final RouteDatabase routeDatabase = new RouteDatabase();
-  boolean cleanupRunning;
+    public ConnectionPool(int maxIdleConnections, long keepAliveDuration, TimeUnit timeUnit) {
+        this.maxIdleConnections = maxIdleConnections;
+        this.keepAliveDurationNs = timeUnit.toNanos(keepAliveDuration);
 
-  /**
-   * Create a new connection pool with tuning parameters appropriate for a single-user application.
-   * The tuning parameters in this pool are subject to change in future OkHttp releases. Currently
-   * this pool holds up to 5 idle connections which will be evicted after 5 minutes of inactivity.
-   */
-  public ConnectionPool() {
-    this(5, 5, TimeUnit.MINUTES);
-  }
-
-  public ConnectionPool(int maxIdleConnections, long keepAliveDuration, TimeUnit timeUnit) {
-    this.maxIdleConnections = maxIdleConnections;
-    this.keepAliveDurationNs = timeUnit.toNanos(keepAliveDuration);
-
-    // Put a floor on the keep alive duration, otherwise cleanup will spin loop.
-    if (keepAliveDuration <= 0) {
-      throw new IllegalArgumentException("keepAliveDuration <= 0: " + keepAliveDuration);
-    }
-  }
-
-  /** Returns the number of idle connections in the pool. */
-  public synchronized int idleConnectionCount() {
-    int total = 0;
-    for (RealConnection connection : connections) {
-      if (connection.allocations.isEmpty()) total++;
-    }
-    return total;
-  }
-
-  /**
-   * Returns total number of connections in the pool. Note that prior to OkHttp 2.7 this included
-   * only idle connections and HTTP/2 connections. Since OkHttp 2.7 this includes all connections,
-   * both active and inactive. Use {@link #idleConnectionCount()} to count connections not currently
-   * in use.
-   */
-  public synchronized int connectionCount() {
-    return connections.size();
-  }
-
-  /**
-   * Returns a recycled connection to {@code address}, or null if no such connection exists. The
-   * route is null if the address has not yet been routed.
-   */
-  @Nullable RealConnection get(Address address, StreamAllocation streamAllocation, Route route) {
-    assert (Thread.holdsLock(this));
-    for (RealConnection connection : connections) {
-      if (connection.isEligible(address, route)) {
-        streamAllocation.acquire(connection, true);
-        return connection;
-      }
-    }
-    return null;
-  }
-
-  /**
-   * Replaces the connection held by {@code streamAllocation} with a shared connection if possible.
-   * This recovers when multiple multiplexed connections are created concurrently.
-   */
-  @Nullable Socket deduplicate(Address address, StreamAllocation streamAllocation) {
-    assert (Thread.holdsLock(this));
-    for (RealConnection connection : connections) {
-      if (connection.isEligible(address, null)
-          && connection.isMultiplexed()
-          && connection != streamAllocation.connection()) {
-        return streamAllocation.releaseAndAcquire(connection);
-      }
-    }
-    return null;
-  }
-
-  void put(RealConnection connection) {
-    assert (Thread.holdsLock(this));
-    if (!cleanupRunning) {
-      cleanupRunning = true;
-      executor.execute(cleanupRunnable);
-    }
-    connections.add(connection);
-  }
-
-  /**
-   * Notify this pool that {@code connection} has become idle. Returns true if the connection has
-   * been removed from the pool and should be closed.
-   */
-  boolean connectionBecameIdle(RealConnection connection) {
-    assert (Thread.holdsLock(this));
-    if (connection.noNewStreams || maxIdleConnections == 0) {
-      connections.remove(connection);
-      return true;
-    } else {
-      notifyAll(); // Awake the cleanup thread: we may have exceeded the idle connection limit.
-      return false;
-    }
-  }
-
-  /** Close and remove all idle connections in the pool. */
-  public void evictAll() {
-    List<RealConnection> evictedConnections = new ArrayList<>();
-    synchronized (this) {
-      for (Iterator<RealConnection> i = connections.iterator(); i.hasNext(); ) {
-        RealConnection connection = i.next();
-        if (connection.allocations.isEmpty()) {
-          connection.noNewStreams = true;
-          evictedConnections.add(connection);
-          i.remove();
+        // Put a floor on the keep alive duration, otherwise cleanup will spin loop.
+        if (keepAliveDuration <= 0) {
+            throw new IllegalArgumentException("keepAliveDuration <= 0: " + keepAliveDuration);
         }
-      }
     }
 
-    for (RealConnection connection : evictedConnections) {
-      closeQuietly(connection.socket());
+    /**
+     * Returns the number of idle connections in the pool.
+     */
+    public synchronized int idleConnectionCount() {
+        int total = 0;
+        for (RealConnection connection : connections) {
+            if (connection.allocations.isEmpty()) total++;
+        }
+        return total;
     }
-  }
 
-  /**
-   * Performs maintenance on this pool, evicting the connection that has been idle the longest if
-   * either it has exceeded the keep alive limit or the idle connections limit.
-   *
-   * <p>Returns the duration in nanos to sleep until the next scheduled call to this method. Returns
-   * -1 if no further cleanups are required.
-   */
-  long cleanup(long now) {
-    int inUseConnectionCount = 0;
-    int idleConnectionCount = 0;
-    RealConnection longestIdleConnection = null;
-    long longestIdleDurationNs = Long.MIN_VALUE;
+    /**
+     * Returns total number of connections in the pool. Note that prior to OkHttp 2.7 this included
+     * only idle connections and HTTP/2 connections. Since OkHttp 2.7 this includes all connections,
+     * both active and inactive. Use {@link #idleConnectionCount()} to count connections not currently
+     * in use.
+     */
+    public synchronized int connectionCount() {
+        return connections.size();
+    }
 
-    // Find either a connection to evict, or the time that the next eviction is due.
-    synchronized (this) {
-      for (Iterator<RealConnection> i = connections.iterator(); i.hasNext(); ) {
-        RealConnection connection = i.next();
+    /**
+     * todo 获取可复用的连接
+     * Returns a recycled connection to {@code address}, or null if no such connection exists. The
+     * route is null if the address has not yet been routed.
+     */
+    @Nullable
+    RealConnection get(Address address, StreamAllocation streamAllocation, Route route) {
+        assert (Thread.holdsLock(this));
+        for (RealConnection connection : connections) {
+            //todo 要拿到的连接与连接池中的连接的配置(dns/代理/域名等等)全都一致，就可以复用
+            if (connection.isEligible(address, route)) {
+                streamAllocation.acquire(connection, true); // 在使用了，所以 acquire 会创建弱引用放入集合记录
+                return connection;
+            }
+        }
+        return null;
+    }
 
-        // If the connection is in use, keep searching.
-        if (pruneAndGetAllocationCount(connection, now) > 0) {
-          inUseConnectionCount++;
-          continue;
+    /**
+     * todo 对http2而言，多路复用去重(所有同一地址的请求都应该共享同一个TCP连接) 先不管
+     * Replaces the connection held by {@code streamAllocation} with a shared connection if possible.
+     * This recovers when multiple multiplexed connections are created concurrently.
+     */
+    @Nullable
+    Socket deduplicate(Address address, StreamAllocation streamAllocation) {
+        assert (Thread.holdsLock(this));
+        for (RealConnection connection : connections) {
+            if (connection.isEligible(address, null)
+                    && connection.isMultiplexed()
+                    && connection != streamAllocation.connection()) {
+                return streamAllocation.releaseAndAcquire(connection);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * todo 保存连接以复用。
+     * 本方法没上锁,只加了断言: 当前线程拥有this(pool)对象的锁。
+     * 表示使用这个方法必须要上锁，而且是上pool的对象锁。
+     * okhttp中使用到这个函数的地方确实也是这么做的
+     */
+    void put(RealConnection connection) {
+        assert (Thread.holdsLock(this));
+        //todo 如果清理任务未执行就启动它，再把新连接加入队列
+        if (!cleanupRunning) {
+            cleanupRunning = true;
+            executor.execute(cleanupRunnable);
+        }
+        connections.add(connection);
+    }
+
+    /**
+     * todo 连接用完了,重新变为闲置
+     * Notify this pool that {@code connection} has become idle. Returns true if the connection has
+     * been removed from the pool and should be closed.
+     */
+    boolean connectionBecameIdle(RealConnection connection) {
+        assert (Thread.holdsLock(this));
+        //todo 比如 服务器返回 Connection: close ，那就会把这个连接关掉 (noNewStreams 设置为true)
+        if (connection.noNewStreams || maxIdleConnections == 0) {
+            connections.remove(connection);
+            return true;
+        } else {
+            //todo 唤醒wait的清理任务 开始工作
+            notifyAll(); // Awake the cleanup thread: we may have exceeded the idle connection limit.
+            return false;
+        }
+    }
+
+    /**
+     * Close and remove all idle connections in the pool.
+     */
+    public void evictAll() {
+        List<RealConnection> evictedConnections = new ArrayList<>();
+        synchronized (this) {
+            for (Iterator<RealConnection> i = connections.iterator(); i.hasNext(); ) {
+                RealConnection connection = i.next();
+                if (connection.allocations.isEmpty()) {
+                    connection.noNewStreams = true;
+                    evictedConnections.add(connection);
+                    i.remove();
+                }
+            }
         }
 
-        idleConnectionCount++;
-
-        // If the connection is ready to be evicted, we're done.
-        long idleDurationNs = now - connection.idleAtNanos;
-        if (idleDurationNs > longestIdleDurationNs) {
-          longestIdleDurationNs = idleDurationNs;
-          longestIdleConnection = connection;
+        for (RealConnection connection : evictedConnections) {
+            closeQuietly(connection.socket());
         }
-      }
-
-      if (longestIdleDurationNs >= this.keepAliveDurationNs
-          || idleConnectionCount > this.maxIdleConnections) {
-        // We've found a connection to evict. Remove it from the list, then close it below (outside
-        // of the synchronized block).
-        connections.remove(longestIdleConnection);
-      } else if (idleConnectionCount > 0) {
-        // A connection will be ready to evict soon.
-        return keepAliveDurationNs - longestIdleDurationNs;
-      } else if (inUseConnectionCount > 0) {
-        // All connections are in use. It'll be at least the keep alive duration 'til we run again.
-        return keepAliveDurationNs;
-      } else {
-        // No connections, idle or in use.
-        cleanupRunning = false;
-        return -1;
-      }
     }
 
-    closeQuietly(longestIdleConnection.socket());
+    /**
+     * Performs maintenance on this pool, evicting the connection that has been idle the longest if
+     * either it has exceeded the keep alive limit or the idle connections limit.
+     *
+     * <p>Returns the duration in nanos to sleep until the next scheduled call to this method. Returns
+     * -1 if no further cleanups are required.
+     */
+    long cleanup(long now) {
+        int inUseConnectionCount = 0;
+        int idleConnectionCount = 0;
+        RealConnection longestIdleConnection = null; //连接池中的闲置了最久的连接
+        long longestIdleDurationNs = Long.MIN_VALUE; //连接池中的闲置连接的最长闲置时间
 
-    // Cleanup again immediately.
-    return 0;
-  }
+        // Find either a connection to evict, or the time that the next eviction is due.
+        synchronized (this) {
+            //遍历连接池
+            for (Iterator<RealConnection> i = connections.iterator(); i.hasNext(); ) {
+                RealConnection connection = i.next();
 
-  /**
-   * Prunes any leaked allocations and then returns the number of remaining live allocations on
-   * {@code connection}. Allocations are leaked if the connection is tracking them but the
-   * application code has abandoned them. Leak detection is imprecise and relies on garbage
-   * collection.
-   */
-  private int pruneAndGetAllocationCount(RealConnection connection, long now) {
-    List<Reference<StreamAllocation>> references = connection.allocations;
-    for (int i = 0; i < references.size(); ) {
-      Reference<StreamAllocation> reference = references.get(i);
+                // If the connection is in use, keep searching.
+              // todo 检查连接是否正在被使用
+                if (pruneAndGetAllocationCount(connection, now) > 0) {
+                    inUseConnectionCount++;
+                    continue;
+                }
 
-      if (reference.get() != null) {
-        i++;
-        continue;
-      }
+                //todo 否则记录闲置连接数
+                idleConnectionCount++;
 
-      // We've discovered a leaked allocation. This is an application bug.
-      StreamAllocation.StreamAllocationReference streamAllocRef =
-          (StreamAllocation.StreamAllocationReference) reference;
-      String message = "A connection to " + connection.route().address().url()
-          + " was leaked. Did you forget to close a response body?";
-      Platform.get().logCloseableLeak(message, streamAllocRef.callStackTrace);
+                // If the connection is ready to be evicted, we're done.
+                //TODO 获得这个连接已经闲置多久
+                // 执行完遍历，获得闲置了最久的连接以及最长闲置时间
+                long idleDurationNs = now - connection.idleAtNanos;
+                if (idleDurationNs > longestIdleDurationNs) {
+                    longestIdleDurationNs = idleDurationNs;
+                    longestIdleConnection = connection;
+                }
+            }
 
-      references.remove(i);
-      connection.noNewStreams = true;
+            //todo 最长闲置时间超过了保活时间(5分钟) 或者池内的连接数量超过了最大闲置连接数量(5个)
+            // 马上移除这个闲置了最久的连接，然后返回0，0表示不等待，马上再次执行清理任务
+            if (longestIdleDurationNs >= this.keepAliveDurationNs
+                    || idleConnectionCount > this.maxIdleConnections) {
+                // We've found a connection to evict. Remove it from the list, then close it below (outside
+                // of the synchronized block).
+                connections.remove(longestIdleConnection);
+            } else if (idleConnectionCount > 0) {
+                // A connection will be ready to evict soon.
+                //todo 池内存在闲置连接，那就等待 保活时间(5分钟)-最长闲置时间 =还能闲置多久 后再次检查
+                return keepAliveDurationNs - longestIdleDurationNs;
+            } else if (inUseConnectionCount > 0) {
+                // All connections are in use. It'll be at least the keep alive duration 'til we run again.
+                //todo 池内所有的连接都在使用中，就等 keepAliveDurationNs(5分钟) 后再次检查
+                return keepAliveDurationNs;
+            } else {
+                // No connections, idle or in use.
+                //todo 都不满足，即池内没有任何连接，直接停止清理任务(put后会再次启动清理任务)
+                cleanupRunning = false;
+                return -1;
+            }
+        }
 
-      // If this was the last allocation, the connection is eligible for immediate eviction.
-      if (references.isEmpty()) {
-        connection.idleAtNanos = now - keepAliveDurationNs;
+        closeQuietly(longestIdleConnection.socket());//移除闲置连接的同时关闭这个闲置连接的socket
+
+        // Cleanup again immediately.
         return 0;
-      }
     }
 
-    return references.size();
-  }
+    /**
+     * Prunes any leaked allocations and then returns the number of remaining live allocations on
+     * {@code connection}. Allocations are leaked if the connection is tracking them but the
+     * application code has abandoned them. Leak detection is imprecise and relies on garbage
+     * collection.
+     */
+    private int pruneAndGetAllocationCount(RealConnection connection, long now) {
+        //todo 这个连接被使用就会创建一个弱引用放入集合，这个集合不为空就表示这个连接正在被使用
+        // 实际上 http1.x 上也只能有一个正在使用的。
+        List<Reference<StreamAllocation>> references = connection.allocations;
+        for (int i = 0; i < references.size(); ) {
+            Reference<StreamAllocation> reference = references.get(i);
+
+            if (reference.get() != null) {
+                i++;
+                continue;
+            }
+
+            // We've discovered a leaked allocation. This is an application bug.
+            StreamAllocation.StreamAllocationReference streamAllocRef =
+                    (StreamAllocation.StreamAllocationReference) reference;
+            String message = "A connection to " + connection.route().address().url()
+                    + " was leaked. Did you forget to close a response body?";
+            Platform.get().logCloseableLeak(message, streamAllocRef.callStackTrace);
+
+            references.remove(i);
+            connection.noNewStreams = true;
+
+            // If this was the last allocation, the connection is eligible for immediate eviction.
+            if (references.isEmpty()) {
+                connection.idleAtNanos = now - keepAliveDurationNs;
+                return 0;
+            }
+        }
+
+        return references.size();
+    }
 }

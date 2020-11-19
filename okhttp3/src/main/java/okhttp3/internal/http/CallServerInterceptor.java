@@ -51,20 +51,26 @@ public final class CallServerInterceptor implements Interceptor {
         long sentRequestMillis = System.currentTimeMillis();
 
         realChain.eventListener().requestHeadersStart(realChain.call());
-        httpCodec.writeRequestHeaders(request);
+        httpCodec.writeRequestHeaders(request);//把请求行和请求头写入到缓冲字节数组中
         realChain.eventListener().requestHeadersEnd(realChain.call(), request);
 
         Response.Builder responseBuilder = null;
+        //如果是POST请求且有请求体，则要判断Expect:100-continue请求头
         if (HttpMethod.permitsRequestBody(request.method()) && request.body() != null) {
             // If there's a "Expect: 100-continue" header on the request, wait for a "HTTP/1.1 100
             // Continue" response before transmitting the request body. If we don't get that, return
             // what we did get (such as a 4xx response) without ever transmitting the request body.
+            // todo 如果POST请求包含Expect:100-continue请求头，则发完请求头后就读取服务器的响应
             if ("100-continue".equalsIgnoreCase(request.header("Expect"))) {
-                httpCodec.flushRequest();
+                httpCodec.flushRequest();//发送给服务器
                 realChain.eventListener().responseHeadersStart(realChain.call());
-                responseBuilder = httpCodec.readResponseHeaders(true);
+                responseBuilder = httpCodec.readResponseHeaders(true);//读取服务器的响应
             }
 
+            //todo responseBuilder == null有两种情况：
+            // 1.POST请求包含Expect:100-continue请求头，且服务器返回100表示可以接收请求体，这时responseBuilder是为null的，因为这个响应没有响应体
+            // 2.POST请求不包含Expect:100-continue请求头
+            // 则继续写入请求体
             if (responseBuilder == null) {
                 // Write the request body if the "Expect: 100-continue" expectation was met.
                 realChain.eventListener().requestBodyStart(realChain.call());
@@ -87,13 +93,16 @@ public final class CallServerInterceptor implements Interceptor {
             }
         }
 
+        // todo 发送给服务器
         httpCodec.finishRequest();
 
+        //todo 读取服务器的响应
         if (responseBuilder == null) {
             realChain.eventListener().responseHeadersStart(realChain.call());
-            responseBuilder = httpCodec.readResponseHeaders(false);
+            responseBuilder = httpCodec.readResponseHeaders(false);//读取服务器的响应
         }
 
+        // todo 生成Response对象
         Response response = responseBuilder
                 .request(request)
                 .handshake(streamAllocation.connection().handshake())
@@ -142,7 +151,7 @@ public final class CallServerInterceptor implements Interceptor {
                     "HTTP " + code + " had non-zero Content-Length: " + response.body().contentLength());
         }
 
-        return response;
+        return response;    //返回Response对象
     }
 
     static final class CountingSink extends ForwardingSink {

@@ -112,11 +112,11 @@ public final class CacheInterceptor implements Interceptor {
             }
         }
 
-        //todo 3.有网络请求，且有缓存(networkRequest != null && cacheResponse != null)
-
-        // If we have a cache response too, then we're doing a conditional get.
+        //todo 3.有网络请求，且有缓存(networkRequest != null && cacheResponse != null)，说明本次网络请求是一个条件网络请求
+        //If we have a cache response too, then we're doing a conditional get.
         if (cacheResponse != null) {
-            //todo 服务器返回304无修改，那就根据缓存的响应修改了时间等数据后作为本次请求的响应返回
+            //todo 如果服务器返回304无修改，那就合并缓存的响应头和网络响应的响应头，并修改发送时间、接收时间等数据后作为本次请求的响应返回
+            // 当然，如果服务器返回200，则表示服务器上已经有更新了，则使用网络请求的响应，此时会继续执行后续的步骤4.
             if (networkResponse.code() == HTTP_NOT_MODIFIED) {
                 Response response = cacheResponse.newBuilder()
                         .headers(combine(cacheResponse.headers(), networkResponse.headers()))
@@ -130,7 +130,7 @@ public final class CacheInterceptor implements Interceptor {
                 // Update the cache after combining headers but before stripping the
                 // Content-Encoding header (as performed by initContentStream()).
                 cache.trackConditionalCacheHit();
-                cache.update(cacheResponse, response);
+                cache.update(cacheResponse, response);//更新缓存
                 return response;
             } else {
                 closeQuietly(cacheResponse.body());
