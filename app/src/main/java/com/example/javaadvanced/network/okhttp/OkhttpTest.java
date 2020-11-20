@@ -18,22 +18,29 @@ import okhttp3.ResponseBody;
 public class OkhttpTest {
     OkHttpClient client = new OkHttpClient();
 
-
     public void testOkHttp() throws IOException {
 //        get("http://restapi.amap.com/v3/weather/weatherInfo?city=长沙&key" +
 //                "=13cb58f5884f9749287abbead9c658f2");
 //
 //        post("http://restapi.amap.com/v3/weather/weatherInfo");
 
+
+
+    }
+
+    /**
+     * 测试JDK的ProxySelector的使用
+     * @throws IOException
+     */
+    public void testProxySelector() throws IOException {
         try {
             URI uri = new URI("http://restapi.amap.com");
             List<Proxy> proxyList = ProxySelector.getDefault().select(uri);
-            System.out.println(proxyList.get(0).address());
-            System.out.println(proxyList.get(0).type());
+            System.out.println("proxy.address=" + proxyList.get(0).address());//proxy.address=null
+            System.out.println("proxy.type=" + proxyList.get(0).type());//proxy.type=DIRECT
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -69,7 +76,8 @@ public class OkhttpTest {
 
     public static void main(String[] args) throws IOException {
         OkhttpTest okhttpTest  = new OkhttpTest();
-        okhttpTest.testOkHttp();
+        //okhttpTest.testOkHttp();
+        okhttpTest.testProxySelector();
 
     }
 }
