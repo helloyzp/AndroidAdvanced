@@ -12,6 +12,9 @@ import java.net.Socket;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
+/**
+ * 测试http协议的代理机制，方便理解okhttp的代理实现的原理
+ */
 public class ProxyTest {
 
     public static void main(String[] args) throws IOException {

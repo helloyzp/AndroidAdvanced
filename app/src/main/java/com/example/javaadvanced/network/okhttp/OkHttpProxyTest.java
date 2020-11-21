@@ -5,12 +5,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.SocketAddress;
+import java.net.URI;
+import java.net.UnknownHostException;
+import java.util.List;
 
 import okhttp3.Authenticator;
 import okhttp3.Call;
 import okhttp3.Credentials;
+import okhttp3.Dns;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -18,15 +25,19 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.Route;
 
-
+/**
+ * 测试okhttp的代理实现
+ */
 public class OkHttpProxyTest {
 
+    //SOCKS代理
     OkHttpClient socksClient =
             new OkHttpClient.Builder()
                     .proxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("localhost", 808)))
                     //.retryOnConnectionFailure(false)//配置连接失败时不重试，默认是true
                     .build();
 
+    //HTTP代理
     OkHttpClient httpClient =
             new OkHttpClient.Builder()
                     .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
@@ -47,6 +58,33 @@ public class OkHttpProxyTest {
                             Response proceed = chain.proceed(chain.request());
                             //......
                             return proceed;
+                        }
+                    })
+                    .build();
+
+    //OkHttp的proxy、proxySelector、dns的使用
+    OkHttpClient httpClient2 =
+            new OkHttpClient.Builder()
+                    //设置单个代理
+                    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("114.239.145.90", 808)))
+                    //设置多个代理
+                    .proxySelector(new ProxySelector() {
+                        @Override
+                        public List<Proxy> select(URI uri) {
+                            return null;
+                        }
+
+                        @Override
+                        public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
+
+                        }
+                    })
+                    //设置dns
+                    .dns(new Dns() {
+                        @NotNull
+                        @Override
+                        public List<InetAddress> lookup(@NotNull String s) throws UnknownHostException {
+                            return null;
                         }
                     })
                     .build();
