@@ -1,4 +1,4 @@
-package com.example.javaadvanced.network.okhttp;
+package com.example.javaadvanced.network.okhttp.proxy;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 /**
- * 测试http协议的代理机制，方便理解okhttp的代理实现的原理
+ * 利用JDK中的API测试http协议的代理机制，这时前置知识点，方便后续分析okhttp的代理的实现原理
  */
 public class ProxyTest {
 
@@ -152,7 +152,7 @@ public class ProxyTest {
      * @throws IOException
      */
     public void testSocksProxy() throws IOException {
-        //启动本地的SOCKS代理服务器
+        //先启动本地主机的SOCKS代理服务器
         new Thread() {
             @Override
             public void run() {
@@ -164,9 +164,12 @@ public class ProxyTest {
             }
         }.start();
 
-
+        // 这是JDK中对网络请求使用SOCKS代理的入口方法，要实现SOCKS代理，就需要传递进去一个Proxy对象给Socket
+        // 这里是把本地主机作为SOCKS代理服务器
         Socket socket = new Socket(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("localhost", 808)));
-        //okhttp 设置了socks代理就传递不解析的域名，让代理服务器解析
+        //让SOCKS代理服务器解析域名：设置了SOCKS代理就传递不解析的域名，让SOCKS代理服务器解析。(okhttp也是这么做的)
+        //InetSocketAddress.createUnresolved("restapi.amap.com", 80)这行代码非常关键，创建了一个未解析(Unresolved)的SocketAddress，
+        //在SOCKS协议握手阶段，InetSocketAddress信息会原封不动的发送到代理服务器，由代理服务器解析出具体的IP地址。
         socket.connect(InetSocketAddress.createUnresolved("restapi.amap.com", 80));
 
 

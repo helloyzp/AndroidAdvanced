@@ -1,4 +1,4 @@
-package com.example.javaadvanced.network.okhttp;
+package com.example.javaadvanced.network.okhttp.proxy;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +7,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
+/**
+ * Socks代理服务武器
+ */
 public class SocksProxy {
     static int state = 0;
 

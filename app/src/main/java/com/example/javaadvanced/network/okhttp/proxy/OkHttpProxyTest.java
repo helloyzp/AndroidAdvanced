@@ -1,4 +1,4 @@
-package com.example.javaadvanced.network.okhttp;
+package com.example.javaadvanced.network.okhttp.proxy;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +26,7 @@ import okhttp3.ResponseBody;
 import okhttp3.Route;
 
 /**
- * 测试okhttp的代理实现
+ * 测试okhttp的代理的实现原理
  */
 public class OkHttpProxyTest {
 
