@@ -188,7 +188,7 @@ public final class RouteSelector {
         }
 
         if (proxy.type() == Proxy.Type.SOCKS) {//若使用SOCKS代理
-            //若使用SOCKS代理，则 connect 到 http服务器， dns没用到，由SOCKS代理服务器解析域名
+            //若使用SOCKS代理，dns没用到，由SOCKS代理服务器解析域名
             //注意InetSocketAddress.createUnresolved()方法：根据主机名和端口号创建未解析的套接字地址。不会尝试将主机名解析为 InetAddress。
             inetSocketAddresses.add(InetSocketAddress.createUnresolved(socketHost, socketPort));
         } else {//若无代理或者使用HTTP代理

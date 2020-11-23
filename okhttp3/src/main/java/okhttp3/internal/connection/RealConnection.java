@@ -247,6 +247,7 @@ public final class RealConnection extends Http2Connection.Listener implements Co
         Proxy proxy = route.proxy();
         Address address = route.address();
 
+        //如果是Socks代理则 new Socket(proxy); 否则相当于直接:new Socket()
         rawSocket = proxy.type() == Proxy.Type.DIRECT || proxy.type() == Proxy.Type.HTTP
                 ? address.socketFactory().createSocket()
                 : new Socket(proxy);
