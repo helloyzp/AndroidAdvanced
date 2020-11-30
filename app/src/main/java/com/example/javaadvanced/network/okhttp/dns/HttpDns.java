@@ -17,7 +17,9 @@ public class HttpDns implements Dns {
     @Override
     public List<InetAddress> lookup(String hostname) throws UnknownHostException {
         Log.e(TAG, "lookup(), hostname=" + hostname);
-/*        String ip = DNSHelper.getIpByHost(hostname);
+/*        //根据HttpDns服务商提供的SDK实现HttpDns
+
+        String ip = DNSHelper.getIpByHost(hostname);
         if (ip != null && !ip.equals("")) {
             List<InetAddress> inetAddresses = Arrays.asList(InetAddress.getAllByName(ip));
             Log.e("HttpDns", "inetAddresses:" + inetAddresses);
