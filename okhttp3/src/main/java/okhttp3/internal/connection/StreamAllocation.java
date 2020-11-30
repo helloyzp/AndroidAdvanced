@@ -103,8 +103,7 @@ public final class StreamAllocation {
         this.callStackTrace = callStackTrace;
     }
 
-    public HttpCodec newStream(
-            OkHttpClient client, Interceptor.Chain chain, boolean doExtensiveHealthChecks) {
+    public HttpCodec newStream(OkHttpClient client, Interceptor.Chain chain, boolean doExtensiveHealthChecks) {
         int connectTimeout = chain.connectTimeoutMillis();
         int readTimeout = chain.readTimeoutMillis();
         int writeTimeout = chain.writeTimeoutMillis();
@@ -112,7 +111,7 @@ public final class StreamAllocation {
         boolean connectionRetryEnabled = client.retryOnConnectionFailure();
 
         try {
-            //todo  找到一个健康的连接
+            //todo  找到一个健康的连接，即创建或复用已有的连接
             RealConnection resultConnection = findHealthyConnection(connectTimeout, readTimeout,
                     writeTimeout, pingIntervalMillis, connectionRetryEnabled,
                     doExtensiveHealthChecks);
@@ -130,8 +129,9 @@ public final class StreamAllocation {
 
     /**
      * Finds a connection and returns it if it is healthy. If it is unhealthy the process is
-     * repeated
-     * until a healthy connection is found.
+     * repeated until a healthy connection is found.
+     * <p>
+     * 寻找并返回一个健康的连接，如果没有则一直重复，直到找到这个连接
      */
     private RealConnection findHealthyConnection(int connectTimeout, int readTimeout,
                                                  int writeTimeout, int pingIntervalMillis,
@@ -139,6 +139,7 @@ public final class StreamAllocation {
                                                  boolean doExtensiveHealthChecks) throws IOException {
         while (true) {
             //todo 找到一个连接
+            // findConnection()方法是核心代码，真正创建或者复用链接的地方
             RealConnection candidate = findConnection(connectTimeout, readTimeout, writeTimeout,
                     pingIntervalMillis, connectionRetryEnabled);
 
@@ -152,7 +153,7 @@ public final class StreamAllocation {
 
             //todo 如果不是新创建的，需要检查是否健康
             //Do a (potentially slow) check to confirm that the pooled connection is still good.
-          // If it
+            // If it
             // isn't, take it out of the pool and start again.
             if (!candidate.isHealthy(doExtensiveHealthChecks)) {
                 //todo 不健康 关闭连接，释放Socket,从连接池移除
@@ -182,13 +183,12 @@ public final class StreamAllocation {
             if (canceled) throw new IOException("Canceled");
 
             // Attempt to use an already-allocated connection. We need to be careful here because
-          // our
-            // already-allocated connection may have been restricted from creating new streams.
+            // our already-allocated connection may have been restricted from creating new streams.
             releasedConnection = this.connection;
             toClose = releaseIfNoNewStreams();
             if (this.connection != null) {
                 // We had an already-allocated connection and it's good.
-                result = this.connection;
+                result = this.connection; //todo 步骤1.如果需要的连接是当前连接，则记录result为当前连接
                 releasedConnection = null;
             }
             if (!reportedAcquired) {
@@ -197,7 +197,7 @@ public final class StreamAllocation {
             }
 
             if (result == null) {
-                //todo 尝试从连接池获取连接，如果有可复用的连接,会给第三个参数 this的connection赋值
+                //todo 步骤2.尝试从连接池获取连接，如果有可复用的连接,会给第三个参数 this的connection赋值
                 //Attempt to get a connection from the pool.
                 Internal.instance.get(connectionPool, address, this, null);
                 if (connection != null) {
@@ -216,7 +216,7 @@ public final class StreamAllocation {
         if (foundPooledConnection) {
             eventListener.connectionAcquired(call, result);
         }
-        if (result != null) {
+        if (result != null) {//说明从当前连接(this.connection)或者连接池中(connectionPool)找到可复用的连接
             // If we found an already-allocated or pooled connection, we're done.
             return result;
         }
@@ -229,19 +229,19 @@ public final class StreamAllocation {
             routeSelection = routeSelector.next();
         }
 
+        //todo   步骤3.配置路由后，再次尝试去连接池获取连接
         synchronized (connectionPool) {
             if (canceled) throw new IOException("Canceled");
 
             if (newRouteSelection) {
                 // Now that we have a set of IP addresses, make another attempt at getting a
-              // connection from
-                // the pool. This could match due to connection coalescing.
+                // connection from the pool. This could match due to connection coalescing.
                 //todo 根据代理和不同的ip从连接池中找可复用的连接
                 List<Route> routes = routeSelection.getAll();
                 for (int i = 0, size = routes.size(); i < size; i++) {
                     Route route = routes.get(i);
                     Internal.instance.get(connectionPool, address, this, route);
-                    if (connection != null) {
+                    if (connection != null) {//找到可复用的连接
                         foundPooledConnection = true;
                         result = connection;
                         this.route = route;
@@ -249,14 +249,14 @@ public final class StreamAllocation {
                     }
                 }
             }
-            //todo 还是没找到，必须新建一个连接了
+            //todo 步骤4.还是没找到，必须新建一个RealConnection连接了
             if (!foundPooledConnection) {
                 if (selectedRoute == null) {
                     selectedRoute = routeSelection.next();
                 }
 
                 // Create a connection and assign it to this allocation immediately. This makes
-              // it possible
+                // it possible
                 // for an asynchronous cancel() to interrupt the handshake we're about to do.
                 route = selectedRoute;
                 refusedStreamCount = 0;
@@ -266,14 +266,16 @@ public final class StreamAllocation {
         }
 
         // If we found a pooled connection on the 2nd time around, we're done.
-        if (foundPooledConnection) {
+        if (foundPooledConnection) {//第2轮从连接池中寻找到了可复用的连接，返回该连接
             eventListener.connectionAcquired(call, result);
             return result;
         }
 
 
         // Do TCP + TLS handshakes. This is a blocking operation.
-        //todo 实际上就是创建socket连接，但是要注意的是如果存在http代理的情况
+        //todo 走到这里说明第2轮从连接池中寻找可复用连接时没有找到
+        // 则对于步骤4新建的RealConnection连接执行connect方法
+        // connect方法实际上就是创建socket连接，但是要注意的是如果存在http代理的情况
         result.connect(connectTimeout, readTimeout, writeTimeout, pingIntervalMillis,
                 connectionRetryEnabled, call, eventListener);
         routeDatabase().connected(result.route());
@@ -288,7 +290,7 @@ public final class StreamAllocation {
 
             // If another multiplexed connection to the same address was created concurrently, then
             // release this connection and acquire that one.
-            if (result.isMultiplexed()) {
+            if (result.isMultiplexed()) {//对于HTTP/2连接，一条连接(Http2Connection)可以同时执行多个HTTP请求
                 socket = Internal.instance.deduplicate(connectionPool, address, this);
                 result = connection;
             }
@@ -458,7 +460,7 @@ public final class StreamAllocation {
                     refusedStreamCount++;
                 }
                 // On HTTP/2 stream errors, retry REFUSED_STREAM errors once on the same
-              // connection. All
+                // connection. All
                 // other errors must be retried on a new connection.
                 if (streamResetException.errorCode != ErrorCode.REFUSED_STREAM || refusedStreamCount > 1) {
                     noNewStreams = true;
