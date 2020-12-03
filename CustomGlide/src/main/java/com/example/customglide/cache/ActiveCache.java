@@ -20,7 +20,10 @@ public class ActiveCache {
     private ReferenceQueue<Value> queue; // 监听弱引用
     private Thread thread; // 线程--》 死循环
     private boolean isCloseThread; // 死循环的标记
-    private boolean isShoudonRemove; //是否要进行被动移除， 为了控制 手动移除 和 被动移除 的冲突
+    /**
+     *  是否要进行手动移除， 为了控制 手动移除 和 被动移除 的冲突
+     */
+    private boolean isShoudonRemove;
 
     private ValueCallback valueCallback;
 
@@ -59,7 +62,7 @@ public class ActiveCache {
      * TODO 手动 移除
      */
     public Value remove(String key) {
-        isShoudonRemove = true; // 不要去被动移除
+        isShoudonRemove = true; // 手动移除生效，不要去被动移除
         WeakReference<Value> remove = mapList.remove(key);
         isShoudonRemove = false; // 被动移除开始生效
 
@@ -132,7 +135,7 @@ public class ActiveCache {
                     while (!isCloseThread) { // 这个循环如何结束？
                         try {
 
-                            // 如果是 手动移除，则不进行被动移除的操作
+                            // 如果是 手动移除，则不进行被动移除的操作， 不是手动移除时才进行被动移除的操作
                             if (!isShoudonRemove) {
                                 // queue.remove(); 同学们这是：阻塞式的方法
 
