@@ -3,11 +3,13 @@ package com.example.customglide;
 import android.content.Context;
 
 /**
- * 有很多参数
- * 无限次的添加
+ * 建造者模式
+ *
+ * 有很多参数可以添加
+ *
  * ....
  *
- * Build ---》 结果
+ * Build()方法生成结果
  */
 public class GlideBuilder {
 

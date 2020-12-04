@@ -24,7 +24,8 @@ public class Glide {
         return getRetriver(context).get(context);
     }
 
-    // Glide 转变的开始
+
+    // Glide 转变
     private static RequestManagerRetriver getRetriver(Context context) {
         return Glide.get(context).getRetriver();
     }

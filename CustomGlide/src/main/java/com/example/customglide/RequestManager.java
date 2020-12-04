@@ -25,27 +25,27 @@ public class RequestManager {
     private final String FRAGMENT_ACTIVITY_NAME = "Fragment_Activity_NAME";
     private final String ACTIVITY_NAME = "Activity_NAME";
 
-    // 总的环境
+    // 总的上下文环境
     private Context requestManagerContext;
 
     private static RequestTargetEngine callback;
 
     private final int NEXT_HANDLER_MSG = 995465; // Handler 标记
 
-    { // 构造代码块，不用再所有的构造方法里面去实例化了，统一的去写
+    { // 构造代码块，不用在所有的构造方法里面去实例化了，统一的在这里写
         if (callback == null) {
             callback = new RequestTargetEngine();
         }
     }
 
     /**
-     * 可以管理生命周期 -- FragmentActivity是有生命周期方法
+     * 可以管理生命周期 -- FragmentActivity是有生命周期方法的
      *
      * @param fragmentActivity
      */
     FragmentActivity fragmentActivity;
 
-    public RequestManager(FragmentActivity fragmentActivity) { // this == fragmentActivity
+    public RequestManager(FragmentActivity fragmentActivity) {
         this.fragmentActivity = fragmentActivity;
         requestManagerContext = fragmentActivity;
 
@@ -61,13 +61,14 @@ public class RequestManager {
             supportFragmentManager.beginTransaction().add(fragment, FRAGMENT_ACTIVITY_NAME).commitAllowingStateLoss(); // 提交
         }
 
-        // TODO
-        // 测试下面的话，这种测试，不能完全准确
-        // 证明是不是排队状态
+        // TODO 测试
+        // 证明是不是处于排队状态
+        // 这种测试不能完全准确，因为commit操作可能还在排队，可能已经消费了
         Fragment fragment2 = supportFragmentManager.findFragmentByTag(FRAGMENT_ACTIVITY_NAME);
-        Log.d(TAG, "RequestManager: fragment2" + fragment2); // null ： 还在排队中，还没有消费
+        Log.d(TAG, "RequestManager: fragment2=" + fragment2);   // null ： 因为可能还在排队中，还没有消费
 
-        // 添加进去 提交之后 可能还处于 排队状态，想让马上干活 （Android 消息机制管理），快速干活，发了一次Handler
+        // 添加了Fragment，commit之后，可能还处于排队状态（Android 消息机制管理），想立马执行 ，
+        // 需要调用Handler发一次消息，解除排队状态，立马执行，确保commit的Fragment真正被添加。
         mHandler.sendEmptyMessage(NEXT_HANDLER_MSG);
     }
 
@@ -75,7 +76,7 @@ public class RequestManager {
      * 可以管理生命周期 -- Activity是有生命周期方法的(Fragment)
      * @param activity
      */
-    public RequestManager(Activity activity) { // @2
+    public RequestManager(Activity activity) {
         this.requestManagerContext = activity;
 
         // 开始绑定操作
@@ -87,14 +88,16 @@ public class RequestManager {
             fragment = new ActivityFragmentManager(callback);
 
             // 添加到管理器 -- fragmentManager.beginTransaction().add..
-            fragmentManager.beginTransaction().add(fragment, ACTIVITY_NAME).commitAllowingStateLoss(); // 提交  @3
+            fragmentManager.beginTransaction().add(fragment, ACTIVITY_NAME).commitAllowingStateLoss(); // 提交
         }
 
         // TODO 测试
+        // 证明是不是处于排队状态
+        // 这种测试不能完全准确，因为commit操作可能还在排队，可能已经消费了
         android.app.Fragment fragment2 = fragmentManager.findFragmentByTag(ACTIVITY_NAME);
-        Log.d(TAG, "RequestManager: fragment2" + fragment2); // null ： 还在排队中，还没有消费
+        Log.d(TAG, "RequestManager: fragment2=" + fragment2);   // null ： 因为可能还在排队中，还没有消费
 
-        // 发送一次Handler
+        // 添加了Fragment，commit之后可能还处于在排队中，所以调用Handler发送一次消息，确保commit的Fragment真正被添加
         mHandler.sendEmptyMessage(NEXT_HANDLER_MSG);
     }
 
@@ -110,7 +113,7 @@ public class RequestManager {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
             Fragment fragment2 = fragmentActivity.getSupportFragmentManager().findFragmentByTag(FRAGMENT_ACTIVITY_NAME);
-            Log.d(TAG, "Handler: fragment2" + fragment2); // 有值 ： 不在排队中，所以有值
+            Log.d(TAG, "Handler: fragment2" + fragment2); // 有值 ： 因为不在排队中，已经消费了，所以有值。
             return false;
         }
     });

@@ -2,8 +2,12 @@ package com.example.customglide.fragment;
 
 import androidx.fragment.app.Fragment;
 
+
 /**
- * FragmentActivity 生命周期 关联 管理
+ * 监听FragmentActivity的生命周期方法
+ *
+ * 如果用户App当前的页面是FragmentActivity，则使用这个Fragment，
+ * 注意这个Fragment是androidx.fragment.app.Fragment(androidx.fragment.app.Fragment是扩展包androidx里面的)
  */
 public class FragmentActivityFragmentManager extends Fragment {
 
