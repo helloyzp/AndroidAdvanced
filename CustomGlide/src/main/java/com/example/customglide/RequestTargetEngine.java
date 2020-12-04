@@ -16,7 +16,7 @@ import com.example.customglide.resource.Value;
 import com.example.customglide.resource.ValueCallback;
 
 /**
- * 同学们，这是 加载图片资源 的引擎类
+ * 图片资源加载引擎：即加载图片资源的引擎类
  */
 public class RequestTargetEngine implements LifecycleCallback, ValueCallback, MemoryCacheCallback, ResponseListener {
 
@@ -181,7 +181,7 @@ public class RequestTargetEngine implements LifecycleCallback, ValueCallback, Me
     }
 
     /**
-     * 外置资源 成功  回调
+     * 外置资源(如网络资源等)请求成功的回调
      * @param value
      */
     @Override

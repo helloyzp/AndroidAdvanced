@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.customglide.MyApp;
 import com.example.customglide.Tool;
 import com.example.customglide.resource.Value;
 
@@ -38,6 +40,20 @@ public class DiskLruCacheImpl {
             diskLruCache = DiskLruCache.open(file, APP_VERSION, VALUE_COUNT, MAX_SIZE);
         } catch (IOException e) {
             e.printStackTrace();
+
+
+            //没有磁盘读写权限时diskLruCache会创建失败
+            Log.i(TAG, "使用SD卡初始化diskLruCache失败！尝试用cache目录初始化diskLruCache...");
+
+            file = new File(MyApp.getInstance().getCacheDir() + File.separator + DISKLRU_CACHE_DIR);
+            try {
+                diskLruCache = DiskLruCache.open(file, APP_VERSION, VALUE_COUNT, MAX_SIZE);
+                if(diskLruCache != null) {
+                    Log.i(TAG, "使用cache目录初始化diskLruCache成功！");
+                }
+            } catch (IOException iOException) {
+                iOException.printStackTrace();
+            }
         }
     }
 

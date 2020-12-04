@@ -3,10 +3,12 @@ package com.example.customglide;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
+    private String TAG = "MainActivity";
 
     private ImageView imageView1, imageView2, imageView3;
 
@@ -27,18 +29,21 @@ public class MainActivity extends AppCompatActivity {
 
     // 加载此图片：https://cn.bing.com/sa/simg/hpb/LaDigue_EN-CA1115245085_1920x1080.jpg
     public void t1(View view) {
+        Log.i(TAG, "--------------t1--------------");
         Glide.with(this)
                 .load(mLoadImageUrl)
                 .into(imageView1); // inio 不能在异步线程运行
     }
 
     public void t2(View view) {
+        Log.i(TAG, "--------------t2--------------");
         Glide.with(this)
                 .load(mLoadImageUrl)
                 .into(imageView2);
     }
 
     public void t3(View view) {
+        Log.i(TAG, "--------------t3--------------");
         Glide.with(this)
                 .load(mLoadImageUrl)
                 .into(imageView3);
