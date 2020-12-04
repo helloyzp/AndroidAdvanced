@@ -15,14 +15,14 @@ import java.io.OutputStream;
 
 /**
  * 我们自己的 磁盘缓存的封装
- * 目的：put  把我们的Value 存储进去
+ * 目的：put  把我们定义的Value存储进去
  *      get 通过key 得到 Value
  */
 public class DiskLruCacheImpl {
 
     private final String TAG = DiskLruCacheImpl.class.getSimpleName();
 
-    // Sdcard/disk_lru_cache_dir/ac037ea49e34257dc5577d1796bb137dbaddc0e42a9dff051beee8ea457a4668/缓存东西（Value）
+    // Sdcard/disk_lru_cache_dir/ac037ea49e34257dc5577d1796bb137dbaddc0e42a9dff051beee8ea457a4668/缓存内容（Value）
     private final String DISKLRU_CACHE_DIR = "disk_lru_cache_dir"; // 磁盘缓存的的目录
 
     private final int APP_VERSION = 1; // 我们的版本号，一旦修改这个版本号，之前的缓存失效

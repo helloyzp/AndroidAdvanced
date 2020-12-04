@@ -52,12 +52,12 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         // 1.侵入代码很强
-        // 以前的 框架
+        // 以前的框架必须在onDestroy()方法中进行注销
         /*XXXXX.unDestroy();
         XXXXX.unDestroy();
         XXXXX.unDestroy();*/
 
-        // Glide 你不用写这句话，内部会监听你什么释放了
+        //而 Glide 不用写这句代码，内部会监听你什么释放了
         // GLide 对 Activity 生命周期方法监听管理
     }
 }
