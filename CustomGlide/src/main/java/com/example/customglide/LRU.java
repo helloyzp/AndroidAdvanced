@@ -3,11 +3,15 @@ package com.example.customglide;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * 测试LRU算法
+ * JDK的LinkedHashMap已经实现了LRU算法
+ */
 public class LRU {
 
     public static void main(String[] args) {
 
-        // 访问排序
+        // 第三个参数accessOrder设置为true表示按照访问排序，默认是按照插入顺序排序
         LinkedHashMap<String, Integer> map = new LinkedHashMap<>(0, 0.75f, true);
 
         map.put("一", 1); // 最开始添加的，它的LRU算法移除是最高的（越容易被回收）

@@ -84,8 +84,8 @@ public class Value {
             Log.d(TAG, "useAction: 已经被回收了");
             return;
         }
-        Log.d(TAG, "useAction: 加一 count:" + count);
         count ++ ;
+        Log.d(TAG, "useAction(): 加一， count=" + count);
     }
 
     /**
@@ -96,12 +96,13 @@ public class Value {
         // - 1 = 0
 
         count--;
+        Log.d(TAG, "nonUseAction: 减一， count=" + count);
         if (count <= 0 && callback != null) {
             // 证明我们的Value没有使用（管理回收）
             // 告诉外界，回调接口
             callback.valueNonUseListener(key, this); // 活动缓存管理监听
         }
-        Log.d(TAG, "nonUseAction: 减一 count:" + count);
+
     }
 
     /**

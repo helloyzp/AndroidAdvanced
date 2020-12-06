@@ -49,7 +49,7 @@ public class DiskLruCacheImpl {
             try {
                 diskLruCache = DiskLruCache.open(file, APP_VERSION, VALUE_COUNT, MAX_SIZE);
                 if(diskLruCache != null) {
-                    Log.i(TAG, "使用cache目录初始化diskLruCache成功！");
+                    Log.i(TAG, "使用app的cache目录初始化diskLruCache成功！");
                 }
             } catch (IOException iOException) {
                 iOException.printStackTrace();

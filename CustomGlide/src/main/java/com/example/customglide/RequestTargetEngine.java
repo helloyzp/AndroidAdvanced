@@ -114,6 +114,7 @@ public class RequestTargetEngine implements LifecycleCallback, ValueCallback, Me
         if (null != value) {
             Log.d(TAG, "cacheAction: 本次加载的是在（内存缓存）中获取的资源>>>");
 
+            Log.d(TAG, "cacheAction: 移动到活动缓存");
             // 移动操作 （内存缓存--->活动缓存）
             memoryCache.shoudonRemove(key); // 从内存缓存中移除
             activeCache.put(key, value); // 加入到活动缓存中
@@ -130,6 +131,7 @@ public class RequestTargetEngine implements LifecycleCallback, ValueCallback, Me
         if (null != value) {
             Log.d(TAG, "cacheAction: 本次加载的是在（磁盘缓存）中获取的资源>>>");
 
+            Log.d(TAG, "cacheAction: 移动到活动缓存");
             // 把磁盘缓存中的元素加入活动缓存中(注意这里是复制，不是移动)
             activeCache.put(key, value);
 
@@ -175,6 +177,10 @@ public class RequestTargetEngine implements LifecycleCallback, ValueCallback, Me
      */
     @Override
     public void valueNonUseListener(String key, Value value) { // valueNonUseListener()方法被调用说明图片已经从活动缓存中移除
+        Log.i(TAG, "valueNonUseListener(),key=" + key);
+
+
+        Log.i(TAG, "valueNonUseListener(),key=" + key + " ,加入到内存缓存");
         //  加入到内存缓存
         if (key != null && value != null) {
             memoryCache.put(key, value);
@@ -218,12 +224,17 @@ public class RequestTargetEngine implements LifecycleCallback, ValueCallback, Me
      * 外置资源加载成功后，保存到磁盘缓存
      */
     private void saveCahce(String key, Value value) {
-        Log.d(TAG, "saveCahce: >>>>>>>>>>>>>>>>>>>>>>>>>> 加载外置资源成功后 ，保存到缓存中， key:" + key + " value:" + value);
+        Log.d(TAG, "saveCahce(): 加载外置资源成功后 ，保存到缓存中， key:" + key + " value:" + value);
 
         value.setKey(key);
 
+        //为什么不放入活动缓存中？
+
+
+        Log.d(TAG, "saveCahce(): key:" + key + " 保存到磁盘缓存");
+        // 保存到磁盘缓存中
         if (diskLruCache != null) {
-            diskLruCache.put(key, value); // 保存到磁盘缓存中....
+            diskLruCache.put(key, value);
         }
     }
 }
