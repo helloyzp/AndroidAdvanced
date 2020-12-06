@@ -125,7 +125,7 @@ public class RequestManager {
      * @return
      */
     public RequestTargetEngine load(String path) {
-        // 移除掉
+        // 移除掉前面可能发送的消息
         mHandler.removeMessages(NEXT_HANDLER_MSG);
 
         // 下次 全部串起来

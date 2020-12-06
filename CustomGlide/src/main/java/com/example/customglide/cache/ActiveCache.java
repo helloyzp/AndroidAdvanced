@@ -94,7 +94,7 @@ public class ActiveCache {
             }
         }*/
 
-        mapList.clear();
+        mapList.clear();//清空活动缓存
 
         System.gc();
     }

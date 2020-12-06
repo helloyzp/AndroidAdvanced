@@ -22,22 +22,31 @@ public class RequestTargetEngine implements LifecycleCallback, ValueCallback, Me
 
     private final String TAG = RequestTargetEngine.class.getSimpleName();
 
+    /**
+     * 当Activity的onStart()方法执行时会触发该方法
+     */
     @Override
     public void glideInitAction() {
-        Log.d(TAG, "glideInitAction: Glide生命周期之 已经开启了 初始化了....");
+        Log.d(TAG, "glideInitAction(): Glide生命周期之 初始化...");
     }
 
+    /**
+     * 当Activity的onStop()方法执行时会触发该方法
+     */
     @Override
     public void glideStopAction() {
-        Log.d(TAG, "glideInitAction: Glide生命周期之 已经停止中 ....");
+        Log.d(TAG, "glideStopAction(): Glide生命周期之 停止中...");
     }
 
+    /**
+     * 当Activity的onDestroy()方法执行时会触发该方法
+     */
     @Override
     public void glideRecycleAction() {
-        Log.d(TAG, "glideInitAction: Glide生命周期之 进行释放操作 缓存策略释放操作等 >>>>>> ....");
+        Log.d(TAG, "glideRecycleAction(): Glide生命周期之 进行释放操作，缓存策略释放操作等...");
 
         if (activeCache != null) {
-            activeCache.coloseThread(); // 活动缓存 给释放掉
+            activeCache.coloseThread(); // 将活动缓存给释放掉
         }
     }
 
@@ -45,7 +54,9 @@ public class RequestTargetEngine implements LifecycleCallback, ValueCallback, Me
     private MemoryCache memoryCache; // 内存缓存
     private DiskLruCacheImpl diskLruCache; // 磁盘缓存
 
-    // Glide 获取 内存的 八分之一
+    // Glide使用的内存空间大小是总内存大小的八分之一
+    // (为什么是八分之一，因为早期的Android系统默认有8个进程，八分之一即尽量获得最大的内存空间)
+    // 当然我们这里简单使用60M内存缓存空间即可
     private final int MEMORY_MAX_SIXE = 1024 * 1024 * 60;
 
     /**
@@ -92,43 +103,45 @@ public class RequestTargetEngine implements LifecycleCallback, ValueCallback, Me
         if(null != value) {
             Log.d(TAG, "cacheAction: 本次加载的是在（活动缓存）中获取的资源>>>");
 
-            // 返回 == 代表  使用了一次  Value
+            // 返回就代表了使用了一次Value，所以+1
             value.useAction(); // +1
 
-            return value;
+            return value; //活动缓存中有资源，则直接返回
         }
 
-        // TODO 第二步：判断内存缓存是否对资源，如果有资源 剪切（内存--->活动），就返回，   否则就继续往下找
+        // TODO 第二步：判断内存缓存是否对资源，如果有资源，则进行移动资源（内存缓存--->活动缓存），然后返回，否则就继续往下找
         value = memoryCache.get(key);
         if (null != value) {
             Log.d(TAG, "cacheAction: 本次加载的是在（内存缓存）中获取的资源>>>");
 
-            // 移动操作 剪切（内存--->活动）
-            memoryCache.shoudonRemove(key); // 移除内存缓存
-            activeCache.put(key, value); // 把内存缓存中的元素，加入到活动缓存中...
+            // 移动操作 （内存缓存--->活动缓存）
+            memoryCache.shoudonRemove(key); // 从内存缓存中移除
+            activeCache.put(key, value); // 加入到活动缓存中
 
-            // 返回 == 代表  使用了一次  Value
+            // 返回就代表了使用了一次Value，所以+1
             value.useAction(); // +1
 
             return value;
         }
 
-        // TODO 第三步：从磁盘缓存中你去找，如果找到了，把磁盘缓存中的元素 加入到 活动缓存中....
+        // TODO 第三步：从磁盘缓存中去找，如果找到了，则把磁盘缓存中的元素加入到活动缓存中，
+        //  注意这时不是移动元素，磁盘缓存中还是保留这个元素
         value = diskLruCache.get(key);
         if (null != value) {
             Log.d(TAG, "cacheAction: 本次加载的是在（磁盘缓存）中获取的资源>>>");
 
-            // 把磁盘缓存中的元素 ---- 加入 ---》 活动缓存中....
+            // 把磁盘缓存中的元素加入活动缓存中(注意这里是复制，不是移动)
             activeCache.put(key, value);
 
             // ... 可能会有后续扩展 ...
 
-            // 返回 == 代表  使用了一次  Value
+            // 返回就代表了使用了一次Value，所以+1
             value.useAction(); // +1
+
             return value;
         }
 
-        // TODO 第四步， 真正去加载外部资源， 去 网络 SDcard 等等
+        // TODO 第四步， 真正去加载外部资源(即缓存之外的资源)，网络、SDcard 等等
         value = new LoadDataManager().loadResource(path, this, glideContext);
         if(value != null) {
             return value;
@@ -154,15 +167,15 @@ public class RequestTargetEngine implements LifecycleCallback, ValueCallback, Me
     }
 
     /**
-     * 活动缓存间接的调用 Value发出的（-1 == 0）
-     * 专门给Value，不再使用，的回调接口
+     * 活动缓存间接的调用，是 Value发出的
+     * 专门给Value，不再使用的回调接口
      * 监听的方法（Value不再使用了）
      * @param key
      * @param value
      */
     @Override
-    public void valueNonUseListener(String key, Value value) { // 把活动缓存 移除
-        //  加入到 内存缓存
+    public void valueNonUseListener(String key, Value value) { // valueNonUseListener()方法被调用说明图片已经从活动缓存中移除
+        //  加入到内存缓存
         if (key != null && value != null) {
             memoryCache.put(key, value);
         }
@@ -187,14 +200,13 @@ public class RequestTargetEngine implements LifecycleCallback, ValueCallback, Me
     @Override
     public void responseSuccess(Value value) {
         if (null != value) {
-            saveCahce(key, value); // 调用触发保存
-
-            imageView.setImageBitmap(value.getmBitmap()); // 显示给目标
+            saveCahce(key, value); // 调用保存缓存的方法
+            imageView.setImageBitmap(value.getmBitmap()); // 显示给目标视图控件
         }
     }
 
     /**
-     * 外置资源 失败  回调
+     * 外置资源请求失败的回调
      * @param e
      */
     @Override
@@ -203,7 +215,7 @@ public class RequestTargetEngine implements LifecycleCallback, ValueCallback, Me
     }
 
     /**
-     * 外置资源加载成功后  保存到磁盘缓存
+     * 外置资源加载成功后，保存到磁盘缓存
      */
     private void saveCahce(String key, Value value) {
         Log.d(TAG, "saveCahce: >>>>>>>>>>>>>>>>>>>>>>>>>> 加载外置资源成功后 ，保存到缓存中， key:" + key + " value:" + value);

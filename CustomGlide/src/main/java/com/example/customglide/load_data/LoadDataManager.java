@@ -18,6 +18,9 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 去加载外部资源(即缓存之外的资源)
+ */
 public class LoadDataManager implements ILoadData, Runnable {
 
     private final static String TAG = LoadDataManager.class.getSimpleName();
@@ -40,14 +43,14 @@ public class LoadDataManager implements ILoadData, Runnable {
         if ("HTTP".equalsIgnoreCase(uri.getScheme()) || "HTTPS".equalsIgnoreCase(uri.getScheme())) {
             // 异步
             new ThreadPoolExecutor(0,
-                                    Integer.MAX_VALUE,
-                        60, TimeUnit.SECONDS,
+                    Integer.MAX_VALUE,
+                    60, TimeUnit.SECONDS,
                     new SynchronousQueue<Runnable>()).execute(this);
 
-            // new Thread().start(); ---> 不符合标准（阿里开发规范）
+            // new Thread().start(); ---> 不符合标准（阿里开发规范），要用线程池
         }
 
-        // SD本地资源 返回Value，我本地资源，不需要异步线程，所以我可以自己返回
+        // SD本地资源 返回Value，本地资源，不需要异步线程，所以我可以自己返回
 
         // ....
 
@@ -56,8 +59,8 @@ public class LoadDataManager implements ILoadData, Runnable {
 
     @Override
     public void run() {
-        InputStream inputStream =  null;
-        HttpURLConnection httpURLConnection = null; // HttpURLConnection内部已经是Okhttp，因为太高效了
+        InputStream inputStream = null;
+        HttpURLConnection httpURLConnection = null; // HttpURLConnection内部已经是使用Okhttp实现的，因为太高效了
 
         try {
             URL url = new URL(path);
@@ -66,12 +69,12 @@ public class LoadDataManager implements ILoadData, Runnable {
 
             final int responseCode = httpURLConnection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                 inputStream = httpURLConnection.getInputStream();
-                 final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                inputStream = httpURLConnection.getInputStream();
+                final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-                 // TODO 同学们注意：我们没有写这个代码： Bitmap 做缩放，做比例，做压缩，.....
+                // TODO 同学们注意：我们没有写这些代码： Bitmap 做缩放，做比例，做压缩，..... 因为这里是写整体逻辑
 
-                 // 成功 切换主线程
+                // 网络请求成功，切换到主线程
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
@@ -82,13 +85,14 @@ public class LoadDataManager implements ILoadData, Runnable {
                         responseListener.responseSuccess(value);
                     }
                 });
+
             } else {
-                // 失败 切换主线程
+                // 网络请求失败，切换到主线程
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
                         // 回调失败
-                       responseListener.responseException(new IllegalStateException("请求失败，请求码：" + responseCode));
+                        responseListener.responseException(new IllegalStateException("请求失败，请求码：" + responseCode));
                     }
                 });
             }
