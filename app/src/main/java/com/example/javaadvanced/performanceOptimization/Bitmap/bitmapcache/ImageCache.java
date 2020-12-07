@@ -5,11 +5,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.util.Log;
 import android.util.LruCache;
 
 
-import com.example.javaadvanced.BuildConfig;
 import com.example.javaadvanced.performanceOptimization.Bitmap.bitmapcache.disk.DiskLruCache;
 
 import java.io.File;
@@ -25,6 +23,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class ImageCache {
+
+    private int VERSION_CODE = 1;
 
     private static ImageCache instance;
 
@@ -85,12 +85,12 @@ public class ImageCache {
             }
         };
         try {
-            diskLruCache = DiskLruCache.open(new File(dir), BuildConfig.VERSION_CODE, 1, 10 * 1024 * 1024);
+            diskLruCache = DiskLruCache.open(new File(dir), VERSION_CODE, 1, 10 * 1024 * 1024);
         } catch (IOException e) {
             e.printStackTrace();
             //指定的目录创建DiskLruCache失败时用系统的缓存目录
             try {
-                diskLruCache = DiskLruCache.open(context.getCacheDir(), BuildConfig.VERSION_CODE, 1, 10 * 1024 * 1024);
+                diskLruCache = DiskLruCache.open(context.getCacheDir(), VERSION_CODE, 1, 10 * 1024 * 1024);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }

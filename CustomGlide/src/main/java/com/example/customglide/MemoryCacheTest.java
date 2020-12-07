@@ -9,9 +9,9 @@ import com.example.customglide.resource.Value;
 /**
  * 测试LruCache
  */
-public class Test {
+public class MemoryCacheTest {
 
-    private static String TAG = "Test";
+    private static String TAG = "MemoryCacheTest";
 
     public static void test() {
 

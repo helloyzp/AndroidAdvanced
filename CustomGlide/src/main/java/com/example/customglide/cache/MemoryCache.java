@@ -12,7 +12,7 @@ import com.example.customglide.resource.Value;
 
 /**
  * LRU 内存缓存
- * 回收机制：LRU最少使用
+ * 回收机制：LRUz最近最少使用，用LruCache实现
  */
 public class MemoryCache extends LruCache<String, Value> {
 
@@ -54,7 +54,7 @@ public class MemoryCache extends LruCache<String, Value> {
         super.entryRemoved(evicted, key, oldValue, newValue);
 
         // 被移除
-        if (memoryCacheCallback != null && !shoudonRemove) { // 同学们注意： !shoudonRemove == 被动的
+        if (memoryCacheCallback != null && !shoudonRemove) { // 同学们注意： !shoudonRemove 即表示 被动的
             memoryCacheCallback.entryRemovedMemoryCache(key, oldValue); // 被动移除
         }
     }

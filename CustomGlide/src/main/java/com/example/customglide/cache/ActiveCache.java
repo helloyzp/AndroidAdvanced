@@ -119,7 +119,8 @@ public class ActiveCache {
     }
 
     /**
-     * 监听什么时候被GC回收，这时候要进行手动移除：把mapList中的被移除的Value的对应的弱引用移除
+     * 监听弱引用指向的对象什么时候被GC回收，弱引用指向的对象被GC回收的时候，弱引用会被放入队列
+     * 这时候要进行手动移除：把被GC回收的Value的对应的弱引用从mapList中移除
      * @return
      */
     private ReferenceQueue<Value> getQueue() {

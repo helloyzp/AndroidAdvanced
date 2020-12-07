@@ -7,7 +7,7 @@ import java.util.Map;
  * 测试LRU算法
  * JDK的LinkedHashMap已经实现了LRU算法
  */
-public class LRU {
+public class LruTest {
 
     public static void main(String[] args) {
 
