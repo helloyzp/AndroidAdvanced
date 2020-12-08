@@ -1,3 +1,5 @@
+include ':memorydemo'
+include ':leakcanarydemo'
 include ':CustomGlide'
 include ':okhttp3'
 //include ':sourcecode'
