@@ -7,6 +7,7 @@ import android.util.Log;
 import com.example.javaadvanced.jvm.AndroidVM.Hotfix;
 import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.proxymodel.proxy.HttpProxy;
 import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.proxymodel.proxy.OkHttpModel;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.io.File;
 
@@ -33,5 +34,12 @@ public class MyApplication extends Application {
         //当需要将网络请求库由Volley更换为OkHttp时只需要调用HttpProxy.init()设置新的realObject即可
         HttpProxy.init(new OkHttpModel(getApplicationContext()));
 
+        //LeakCanary
+        if(LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(this);
+
     }
+
 }

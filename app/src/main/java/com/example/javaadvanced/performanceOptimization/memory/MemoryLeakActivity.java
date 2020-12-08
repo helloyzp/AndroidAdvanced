@@ -3,6 +3,7 @@ package com.example.javaadvanced.performanceOptimization.memory;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.inputmethod.InputMethodManager;
 
 import com.example.javaadvanced.R;
@@ -25,7 +26,7 @@ public class MemoryLeakActivity extends Activity {
 
 
     /**
-     * 如果不传外部类引用则不能访问外部类的成员属性i
+     * 1.如果不传外部类引用则不能访问外部类的成员属性i
      */
     static class Runnable1 implements Runnable {
 
@@ -37,7 +38,7 @@ public class MemoryLeakActivity extends Activity {
     }
 
     /**
-     * 如果直接传递外部类引用则依然会造成内存泄露
+     * 2.如果直接传递外部类引用则依然会造成内存泄露
      */
     static class Runnable2 implements Runnable {
         //但是不能直接将外部类引用传递进来，因为虽然可以访问外部类的成员属性，但是还是会造成内存泄露
@@ -55,7 +56,8 @@ public class MemoryLeakActivity extends Activity {
 
 
     /**
-     * 正确解决方案：使用弱引用，即静态内部类持有外部类的弱引用
+     * 3.正确解决方案：使用弱引用，即定义一个静态内部类的成员属性，持有外部类的弱引用
+     * 定义静态的Runnable
      */
     static class Runnable3 implements Runnable {
         /**
@@ -78,6 +80,38 @@ public class MemoryLeakActivity extends Activity {
             }
         }
     }
+
+    /**
+     * 4.正确解决方案：使用弱引用，即定义一个静态内部类的成员属性，持有外部类的弱引用
+     * 定义静态的Handler
+     */
+    static class MyHandler extends Handler {
+
+        /**
+         * 注意这里应该使用WeakReference，而不是SoftReference，
+         * 虽然使用SoftReference也不会造成OOM，但是当我们退出Activity时是希望Activity尽快被回收的，
+         * 所以使用WeakReference更合适，因为被WeakReference关联的对象在GC执行时会被直接回收，
+         * 而对于SoftReference关联的对象，GC不会直接回收，而是在系统将要内存溢出之前才会触发GC将这些对象进行回收。
+         */
+        WeakReference<MemoryLeakActivity> activityWeakReference;
+
+        public MyHandler(MemoryLeakActivity activity) {
+            this.activityWeakReference = new WeakReference<MemoryLeakActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (activityWeakReference.get() != null) {
+                int i = activityWeakReference.get().i;
+                System.out.println("i=" + i);
+            }
+        }
+
+    }
+
+
+    private Handler mHandler2 = new MyHandler(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
