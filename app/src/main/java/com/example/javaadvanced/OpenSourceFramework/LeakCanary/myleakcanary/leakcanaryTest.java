@@ -14,6 +14,7 @@ public class leakcanaryTest {
         obj = null;
         Utils.gc();
         //TODO: 思考如何判断被观察的对象可能存在泄漏嫌疑
+        // 查看 retainedReferences 中是否有这个对象即可。
 
         Utils.sleep(5000);
         System.out.println("查看是否在怀疑列表：" + watcher.getRetainedReferences().size());

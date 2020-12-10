@@ -9,7 +9,11 @@ import android.util.Log;
 
 import com.example.leakcanarydemo.databinding.ActivityMainBinding;
 
+/**
+ * 演示内存泄漏：进入TestActivity后然后返回到MainActivity，LeakCanary就会报内存泄漏
+ */
 public class MainActivity extends AppCompatActivity implements ComponentCallbacks2 {
+    private String TAG = "MainActivity";
 
     private ActivityMainBinding binding;
 
@@ -19,8 +23,8 @@ public class MainActivity extends AppCompatActivity implements ComponentCallback
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.button.setOnClickListener( view -> {
-            startActivity(new Intent(MainActivity.this,TestActivity.class));
+        binding.button.setOnClickListener(view -> {
+            startActivity(new Intent(MainActivity.this, TestActivity.class));
         });
     }
 
@@ -43,36 +47,36 @@ public class MainActivity extends AppCompatActivity implements ComponentCallback
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("Zero",this.getClass().getSimpleName() + " onStart...");
+        Log.i(TAG, this.getClass().getSimpleName() + " onStart()...");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.i("Zero",this.getClass().getSimpleName() + " onRestart...");
+        Log.i(TAG, this.getClass().getSimpleName() + " onRestart()...");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("Zero",this.getClass().getSimpleName() + " onResume...");
+        Log.i(TAG, this.getClass().getSimpleName() + " onResume()...");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.i("Zero",this.getClass().getSimpleName() + " onPause...");
+        Log.i(TAG, this.getClass().getSimpleName() + " onPause()...");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.i("Zero",this.getClass().getSimpleName() + " onStop...");
+        Log.i(TAG, this.getClass().getSimpleName() + " onStop()...");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i("Zero",this.getClass().getSimpleName() + " onDestroy...");
+        Log.i(TAG, this.getClass().getSimpleName() + " onDestroy()...");
     }
 }
