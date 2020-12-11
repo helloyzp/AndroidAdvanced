@@ -8,7 +8,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
-/**
+/**·
  * 简易版LeakCanary，实现LeakCanary的核心功能。
  * 演示LeakCanary的核心原理
  */
@@ -20,7 +20,8 @@ public class Watcher {
     //怀疑列表
     private HashMap<String, KeyWeakReference> retainedReferences = new HashMap<>();
 
-    //引用队列，相当于一个监视器设备，所有需要监视的对象，盛放监视对象的引用容器 都与之关联
+    //引用队列
+    //相当于一个监视器设备，所有需要监视的对象，盛放监视对象的引用容器 都与之关联
     //当被监视的对象被gc回收后，对应的引用容器就会被加入到queue
     private ReferenceQueue queue = new ReferenceQueue();
 
@@ -49,7 +50,7 @@ public class Watcher {
                     retainedReferences.remove(findRef.getKey());
                 }
             }
-        } while (findRef != null);//把所有放到referenceQueue的引用容器找出来
+        } while (findRef != null);//把所有放到referenceQueue中的引用容器找出来
     }
 
     /**
@@ -61,10 +62,10 @@ public class Watcher {
         System.out.println("加入到怀疑列表...");
         //在加入怀疑列表之前，做一次清理工作
         removeWeaklyReachableReferences();
-        //根据key从观察列表中去找盛放对象的引用容器，如果被找到，说明到目前为止key对应的对象还没被是否
+        //根据key从观察列表中去找盛放对象的引用容器，如果被找到，说明到目前为止key对应的对象还没被回收
         KeyWeakReference retainedRef = watchedReferences.remove(key);
         if (retainedRef != null) {
-            //把从观察列表中移除出来的对象加入到怀疑列表
+            //把从观察列表中移除出来的弱引用容器加入到怀疑列表
             retainedReferences.put(key, retainedRef);
         }
     }
