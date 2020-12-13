@@ -4,7 +4,7 @@ import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 
 /**
- * 继承自WeakReference，并且加入一个key，用来通过可以key可以查找到对应的KeyWeakReference
+ * 继承自WeakReference，并且加入一个key，用来通过key可以查找到对应的KeyWeakReference
  * @param <T>
  */
 public class KeyWeakReference<T> extends WeakReference<T> {
