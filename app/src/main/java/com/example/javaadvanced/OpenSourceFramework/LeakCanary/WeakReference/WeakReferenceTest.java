@@ -5,6 +5,7 @@ import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 
 /**
+ * WeakReference的使用：
  * WeakReference和ReferenceQueue结合使用，监控某个对象是否被gc回收。
  * 只要在ReferenceQueue中有弱引用对象，则该弱引用对象引用的对象一定被GC回收了。
  */
