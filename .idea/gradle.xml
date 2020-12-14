@@ -16,6 +16,8 @@
             <option value="$PROJECT_DIR$/androidadapter" />
             <option value="$PROJECT_DIR$/androidfragment" />
             <option value="$PROJECT_DIR$/androidfragmentdemo" />
+            <option value="$PROJECT_DIR$/annotation_compiler" />
+            <option value="$PROJECT_DIR$/annotations" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/leakcanarydemo" />
             <option value="$PROJECT_DIR$/memorydemo" />
