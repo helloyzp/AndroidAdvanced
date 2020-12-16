@@ -1,9 +1,9 @@
-package com.example.javaadvanced.OpenSourceFramework.Butterknife.butterknifeframework;
+package com.example.javaadvanced.OpenSourceFramework.ioc_compile.mybutterknife;
 
 import android.app.Activity;
 
 
-public class JettButterknife {
+public class MyButterknife {
     public static void bind(Activity activity) {
         String name = activity.getClass().getName() + "_ViewBinding";
         try {

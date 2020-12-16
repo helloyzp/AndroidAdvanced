@@ -26,6 +26,8 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.JavaFileObject;
 
 /**
+ * 注解处理器
+ * <p>
  * 注解处理器的功能，就在这个类
  * 用来生成代码
  * 使用前需要注册
@@ -42,7 +44,7 @@ public class AnnotationsCompiler extends AbstractProcessor {
     //2.当前APT能用来处理哪些注解
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        Set<String> types=new HashSet<>();
+        Set<String> types = new HashSet<>();
         types.add(BindView.class.getCanonicalName());
 //        types.add(Override.class.getCanonicalName());
         return types;
@@ -50,10 +52,11 @@ public class AnnotationsCompiler extends AbstractProcessor {
 
     //3.需要一个用来生成文件的对象
     Filer filer;
+
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        filer=processingEnv.getFiler();
+        filer = processingEnv.getFiler();
     }
 
     /**
@@ -61,24 +64,25 @@ public class AnnotationsCompiler extends AbstractProcessor {
      */
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        Set<? extends Element> elementsAnnotatedWith=roundEnv.getElementsAnnotatedWith(BindView.class);
+        Set<? extends Element> elementsAnnotatedWith = roundEnv.getElementsAnnotatedWith(BindView.class);
+        //Element包括：TypeElement、ExecutableElement、VariableElement
         //类    TypeElement
         //方法  ExecutableElement
         //属性  VariableElement
         //需要开始进行分类
-        Map<String, List<VariableElement>> map=new HashMap<>();
+        Map<String, List<VariableElement>> map = new HashMap<>();
         for (Element element : elementsAnnotatedWith) {
-            VariableElement variableElement=(VariableElement)element;
+            VariableElement variableElement = (VariableElement) element;
             //得到activity名字(全类名)
-            String activityName=variableElement.getEnclosingElement().getSimpleName().toString();
-            List<VariableElement> variableElements=map.get(activityName);
-            if(variableElements==null){
-                variableElements=new ArrayList();
-                map.put(activityName,variableElements);
+            String activityName = variableElement.getEnclosingElement().getSimpleName().toString();
+            List<VariableElement> variableElements = map.get(activityName);
+            if (variableElements == null) { //activityName只需要放一次
+                variableElements = new ArrayList();
+                map.put(activityName, variableElements);
             }
             variableElements.add(variableElement);
         }
-
+//下面的代码就是为了生成类似以下内容的java类：
 //        package com.example.butterknife_framework_demo;
 //        import com.example.butterknife_framework_demo.IBinder;
 //        public class MainActivity_ViewBinding implements IBinder<com.example.butterknife_framework_demo.MainActivity> {
@@ -88,47 +92,48 @@ public class AnnotationsCompiler extends AbstractProcessor {
 //
 //            }
 //        }
-        if(map.size()>0){
-            Writer writer=null;
+
+        if (map.size() > 0) {
+            Writer writer = null;
             Iterator<String> iterator = map.keySet().iterator();
-            while(iterator.hasNext()){
+            while (iterator.hasNext()) {
                 //开始生成对应的文件
-                String activityName=iterator.next();
+                String activityName = iterator.next();
                 List<VariableElement> variableElements = map.get(activityName);
                 //得到包名
-                TypeElement enclosingElment=(TypeElement)variableElements.get(0).getEnclosingElement();
-                String packageName=processingEnv.getElementUtils().getPackageOf(enclosingElment).toString();
+                TypeElement enclosingElment = (TypeElement) variableElements.get(0).getEnclosingElement();
+                String packageName = processingEnv.getElementUtils().getPackageOf(enclosingElment).toString();
                 //写入文件
-                try{
-                    JavaFileObject sourceFile=filer.createSourceFile(packageName+"."+activityName+"_ViewBinding");
-                    writer=sourceFile.openWriter();
+                try {
+                    JavaFileObject sourceFile = filer.createSourceFile(packageName + "." + activityName + "_ViewBinding");
+                    writer = sourceFile.openWriter();
                     //package com.example.butterknife_framework_demo;
-                    writer.write("package "+packageName+";\n");
+                    writer.write("package " + packageName + ";\n");
                     //import com.example.butterknife_framework_demo.IBinder;
-                    writer.write("import "+packageName+".IBinder;\n");
+                    writer.write("import " + packageName + ".IBinder;\n");
                     //public class MainActivity_ViewBinding implements IBinder<com.example.butterknife_framework_demo.MainActivity> {
-                    writer.write("public class "+activityName+"_ViewBinding implements IBinder<"+packageName+"."+activityName+">{\n");
+                    writer.write("public class " + activityName + "_ViewBinding implements IBinder<" + packageName + "." + activityName + ">{\n");
                     //@Override
                     writer.write("@Override\n");
                     //public void bind(com.example.butterknife_framework_demo.MainActivity target) {
-                    writer.write("public void bind("+packageName+"."+activityName+" target){\n");
+                    writer.write("public void bind(" + packageName + "." + activityName + " target){\n");
                     //target.textView = (android.widget.TextView) target.findViewById(2131165359);
-                    for (VariableElement variableElement : variableElements) {
+                    for (VariableElement variableElement : variableElements) {//遍历所有需要绑定的view
                         //得到名字
-                        String variableName=variableElement.getSimpleName().toString();
+                        String variableName = variableElement.getSimpleName().toString();
                         //得到ID
-                        int id=variableElement.getAnnotation(BindView.class).value();
+                        int id = variableElement.getAnnotation(BindView.class).value();
                         //得到类型
-                        TypeMirror typeMirror=variableElement.asType();
+                        TypeMirror typeMirror = variableElement.asType();
                         //target.textView = (android.widget.TextView) target.findViewById(2131165359);
-                        writer.write("target."+variableName+"=("+typeMirror+")target.findViewById("+id+");\n");
+                        writer.write("target." + variableName + "=(" + typeMirror + ")target.findViewById(" + id + ");\n");
                     }
-                    writer.write("\n}\n}" );
+                    writer.write("\n}\n}");
 
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
-                }finally {
-                    if(writer!=null){
+                } finally {
+                    if (writer != null) {
                         try {
                             writer.close();
                         } catch (IOException e) {

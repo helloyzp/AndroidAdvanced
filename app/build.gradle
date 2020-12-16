@@ -150,12 +150,14 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime:2.2.0'
 
 
-    //注册一个APT功能
+
+
+    implementation project(path: ':annotations') //项目中需要用到的注解，注解处理器会使用这些注解
+    annotationProcessor project(path: ':annotation_compiler')  //注解处理器
+
+    //auto-service自动完成注册注解处理器，注解处理器注册后才能使用
     annotationProcessor 'com.google.auto.service:auto-service:1.0-rc4'
     compileOnly 'com.google.auto.service:auto-service:1.0-rc4'
-
-    implementation project(path: ':annotations')
-    annotationProcessor project(path: ':annotation_compiler')
 
 
 }

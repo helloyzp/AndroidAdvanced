@@ -1,6 +1,4 @@
-package com.example.javaadvanced.OpenSourceFramework.Butterknife.butterknifeframework;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.javaadvanced.OpenSourceFramework.ioc_compile.mybutterknife;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -27,7 +25,7 @@ public class ButterknifeMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_butterknife);
 
-        JettButterknife.bind(this);
+        MyButterknife.bind(this);
 
         btn.setText("1234");
     }

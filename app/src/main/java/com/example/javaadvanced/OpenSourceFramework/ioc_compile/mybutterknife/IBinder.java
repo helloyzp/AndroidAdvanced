@@ -1,4 +1,4 @@
-package com.example.javaadvanced.OpenSourceFramework.Butterknife.butterknifeframework;
+package com.example.javaadvanced.OpenSourceFramework.ioc_compile.mybutterknife;
 
 /**
  * 用来给用户绑定activity使用
