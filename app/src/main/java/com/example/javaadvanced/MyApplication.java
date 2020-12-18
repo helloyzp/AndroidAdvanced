@@ -4,6 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+/*import com.example.javaadvanced.OpenSourceFramework.ioc_compile.dagger2.DaggerMyComponent;
+import com.example.javaadvanced.OpenSourceFramework.ioc_compile.dagger2.DatabaseModule;
+import com.example.javaadvanced.OpenSourceFramework.ioc_compile.dagger2.HttpModule;*/
+import com.example.javaadvanced.OpenSourceFramework.ioc_compile.dagger2.DaggerMyComponent;
+import com.example.javaadvanced.OpenSourceFramework.ioc_compile.dagger2.DatabaseModule;
+import com.example.javaadvanced.OpenSourceFramework.ioc_compile.dagger2.HttpModule;
+import com.example.javaadvanced.OpenSourceFramework.ioc_compile.dagger2.MyComponent;
+import com.example.javaadvanced.OpenSourceFramework.ioc_compile.dagger2.di.presenter_id.DaggerPresenterComponent;
 import com.example.javaadvanced.jvm.AndroidVM.Hotfix;
 import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.proxymodel.proxy.HttpProxy;
 import com.example.javaadvanced.performanceOptimization.CodeStructDesignPattern.proxymodel.proxy.OkHttpModel;
@@ -13,6 +21,12 @@ import java.io.File;
 
 public class MyApplication extends Application {
     private String TAG = "MyApplication";
+
+    private MyComponent myComponent;
+
+    public MyComponent getAppComponent() {
+        return myComponent;
+    }
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -39,6 +53,13 @@ public class MyApplication extends Application {
             return;
         }
         LeakCanary.install(this);
+
+        //dragger
+        myComponent = DaggerMyComponent.builder()
+                .httpModule(new HttpModule())
+                .databaseModule(new DatabaseModule())
+                .presenterComponent(DaggerPresenterComponent.create())
+                .build();
 
     }
 

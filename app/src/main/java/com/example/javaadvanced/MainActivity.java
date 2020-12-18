@@ -7,6 +7,8 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.javaadvanced.OpenSourceFramework.ioc_compile.Butterknife.mybutterknife.ButterknifeMainActivity;
+import com.example.javaadvanced.OpenSourceFramework.ioc_compile.dagger2.DraggerMainActivity;
 import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.IOCMainActivity;
 
 import java.lang.reflect.Method;
@@ -65,7 +67,9 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, ScreenadapterActivity.class);
         //Intent intent = new Intent(this, OkhttpMainActivity.class);
         //Intent intent = new Intent(this, ThreadTestActivity.class);
-        Intent intent = new Intent(this, IOCMainActivity.class);
+        //Intent intent = new Intent(this, IOCMainActivity.class);
+        //Intent intent = new Intent(this, DraggerMainActivity.class);
+        Intent intent = new Intent(this, ButterknifeMainActivity.class);
         startActivity(intent);
     }
 

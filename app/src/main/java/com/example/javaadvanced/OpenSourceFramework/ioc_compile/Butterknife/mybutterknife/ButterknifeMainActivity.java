@@ -1,4 +1,4 @@
-package com.example.javaadvanced.OpenSourceFramework.ioc_compile.mybutterknife;
+package com.example.javaadvanced.OpenSourceFramework.ioc_compile.Butterknife.mybutterknife;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,7 +7,9 @@ import android.widget.Button;
 import com.example.annotations.BindView;
 import com.example.javaadvanced.R;
 
-
+/**
+ * 手写实现Butterknife核心原理，编译时注入
+ */
 public class ButterknifeMainActivity extends Activity {
 
     @BindView(R.id.btn)
