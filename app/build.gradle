@@ -31,7 +31,7 @@ android {
 
     }
 
-
+    //使用Java 8
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -135,6 +135,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.0.1")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.0.1")
 
+    //leakcanary 1.6版本
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
@@ -150,16 +151,19 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime:2.2.0'
 
 
+    //butterknife的依赖
+    implementation 'com.jakewharton:butterknife:10.2.3'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
 
-
+    //手写实现butterknife核心原理
     implementation project(path: ':annotations') //项目中需要用到的注解，注解处理器会使用这些注解
     annotationProcessor project(path: ':annotation_compiler')  //注解处理器
-
     //auto-service自动完成注册注解处理器，注解处理器注册后才能使用
     annotationProcessor 'com.google.auto.service:auto-service:1.0-rc4'
     compileOnly 'com.google.auto.service:auto-service:1.0-rc4'
 
 
+    //dagger的依赖
     implementation 'com.google.dagger:dagger:2.4'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.4'
 

@@ -72,7 +72,8 @@
         <activity android:name=".OpenSourceFramework.ioc_runtime.IOCMainActivity"/>
         <activity android:name=".OpenSourceFramework.ioc_compile.dagger2.DraggerMainActivity"/>
         <activity android:name=".OpenSourceFramework.ioc_compile.dagger2.DraggerSecondActivity"/>
-        <activity android:name=".OpenSourceFramework.ioc_compile.Butterknife.mybutterknife.ButterknifeMainActivity"/>
+        <activity android:name=".OpenSourceFramework.ioc_compile.Butterknife.mybutterknife.MyButterknifeActivity"/>
+        <activity android:name=".OpenSourceFramework.ioc_compile.Butterknife.Butterknife.ButterknifeUseActivity"/>
 
     </application>
 

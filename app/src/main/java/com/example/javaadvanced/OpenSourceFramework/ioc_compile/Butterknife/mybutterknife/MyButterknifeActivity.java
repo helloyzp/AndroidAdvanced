@@ -10,7 +10,7 @@ import com.example.javaadvanced.R;
 /**
  * 手写实现Butterknife核心原理，编译时注入
  */
-public class ButterknifeMainActivity extends Activity {
+public class MyButterknifeActivity extends Activity {
 
     @BindView(R.id.btn)
     Button btn;
@@ -25,7 +25,7 @@ public class ButterknifeMainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_butterknife);
+        setContentView(R.layout.activity_mybutterknife);
 
         MyButterknife.bind(this);
 
