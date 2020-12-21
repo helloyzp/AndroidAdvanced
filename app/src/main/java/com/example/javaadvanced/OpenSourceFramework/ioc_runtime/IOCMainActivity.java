@@ -13,7 +13,7 @@ import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.annotations.View
 import com.example.javaadvanced.R;
 
 /**
- *
+ * 实现类似Butterknife的功能，控件注入和事件注入， 主要用到的技术：运行时注解+反射
  *
  * 普通加载布局文件的方式：
  *  在Activity的onCreate()方法写 setContentView(R.layout.activity_main); 主动加载布局文件
