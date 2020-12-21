@@ -1,10 +1,10 @@
-package com.example.javaadvanced.OpenSourceFramework.ioc_runtime;
+package com.example.javaadvanced.OpenSourceFramework.ioc_runtime.mybutterknife;
 
 import android.view.View;
 
-import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.annotations.ContentView;
-import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.annotations.EventBase;
-import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.annotations.ViewInject;
+import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.mybutterknife.annotations.ContentView;
+import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.mybutterknife.annotations.EventBase;
+import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.mybutterknife.annotations.ViewInject;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

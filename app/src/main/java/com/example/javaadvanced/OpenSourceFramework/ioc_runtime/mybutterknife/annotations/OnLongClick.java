@@ -1,4 +1,4 @@
-package com.example.javaadvanced.OpenSourceFramework.ioc_runtime.annotations;
+package com.example.javaadvanced.OpenSourceFramework.ioc_runtime.mybutterknife.annotations;
 
 import android.view.View;
 

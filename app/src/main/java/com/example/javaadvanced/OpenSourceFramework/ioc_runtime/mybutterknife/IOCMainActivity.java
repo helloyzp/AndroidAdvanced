@@ -1,15 +1,14 @@
-package com.example.javaadvanced.OpenSourceFramework.ioc_runtime;
+package com.example.javaadvanced.OpenSourceFramework.ioc_runtime.mybutterknife;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.annotations.ContentView;
-import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.annotations.OnClick;
-import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.annotations.OnLongClick;
-import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.annotations.ViewInject;
+import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.mybutterknife.annotations.ContentView;
+import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.mybutterknife.annotations.OnClick;
+import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.mybutterknife.annotations.OnLongClick;
+import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.mybutterknife.annotations.ViewInject;
 import com.example.javaadvanced.R;
 
 /**

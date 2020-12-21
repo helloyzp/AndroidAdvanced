@@ -1,4 +1,4 @@
-package com.example.javaadvanced.OpenSourceFramework.ioc_runtime;
+package com.example.javaadvanced.OpenSourceFramework.ioc_runtime.mybutterknife;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  */
 public class ListenerInvocationHandler implements InvocationHandler {
 
-    //需要在onClick中执行activity.click();
+    //需要在onClick中执行activity.click()方法;
     private Object activity;
     private Method activityMethod;
 

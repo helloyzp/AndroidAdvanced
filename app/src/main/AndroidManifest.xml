@@ -69,7 +69,7 @@
         <activity android:name=".performanceOptimization.screenadapter.ScreenadapterActivity"/>
         <activity android:name=".network.okhttp.OkhttpMainActivity"/>
         <activity android:name=".thread.ThreadTestActivity"/>
-        <activity android:name=".OpenSourceFramework.ioc_runtime.IOCMainActivity"/>
+        <activity android:name=".OpenSourceFramework.ioc_runtime.mybutterknife.IOCMainActivity"/>
         <activity android:name=".OpenSourceFramework.ioc_compile.dagger2.DraggerMainActivity"/>
         <activity android:name=".OpenSourceFramework.ioc_compile.dagger2.DraggerSecondActivity"/>
         <activity android:name=".OpenSourceFramework.ioc_compile.Butterknife.mybutterknife.MyButterknifeActivity"/>
