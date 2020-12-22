@@ -74,6 +74,9 @@
         <activity android:name=".OpenSourceFramework.ioc_compile.dagger2.DraggerSecondActivity"/>
         <activity android:name=".OpenSourceFramework.ioc_compile.Butterknife.mybutterknife.MyButterknifeActivity"/>
         <activity android:name=".OpenSourceFramework.ioc_compile.Butterknife.Butterknife.ButterknifeUseActivity"/>
+        <activity android:name=".OpenSourceFramework.ioc_runtime.EventBus.EventBusUseActivity"/>
+        <activity android:name=".OpenSourceFramework.ioc_runtime.myEventBus.MyEventBusMainActivity"/>
+        <activity android:name=".OpenSourceFramework.ioc_runtime.myEventBus.MyEventBusSecondActivity"/>
 
     </application>
 
