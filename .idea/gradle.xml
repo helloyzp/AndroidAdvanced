@@ -19,6 +19,8 @@
             <option value="$PROJECT_DIR$/annotation_compiler" />
             <option value="$PROJECT_DIR$/annotations" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/binder_client" />
+            <option value="$PROJECT_DIR$/binder_server" />
             <option value="$PROJECT_DIR$/leakcanarydemo" />
             <option value="$PROJECT_DIR$/memorydemo" />
             <option value="$PROJECT_DIR$/okhttp3" />

@@ -1,3 +1,5 @@
+include ':binder_server'
+include ':binder_client'
 include ':annotation_compiler'
 include ':annotations'
 include ':memorydemo'
