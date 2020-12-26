@@ -11,8 +11,11 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyService extends Service {
-    private String TAG = "MyService";
+/**
+ * 测试如果Service和客户端在同一个进程的情况
+ */
+public class MyLocalService extends Service {
+    private String TAG = "MyLocalService";
 
     private ArrayList<Person> persons;
 
