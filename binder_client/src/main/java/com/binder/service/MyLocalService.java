@@ -27,6 +27,12 @@ public class MyLocalService extends Service {
         return iBinder;
     }
 
+    @Override
+    public void onRebind(Intent intent) {
+        Log.i(TAG, "onRebind(), iBinder=" + iBinder);
+
+    }
+
     private IBinder iBinder = new IMyAidl.Stub() {
         @Override
         public void addPerson(Person person) throws RemoteException {

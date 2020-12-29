@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     iMyAidl.addPerson(new Person("流川枫", 3));
                     List<Person> persons = iMyAidl.getPersonList();
-                    Log.e(TAG, persons.toString());
+                    Log.e(TAG, "getPersonList()=" + persons.toString());
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
