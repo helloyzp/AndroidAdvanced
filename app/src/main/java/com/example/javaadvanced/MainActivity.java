@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.javaadvanced.OpenSourceFramework.ioc_runtime.myEventBus.MyEventBusMainActivity;
+import com.example.javaadvanced.performanceOptimization.anr.ANRMainActivity;
 
 import java.lang.reflect.Method;
 
@@ -69,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, DraggerMainActivity.class);
         //Intent intent = new Intent(this, ButterknifeUseActivity.class);
         //Intent intent = new Intent(this, EventBusUseActivity.class);
-        Intent intent = new Intent(this, MyEventBusMainActivity.class);
+        //Intent intent = new Intent(this, MyEventBusMainActivity.class);
+        Intent intent = new Intent(this, ANRMainActivity.class);
         startActivity(intent);
     }
 

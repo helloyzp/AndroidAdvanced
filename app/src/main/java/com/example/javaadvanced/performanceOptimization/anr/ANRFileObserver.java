@@ -9,7 +9,11 @@ public class ANRFileObserver extends FileObserver {
     private String TAG = "ANRFileObserver";
 
 
-    public ANRFileObserver(String path) {//data/anr/
+    /**
+     *
+     * @param path 传 data/anr/ 这个目录
+     */
+    public ANRFileObserver(String path) {
         super(path);
     }
 
@@ -17,6 +21,11 @@ public class ANRFileObserver extends FileObserver {
         super(path, mask);
     }
 
+    /**
+     * ANRFileObserver监控的路径/文件发生改变时会回调onEvent()方法，对应的各个事件类型如下
+     * @param event
+     * @param path
+     */
     @Override
     public void onEvent(int event, @Nullable String path) {
         switch (event) {
