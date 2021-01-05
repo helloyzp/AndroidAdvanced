@@ -1,19 +1,16 @@
 package com.example.javaadvanced.performanceOptimization.anr;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.javaadvanced.R;
 
-public class ANRMainActivity extends AppCompatActivity {
+public class ANRSecondActivity extends AppCompatActivity {
 
     private static final String TAG = "ANRMainActivity";
 
@@ -21,21 +18,11 @@ public class ANRMainActivity extends AppCompatActivity {
 
     private TextView textView;
 
-    private Button button;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_anr_main);
+        setContentView(R.layout.activity_anr_second);
         textView = findViewById(R.id.textview);
-        button  = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ANRMainActivity.this, ANRSecondActivity.class);
-                startActivity(intent);
-            }
-        });
 
         //ActivityANRTest();
         //anrTest();
@@ -87,27 +74,4 @@ public class ANRMainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        try {
-            Thread.sleep(1000 * 9);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-/*        try {
-            Thread.sleep(1000 * 9);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-
-    }
 }

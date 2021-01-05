@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JavaAdvanced</string>
+    <string name="app_name">AndroidAdvanced</string>
 
     <string name="a_fragment">A fragment</string>
     <string name="b_fragment">B fragment</string>

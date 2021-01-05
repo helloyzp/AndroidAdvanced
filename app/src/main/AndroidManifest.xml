@@ -78,6 +78,7 @@
         <activity android:name=".OpenSourceFramework.ioc_runtime.myEventBus.MyEventBusMainActivity"/>
         <activity android:name=".OpenSourceFramework.ioc_runtime.myEventBus.MyEventBusSecondActivity"/>
         <activity android:name=".performanceOptimization.anr.ANRMainActivity"/>
+        <activity android:name=".performanceOptimization.anr.ANRSecondActivity"/>
 
     </application>
 
