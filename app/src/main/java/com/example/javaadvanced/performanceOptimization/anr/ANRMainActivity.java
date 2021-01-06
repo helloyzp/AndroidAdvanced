@@ -82,6 +82,8 @@ public class ANRMainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
+
         }, 3000);
 
     }
