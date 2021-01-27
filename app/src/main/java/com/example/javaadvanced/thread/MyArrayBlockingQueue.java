@@ -1,6 +1,7 @@
 package com.example.javaadvanced.thread;
 
 import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -25,6 +26,12 @@ public class MyArrayBlockingQueue<T> {
     public static void main(String[] agrs) {
         //testMyArrayBlockingQueue();
         testMyArrayBlockingQueue1();
+    }
+
+    public static void testArrayBlockingQueue() {
+        ArrayBlockingQueue arrayBlockingQueue = new ArrayBlockingQueue(10);
+
+
     }
 
     public static void testMyArrayBlockingQueue() {
