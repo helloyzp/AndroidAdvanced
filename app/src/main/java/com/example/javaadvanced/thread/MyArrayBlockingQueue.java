@@ -19,21 +19,22 @@ public class MyArrayBlockingQueue<T> {
     private Condition fullCondition = lock.newCondition();
     private Condition emptyCondition = lock.newCondition();
 
-    private volatile int allow = 5;
-    private volatile int length = 0;
+    private volatile int capacity = 5;//阻塞队列的容量
+    private volatile int length = 0;//阻塞队列存储的数据个数
 
     public static void main(String[] f) {
-        testMyArrayBlockingQueue();
+        //testMyArrayBlockingQueue();
+        testMyArrayBlockingQueue1();
     }
 
     public static void testMyArrayBlockingQueue() {
         MyArrayBlockingQueue<Integer> myArrayBlockingQueue = new MyArrayBlockingQueue<>();
         for (int i = 0; i < 10; ++i) {
-            final int j = i;
+            final int data = i;
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    myArrayBlockingQueue.put(j);
+                    myArrayBlockingQueue.put(data);
                 }
             }).start();
         }
@@ -50,35 +51,72 @@ public class MyArrayBlockingQueue<T> {
             public void run() {
                 while (true) {
                     Integer t = myArrayBlockingQueue.take();
-                    System.out.println("pop " + t);
                 }
             }
         }).start();
     }
 
+    public static void testMyArrayBlockingQueue1() {
+        MyArrayBlockingQueue<Integer> myArrayBlockingQueue = new MyArrayBlockingQueue<>();
+        for (int i = 0; i < 10; ++i) {
+            final int data = i;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while(true) {
+                        myArrayBlockingQueue.put(data);
+                    }
+                }
+            }).start();
+        }
+
+        try {
+            System.out.println("sleep");
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    Integer t = myArrayBlockingQueue.take();
+                }
+            }
+        }).start();
+    }
+
+
     /**
      * 当一个线程调用put方法添加元素时，若集合满了则使调用线程阻塞，直到有其他线程从集合中take出数据。
-     * @param t
+     * @param data
      */
-    public void put(T t) {
-
+    public void put(T data) {
+        System.out.println("---put(), thread="  + Thread.currentThread().getName());
         try {
             //一旦一个线程封锁了锁对象， 其他任何线程都无法通过 lock 语句。
             // 当其他线程调用 lock 时，它们被阻塞，直到第一个线程释放锁对象。
             lock.lock();
 
             //    if(length == allow)
-            while (length == allow) {
+            while (length == capacity) {
                 //使调用线程挂起
-                fullCondition.await();//condition的作用是使线程先等待，当外部满足某一条件时，在通过条件对象唤醒等待的线程。
+                //await()的作用是挂起当前线程，释放竞争资源的所，从而能够让其他线程访问竞争资源。
+                //当外部条件改变时，意味着某个任务可以继续执行，可以通过signal()或者signalAll()通知这个任务
+                System.out.println("put(), thread="  + Thread.currentThread().getName() + "，队列存储已经满了，挂起线程...");
+                fullCondition.await();//condition的作用是使线程挂起，当外部满足某一条件时，再通过条件对象的signal()或者signalAll()方法唤醒等待的线程。
             }
-            System.out.println("push " + t);
-            arrayList.add(t);
+            System.out.println("put(), thread="  + Thread.currentThread().getName() + ", 新增数据 data=" + data);
+            arrayList.add(data);
             ++length;
-            emptyCondition.signalAll();//唤醒所有在该条件上等待着的线程，即唤醒等待着的取数据的线程
+            System.out.println("put(), thread="  + Thread.currentThread().getName() + "，唤醒等待着的读取数据的线程");
+            emptyCondition.signalAll();//唤醒所有在该条件上等待着的线程，即唤醒等待着的读取数据的线程
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            //每个lock()的调用都必须紧跟一个try-finally子句，用来保证在所有情况下都会释放锁，
+            //任务在调用await()，signal()，signalAll()之前必须拥有这个锁，即必须先调用lock()方法。
             lock.unlock();
         }
     }
@@ -88,17 +126,20 @@ public class MyArrayBlockingQueue<T> {
      * @return
      */
     public T take() {
+        System.out.println("---take(), thread="  + Thread.currentThread().getName());
         try {
             lock.lock();
             //    if(length == 0)
             while (length == 0) {
+                System.out.println("take(), thread="  + Thread.currentThread().getName() +  "，队列已没有数据，挂起线程...");
                 emptyCondition.await();
             }
-            T t = arrayList.get(0);
-            arrayList.remove(0);
+            T data = arrayList.remove(0);
+            System.out.println("take(), thread="  + Thread.currentThread().getName() + ", 读取数据 data=" + data);
             --length;
+            System.out.println("take(), thread="  + Thread.currentThread().getName() +  "，唤醒等待着的新增数据的线程");
             fullCondition.signalAll();//唤醒所有在该条件上等待着的线程，即唤醒等待着的新增数据的线程
-            return t;
+            return data;
 
         } catch (Exception e) {
             e.printStackTrace();
