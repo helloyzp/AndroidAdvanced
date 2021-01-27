@@ -22,7 +22,7 @@ public class MyArrayBlockingQueue<T> {
     private volatile int capacity = 5;//阻塞队列的容量
     private volatile int length = 0;//阻塞队列存储的数据个数
 
-    public static void main(String[] f) {
+    public static void main(String[] agrs) {
         //testMyArrayBlockingQueue();
         testMyArrayBlockingQueue1();
     }
