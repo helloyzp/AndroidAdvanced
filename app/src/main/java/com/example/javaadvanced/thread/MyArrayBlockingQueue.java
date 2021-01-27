@@ -15,9 +15,9 @@ public class MyArrayBlockingQueue<T> {
 
     private ReentrantLock lock = new ReentrantLock();
 
-    //定义两个条件，分别为“集合满”和“集合空”
-    private Condition fullCondition = lock.newCondition();
-    private Condition emptyCondition = lock.newCondition();
+    //定义两个条件，分别为“队列非满”和“队列非空”，队列非满时才能新增数据，队列非空时才能读取数据
+    private Condition notFullCondition = lock.newCondition();
+    private Condition notEmptyCondition = lock.newCondition();
 
     private volatile int capacity = 5;//阻塞队列的容量
     private volatile int length = 0;//阻塞队列存储的数据个数
@@ -100,18 +100,18 @@ public class MyArrayBlockingQueue<T> {
             lock.lock();
 
             //    if(length == allow)
-            while (length == capacity) {
+            while (length == capacity) {//即队列非满时才能新增数据
                 //使调用线程挂起
                 //await()的作用是挂起当前线程，释放竞争资源的所，从而能够让其他线程访问竞争资源。
                 //当外部条件改变时，意味着某个任务可以继续执行，可以通过signal()或者signalAll()通知这个任务
                 System.out.println("put(), thread="  + Thread.currentThread().getName() + "，队列存储已经满了，挂起线程...");
-                fullCondition.await();//condition的作用是使线程挂起，当外部满足某一条件时，再通过条件对象的signal()或者signalAll()方法唤醒等待的线程。
+                notFullCondition.await();//condition的作用是使线程挂起，当外部满足某一条件时，再通过条件对象的signal()或者signalAll()方法唤醒等待的线程。
             }
             System.out.println("put(), thread="  + Thread.currentThread().getName() + ", 新增数据 data=" + data);
             arrayList.add(data);
             ++length;
             System.out.println("put(), thread="  + Thread.currentThread().getName() + "，唤醒等待着的读取数据的线程");
-            emptyCondition.signalAll();//唤醒所有在该条件上等待着的线程，即唤醒等待着的读取数据的线程
+            notEmptyCondition.signalAll();//唤醒所有在该条件上等待着的线程，即唤醒等待着的读取数据的线程
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -130,15 +130,15 @@ public class MyArrayBlockingQueue<T> {
         try {
             lock.lock();
             //    if(length == 0)
-            while (length == 0) {
+            while (length == 0) {//即队列非空时才能读取数据
                 System.out.println("take(), thread="  + Thread.currentThread().getName() +  "，队列已没有数据，挂起线程...");
-                emptyCondition.await();
+                notEmptyCondition.await();
             }
             T data = arrayList.remove(0);
             System.out.println("take(), thread="  + Thread.currentThread().getName() + ", 读取数据 data=" + data);
             --length;
             System.out.println("take(), thread="  + Thread.currentThread().getName() +  "，唤醒等待着的新增数据的线程");
-            fullCondition.signalAll();//唤醒所有在该条件上等待着的线程，即唤醒等待着的新增数据的线程
+            notFullCondition.signalAll();//唤醒所有在该条件上等待着的线程，即唤醒等待着的新增数据的线程
             return data;
 
         } catch (Exception e) {
