@@ -23,7 +23,10 @@ public class MyArrayBlockingQueue<T> {
     private volatile int length = 0;
 
     public static void main(String[] f) {
+        testMyArrayBlockingQueue();
+    }
 
+    public static void testMyArrayBlockingQueue() {
         MyArrayBlockingQueue<Integer> myArrayBlockingQueue = new MyArrayBlockingQueue<>();
         for (int i = 0; i < 10; ++i) {
             final int j = i;
