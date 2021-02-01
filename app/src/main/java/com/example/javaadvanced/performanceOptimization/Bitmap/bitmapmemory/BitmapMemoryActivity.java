@@ -25,8 +25,12 @@ public class BitmapMemoryActivity  extends AppCompatActivity {
     /**
      * 解析图片
      *
-     * R.drawable.icon_mv_jpg,R.drawable.icon_mv_png,R.drawable.icon_mv_webp三张图片的宽和高都一样，且放在同一个文件夹，因此
-     * BitmapFactory.decodeResource加载三张图片在同一个手机屏幕上的宽和高都是一样的，而且BitmapFactory.Options配置默认的色彩质量参数都是ARGB_8888，
+     * R.drawable.icon_mv_jpg  大小：49.09KB
+     * R.drawable.icon_mv_png  大小：319.93KB
+     * R.drawable.icon_mv_webp 大小：12.78KB
+     * 三张图片的宽和高都一样(都是300*449)，且放在同一个文件夹，因此
+     * BitmapFactory.decodeResource加载三张图片在同一个手机屏幕上的宽和高都是一样的，
+     * 而且BitmapFactory.Options配置默认的色彩质量参数都是ARGB_8888，
      * 因此这三张图片载到内存中时占用内存的大小是一样的，虽然这三张图片占用的磁盘大小不一样。
      */
     private void decodeBitmap() {
