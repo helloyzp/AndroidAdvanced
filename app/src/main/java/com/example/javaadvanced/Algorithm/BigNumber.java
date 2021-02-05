@@ -2,6 +2,9 @@ package com.example.javaadvanced.Algorithm;
 
 import java.util.Scanner;
 
+/**
+ * 大数加法
+ */
 public class BigNumber {
 
     public static String add(String a, String b) {
