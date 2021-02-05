@@ -14,9 +14,9 @@ public class SocketServer {
         //1 创建一个服务端的ServerSocket，指定一个端口，监听此端口
         ServerSocket serverSocket = new ServerSocket(12346);
         //2 调用accept方法等待客户端连接
-        System.out.println("调用accept之前...");
+        System.out.println("调用accept()等待客户端连接...");
         Socket socket = serverSocket.accept();//accept()方法会一直阻塞，直到有客户端连接到服务端
-        System.out.println("socket建立...");
+        System.out.println("socket建立成功...");
         //3 连接后获取输入流，输出流
         InputStream is = socket.getInputStream();//获取输入流，用于读取客户端发过来的信息
         OutputStream os = socket.getOutputStream();//获取输出流，用于向客户端发送信息
