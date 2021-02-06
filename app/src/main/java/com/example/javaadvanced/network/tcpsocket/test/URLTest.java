@@ -1,4 +1,4 @@
-package com.example.javaadvanced.network.socket.test;
+package com.example.javaadvanced.network.tcpsocket.test;
 
 import java.net.MalformedURLException;
 import java.net.URL;

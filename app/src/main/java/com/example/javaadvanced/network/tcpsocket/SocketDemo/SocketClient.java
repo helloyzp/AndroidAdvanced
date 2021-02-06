@@ -1,10 +1,13 @@
-package com.example.javaadvanced.network.socket.SocketDemo;
+package com.example.javaadvanced.network.tcpsocket.SocketDemo;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * 简单Socket通信的客户端
+ */
 public class SocketClient {
 
 

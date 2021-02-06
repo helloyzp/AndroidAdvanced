@@ -1,4 +1,4 @@
-package com.example.javaadvanced.network.socket.test;
+package com.example.javaadvanced.network.tcpsocket.test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

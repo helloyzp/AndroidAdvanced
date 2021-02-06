@@ -1,4 +1,4 @@
-package com.example.javaadvanced.network.socket.SocketDemo;
+package com.example.javaadvanced.network.tcpsocket.SocketDemo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,6 +8,9 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * 简单Socket通信的服务端
+ */
 public class SocketServer {
 
     public static void main(String... args) throws IOException {

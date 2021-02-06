@@ -1,4 +1,4 @@
-package com.example.javaadvanced.network.socket.SocketDemo;
+package com.example.javaadvanced.network.tcpsocket.SocketDemo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * 简单版聊天室的服务端，支持多个客户端的连接
+ */
 public class ChartServer {
 
     private ServerSocket server = null; //服务器的ServerSocket
